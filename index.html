@@ -723,7 +723,12 @@
 
   <header>
     <nav>
-      <div class="nav-brand">jaime<span>.dev</span></div>
+      <div class="nav-brand">
+        <a href="#about" style="border-bottom:none;">
+          <img src="docs/logo.png" alt="jaime-builds"
+            style="height:36px;width:36px;border-radius:50%;object-fit:cover;display:block;" />
+        </a>
+      </div>
       <ul class="nav-links">
         <li><a href="#about">about</a></li>
         <li><a href="#skills">skills</a></li>
@@ -741,9 +746,15 @@
     <!-- ABOUT -->
     <section id="about" class="hero">
       <div class="fade-in">
-        <h1>Hey, I'm Jaime<span class="cursor"></span></h1>
-        <p class="hero-subtitle">Technical Support Engineer &nbsp;·&nbsp; IT Manager &nbsp;·&nbsp; 15+ Years in the
-          Trenches &nbsp;·&nbsp; Bilingual EN / ES</p>
+        <div style="display:flex;align-items:center;gap:20px;margin-bottom:8px;flex-wrap:wrap;">
+          <img src="docs/avatar.png" alt="Jaime De La Paz"
+            style="width:90px;height:90px;border-radius:50%;object-fit:cover;border:2px solid var(--accent);flex-shrink:0;" />
+          <div>
+            <h1 style="margin-bottom:4px;">Hey, I'm Jaime<span class="cursor"></span></h1>
+            <p class="hero-subtitle">Technical Support Engineer &nbsp;·&nbsp; IT Manager &nbsp;·&nbsp; 15+ Years in the
+              Trenches &nbsp;·&nbsp; Bilingual EN / ES</p>
+          </div>
+        </div>
       </div>
       <div class="fade-in">
         <div class="hero-bio">
@@ -1112,7 +1123,9 @@
         <div class="contact-links">
           <div class="contact-row">
             <span class="label">email</span>
-            <a href="mailto:delapazjaime@yahoo.com">delapazjaime@yahoo.com</a>
+            <a href="/cdn-cgi/l/email-protection#e58180898495849f8f848c8880a59c848d8a8acb868a88"><span
+                class="__cf_email__"
+                data-cfemail="94f0f1f8f5e4f5eefef5fdf9f1d4edf5fcfbfbbaf7fbf9">[email&#160;protected]</span></a>
           </div>
           <div class="contact-row">
             <span class="label">linkedin</span>
@@ -1140,15 +1153,29 @@
   <script>
     const toggle = document.getElementById('theme-toggle');
     const root = document.documentElement;
+
+    // Read saved preference, default to dark
     const saved = localStorage.getItem('theme') || 'dark';
     root.setAttribute('data-theme', saved);
     toggle.textContent = saved === 'dark' ? '☀' : '🌙';
 
     toggle.addEventListener('click', () => {
-      const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      const current = root.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
       root.setAttribute('data-theme', next);
       toggle.textContent = next === 'dark' ? '☀' : '🌙';
       localStorage.setItem('theme', next);
     });
 
-    document.querySelectorAll('a[href^="#"]').forEach
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        e.preventDefault();
+        const t = document.querySelector(a.getAttribute('href'));
+        if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+  </script>
+
+</body>
+
+</html>
