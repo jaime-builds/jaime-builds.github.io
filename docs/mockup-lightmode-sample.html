@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Light Mode Sample</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@300;700;900&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    [data-theme="dark"] {
+      --bg: #0f1117;
+      --bg-alt: #13151c;
+      --surface: #17191f;
+      --border: #1e2028;
+      --border-mid: #25272f;
+      --text: #f0f2f8;
+      --text-dim: #9ca3af;
+      --text-muted: #3d4048;
+      --accent: #c9a85d;
+      --accent-bg: #1a160c;
+      --accent-tag: #d4b472;
+      --accent-tag-border: #2e2518;
+      --card-bg: #13151c;
+      --card-border: #1e2028;
+      --wip-bg: #1e1a0a;
+      --wip-text: #d4a017;
+      --wip-border: #2e2810;
+      --toggle-icon: '🌙';
+    }
+
+    [data-theme="light"] {
+      --bg: #f5f0e8;
+      --bg-alt: #ede8de;
+      --surface: #e8e2d6;
+      --border: #d8d0c0;
+      --border-mid: #c8c0ae;
+      --text: #1c1a16;
+      --text-dim: #4a4438;
+      --text-muted: #8a8070;
+      --accent: #8a6820;
+      --accent-bg: #f0e8d0;
+      --accent-tag: #7a5c18;
+      --accent-tag-border: #c8b080;
+      --card-bg: #ede8de;
+      --card-border: #d8d0c0;
+      --wip-bg: #f5ead0;
+      --wip-text: #8a5a10;
+      --wip-border: #d4b070;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      transition: background .3s, color .3s;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+      position: relative;
+      transition: opacity .2s;
+    }
+    a::after {
+      content: '';
+      position: absolute;
+      left: 0; bottom: -2px;
+      width: 100%; height: 1px;
+      background: currentColor;
+      opacity: 0.35;
+      transform: scaleX(0.5);
+      transform-origin: left;
+      transition: opacity .2s, transform .2s;
+    }
+    a:hover { opacity: 1; }
+    a:hover::after { opacity: 0.9; transform: scaleX(1); }
+
+    .nav-links a::after,
+    .btn-ghost::after,
+    .nav-brand a::after { display: none; }
+
+    .wrapper { max-width: 1080px; margin: 0 auto; padding: 0 28px 120px; }
+
+    header {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      transition: background .3s, border-color .3s;
+    }
+    nav {
+      max-width: 1080px; margin: 0 auto; padding: 0 28px;
+      height: 58px;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    }
+    .nav-brand img { height: 38px; width: 38px; border-radius: 50%; object-fit: cover; display: block; }
+    .nav-links { display: flex; gap: 4px; list-style: none; align-items: center; }
+    .nav-links a {
+      font-size: 12px; color: var(--text-dim); padding: 5px 10px; border-radius: 6px;
+      transition: color .2s, background .2s;
+    }
+    .nav-links a:hover { color: var(--accent); background: var(--accent-bg); opacity: 1; }
+    .nav-links .nav-resume a {
+      color: var(--accent);
+      border: 1px solid var(--accent-tag-border);
+      border-radius: 6px;
+      padding: 4px 10px;
+    }
+    .nav-links .nav-resume a:hover { background: var(--accent-bg); border-color: var(--accent); }
+
+    #theme-toggle {
+      background: var(--surface);
+      border: 1px solid var(--border-mid);
+      color: var(--text-dim);
+      cursor: pointer;
+      width: 36px; height: 36px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px; flex-shrink: 0;
+      transition: background .3s, border-color .2s, color .2s;
+    }
+    #theme-toggle::after { display: none; }
+    #theme-toggle:hover { color: var(--accent); border-color: var(--accent); }
+
+    /* HERO */
+    .hero { padding: 80px 0 60px; border-bottom: 1px solid var(--border); }
+    .hero-top { display: flex; align-items: flex-start; gap: 24px; margin-bottom: 28px; flex-wrap: wrap; }
+    .hero-avatar {
+      width: 96px; height: 96px; border-radius: 50%; object-fit: cover;
+      border: 2px solid var(--accent); flex-shrink: 0;
+    }
+    .hero-identity { flex: 1; min-width: 200px; max-width: 520px; }
+    .hero-eyebrow {
+      font-size: 11px; color: var(--accent); letter-spacing: .14em;
+      text-transform: uppercase; font-weight: 500; margin-bottom: 10px;
+    }
+    .hero h1 {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(32px, 6vw, 52px);
+      font-weight: 900;
+      color: var(--text);
+      line-height: 1.0;
+      letter-spacing: -.5px;
+      margin-bottom: 8px;
+    }
+    .hero h1 .name { color: var(--accent); }
+    .hero-subtitle { font-size: 13px; color: var(--text-dim); letter-spacing: .04em; }
+
+    .hero-bio { font-size: 16px; color: var(--text-dim); line-height: 1.9; margin-bottom: 36px; }
+    .hero-bio p + p { margin-top: 14px; }
+
+    .hero-links { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 18px; border-radius: 20px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px; font-weight: 500;
+      background: transparent;
+      color: var(--text-dim);
+      border: 1px solid var(--border-mid);
+      transition: all .2s; cursor: pointer;
+      text-decoration: none;
+    }
+    .btn-ghost:hover { color: var(--accent); border-color: var(--accent); opacity: 1; }
+    .hero-sep { width: 1px; height: 18px; background: var(--border-mid); }
+
+    /* SKILLS */
+    section { padding: 64px 0; border-bottom: 1px solid var(--border); }
+    section:last-of-type { border-bottom: none; }
+
+    .section-label {
+      font-size: 11px; color: var(--accent); letter-spacing: .14em;
+      text-transform: uppercase; font-weight: 500; margin-bottom: 6px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .section-label::before { content: '—'; opacity: 0.5; font-family: 'DM Sans', sans-serif; }
+    .section-title {
+      font-family: 'Fraunces', serif;
+      font-size: 28px; font-weight: 700;
+      color: var(--text); margin-bottom: 32px; letter-spacing: -.2px;
+    }
+
+    .skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media (max-width: 560px) { .skills-grid { grid-template-columns: 1fr; } }
+
+    .skill-group {
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      border-radius: 10px; padding: 20px; transition: border-color .2s;
+    }
+    .skill-group:hover { border-color: var(--accent-tag-border); }
+    .skill-group-title {
+      font-size: 11px; color: var(--accent); letter-spacing: .08em;
+      font-weight: 500; margin-bottom: 14px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tag {
+      background: var(--accent-bg); color: var(--accent-tag);
+      border: 1px solid var(--accent-tag-border);
+      padding: 4px 10px; border-radius: 4px;
+      font-size: 11px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* NOTE BANNER */
+    .sample-note {
+      background: var(--accent-bg);
+      border: 1px solid var(--accent-tag-border);
+      border-radius: 8px;
+      padding: 12px 18px;
+      font-size: 12px;
+      color: var(--text-dim);
+      font-family: 'JetBrains Mono', monospace;
+      margin-bottom: 0;
+      text-align: center;
+    }
+
+    footer {
+      padding: 40px 0 20px; text-align: center;
+      font-size: 11px; color: var(--text-muted); letter-spacing: .04em;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    footer span { color: var(--accent); }
+  </style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <div class="nav-brand">
+      <a href="#about"><img src="logo.png" alt="jaime-builds" /></a>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#" onclick="return false;">Projects</a></li>
+      <li><a href="#" onclick="return false;">Homelab</a></li>
+      <li><a href="#" onclick="return false;">Field Notes</a></li>
+      <li class="nav-resume"><a href="#" onclick="return false;" target="_blank" rel="noopener">Resume ↗</a></li>
+    </ul>
+    <button id="theme-toggle" aria-label="Toggle theme">🌙</button>
+  </nav>
+</header>
+
+<main class="wrapper">
+
+  <div class="sample-note">
+    — Light mode palette sample · Hero + Skills only · Toggle ☀ / 🌙 in the nav to compare —
+  </div>
+
+  <!-- ABOUT -->
+  <section id="about" class="hero">
+    <div class="hero-top">
+      <img class="hero-avatar" src="avatar.png" alt="Jaime De La Paz" />
+      <div class="hero-identity">
+        <div class="hero-eyebrow">about me</div>
+        <h1>Hey, I'm <span class="name">Jaime</span></h1>
+        <p class="hero-subtitle">Enterprise Support Engineer @ Depot.dev &nbsp;·&nbsp; 15+ Years in the Trenches &nbsp;·&nbsp; Bilingual EN / ES</p>
+      </div>
+    </div>
+
+    <div class="hero-bio">
+      <p>I was born in Mexico and grew up in El Paso, TX. Computers got me early. My uncle showed me WordPerfect and some DOS commands when I was a kid, and I was hooked. I started doing science fair projects about how computers work, taught myself BASIC, and spent way too much time writing games on a TI-83 calculator. I won a scholarship for computer science and had every intention of making it a straight line. Life took me down a different path. I spent time as a forklift operator and a blackjack dealer before finding my way into a call center, then telecom support, then a helpdesk role at a moving company. Eventually I made it to Austin, TX as a Technical Support Engineer at Spiceworks, and that's where the career really took off.</p>
+      <p>I've spent over 15 years making complex systems make sense for developers, customers, and everyone in between. Tier 3 escalation, large-scale server infrastructure, PCI compliance, infrastructure automation with Terraform and Terragrunt, endpoint and equipment management, and integrations across Shopify, Salesforce, Magento, and Kubernetes. Along the way I picked up deep experience in ClickHouse, Docker internals, and build tooling. The list is long and the curiosity hasn't worn off.</p>
+      <p>I am currently an Enterprise Support Engineer at <a href="https://depot.dev" target="_blank" rel="noopener">Depot.dev</a>, helping developers get the most out of their Docker builds and CI pipelines. I believe that understanding the infrastructure behind the product is the best way to truly support it, and because of that I'm always looking to learn, grow, and add to my list of certifications.</p>
+      <p>Based in Rogers City, MI, right on Lake Huron. Still as curious as the kid who entered his first DOS command.</p>
+    </div>
+
+    <div class="hero-links">
+      <a href="#" class="btn-ghost">View my projects &rarr;</a>
+      <div class="hero-sep"></div>
+      <a href="https://www.linkedin.com/in/jaimedelapaz" class="btn-ghost" target="_blank" rel="noopener">LinkedIn ↗</a>
+      <a href="https://github.com/jaime-builds" class="btn-ghost" target="_blank" rel="noopener">GitHub ↗</a>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="section-label">what I work with</div>
+    <h2 class="section-title">Skills &amp; Tech Stack</h2>
+    <div class="skills-grid">
+
+      <div class="skill-group">
+        <div class="skill-group-title">🗄️ &nbsp;Databases</div>
+        <div class="tags">
+          <span class="tag">ClickHouse</span><span class="tag">PostgreSQL</span>
+          <span class="tag">MySQL</span><span class="tag">MariaDB</span>
+          <span class="tag">SQLite</span><span class="tag">SQL Server</span>
+        </div>
+      </div>
+
+      <div class="skill-group">
+        <div class="skill-group-title">🐧 &nbsp;Systems &amp; Infrastructure</div>
+        <div class="tags">
+          <span class="tag">Linux (Ubuntu / CentOS)</span><span class="tag">Windows Server</span>
+          <span class="tag">Docker</span><span class="tag">Kubernetes</span>
+          <span class="tag">OpenShift</span><span class="tag">AWS</span>
+          <span class="tag">Cloudflare</span><span class="tag">Active Directory</span>
+          <span class="tag">VMware</span><span class="tag">VirtualBox</span>
+          <span class="tag">Hyper-V</span>
+        </div>
+      </div>
+
+      <div class="skill-group">
+        <div class="skill-group-title">🔌 &nbsp;APIs &amp; Integrations</div>
+        <div class="tags">
+          <span class="tag">REST APIs</span><span class="tag">GraphQL</span>
+          <span class="tag">Shopify</span><span class="tag">Magento</span>
+          <span class="tag">Salesforce</span><span class="tag">Stripe</span>
+          <span class="tag">Zendesk</span><span class="tag">SAML / OAuth</span>
+          <span class="tag">SSO</span><span class="tag">OpenID Connect</span>
+          <span class="tag">Webhooks</span><span class="tag">Postman</span>
+          <span class="tag">RabbitMQ</span><span class="tag">Zapier</span>
+        </div>
+      </div>
+
+      <div class="skill-group">
+        <div class="skill-group-title">🎯 &nbsp;Support &amp; Operations</div>
+        <div class="tags">
+          <span class="tag">Tier 3 Escalation</span><span class="tag">Incident Response</span>
+          <span class="tag">On-Call Management</span><span class="tag">SLA Management</span>
+          <span class="tag">Root Cause Analysis</span><span class="tag">PCI Compliance</span>
+          <span class="tag">Zendesk</span><span class="tag">Jira</span>
+          <span class="tag">Jira Service Desk</span><span class="tag">Confluence</span>
+          <span class="tag">ServiceNow</span><span class="tag">Intercom</span>
+          <span class="tag">Spiceworks</span>
+        </div>
+      </div>
+
+      <div class="skill-group">
+        <div class="skill-group-title">💻 &nbsp;Languages &amp; Scripting</div>
+        <div class="tags">
+          <span class="tag">SQL</span><span class="tag">Python</span>
+          <span class="tag">Bash</span><span class="tag">PowerShell</span>
+          <span class="tag">Go</span><span class="tag">JavaScript</span>
+          <span class="tag">TypeScript</span><span class="tag">YAML</span>
+          <span class="tag">JSON</span><span class="tag">HTML</span>
+          <span class="tag">RegEx</span>
+        </div>
+      </div>
+
+      <div class="skill-group">
+        <div class="skill-group-title">🔍 &nbsp;Monitoring &amp; Observability</div>
+        <div class="tags">
+          <span class="tag">Datadog</span><span class="tag">New Relic</span>
+          <span class="tag">Icinga</span><span class="tag">Prometheus</span>
+          <span class="tag">Grafana</span><span class="tag">Kibana</span>
+          <span class="tag">OpenSearch</span><span class="tag">OpenTelemetry</span>
+          <span class="tag">Axiom</span><span class="tag">Honeycomb</span>
+          <span class="tag">CloudWatch</span><span class="tag">Sumo Logic</span>
+          <span class="tag">PagerDuty</span>
+        </div>
+      </div>
+
+      <div class="skill-group">
+        <div class="skill-group-title">⚙️ &nbsp;DevOps &amp; CI/CD</div>
+        <div class="tags">
+          <span class="tag">Git</span><span class="tag">GitHub Actions</span>
+          <span class="tag">GitLab</span><span class="tag">Bitbucket</span>
+          <span class="tag">Jenkins</span><span class="tag">Depot</span>
+          <span class="tag">Terraform</span><span class="tag">Terragrunt</span>
+          <span class="tag">CI/CD Pipelines</span><span class="tag">Infrastructure-as-Code</span>
+        </div>
+      </div>
+
+      <div class="skill-group">
+        <div class="skill-group-title">🖥️ &nbsp;Web &amp; Frameworks</div>
+        <div class="tags">
+          <span class="tag">Flask</span><span class="tag">SQLAlchemy</span>
+          <span class="tag">React</span><span class="tag">Bootstrap</span>
+          <span class="tag">Chart.js</span><span class="tag">WebSockets</span>
+          <span class="tag">Jinja2</span>
+        </div>
+      </div>
+
+      <div class="skill-group">
+        <div class="skill-group-title">📱 &nbsp;Device &amp; Endpoint Management</div>
+        <div class="tags">
+          <span class="tag">MDM</span><span class="tag">Kolide</span>
+          <span class="tag">Sophos</span><span class="tag">Bitdefender</span>
+          <span class="tag">Endpoint Troubleshooting</span>
+          <span class="tag">Laptop / Equipment Management</span>
+          <span class="tag">Device Provisioning</span><span class="tag">Patch Management</span>
+        </div>
+      </div>
+
+      <div class="skill-group">
+        <div class="skill-group-title">🤖 &nbsp;AI &amp; LLMs</div>
+        <div class="tags">
+          <span class="tag">Claude</span><span class="tag">ChatGPT</span>
+          <span class="tag">Gemini</span><span class="tag">Qwen3.5</span>
+          <span class="tag">Gemma 4</span><span class="tag">Mistral</span>
+          <span class="tag">DeepSeek R1</span><span class="tag">Ollama</span>
+          <span class="tag">Jan.ai</span><span class="tag">Cursor</span>
+          <span class="tag">Prompt Engineering</span>
+          <span class="tag">Claude Skills Development</span>
+          <span class="tag">LLM Administration</span>
+          <span class="tag">AI-assisted Workflows</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer>
+    <p>Jaime A. De La Paz &nbsp;·&nbsp; Rogers City, MI &nbsp;·&nbsp; <span>&copy; 2026</span></p>
+  </footer>
+
+</main>
+
+<script>
+  const toggle = document.getElementById('theme-toggle');
+  const root = document.documentElement;
+  toggle.addEventListener('click', () => {
+    const current = root.getAttribute('data-theme');
+    const next = current === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    toggle.textContent = next === 'dark' ? '🌙' : '☀';
+  });
+</script>
+
+</body>
+</html>
