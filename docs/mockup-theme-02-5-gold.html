@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Jaime De La Paz — Enterprise Support Engineer</title>
+  <title>Mockup — Theme 02.5 Gold: Editorial + Builder</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@300;700;900&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -11,7 +11,7 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    [data-theme="dark"] {
+    :root {
       --bg: #0f1117;
       --bg-alt: #13151c;
       --surface: #17191f;
@@ -31,26 +31,6 @@
       --wip-border: #2e2810;
     }
 
-    [data-theme="light"] {
-      --bg: #ede8dc;
-      --bg-alt: #e4ddd0;
-      --surface: #dcd5c6;
-      --border: #ccc4b2;
-      --border-mid: #bcb49e;
-      --text: #1c1a16;
-      --text-dim: #4a4438;
-      --text-muted: #8a8070;
-      --accent: #8a6820;
-      --accent-bg: #e8dfc8;
-      --accent-tag: #7a5c18;
-      --accent-tag-border: #c0a870;
-      --card-bg: #e4ddd0;
-      --card-border: #ccc4b2;
-      --wip-bg: #f5ead0;
-      --wip-text: #8a5a10;
-      --wip-border: #d4b070;
-    }
-
     html { scroll-behavior: smooth; }
 
     body {
@@ -59,9 +39,9 @@
       font-family: 'DM Sans', sans-serif;
       font-size: 16px;
       line-height: 1.7;
-      transition: background .3s, color .3s;
     }
 
+    /* Animated underline links */
     a {
       color: var(--accent-tag);
       text-decoration: none;
@@ -82,6 +62,7 @@
     a:hover { opacity: 1; }
     a:hover::after { opacity: 0.9; transform: scaleX(1); }
 
+    /* Kill underline on nav, buttons, project links */
     .nav-links a::after,
     .btn-ghost::after,
     .project-link::after,
@@ -89,11 +70,11 @@
 
     .wrapper { max-width: 1080px; margin: 0 auto; padding: 0 28px 120px; }
 
+    /* NAV */
     header {
       position: sticky; top: 0; z-index: 100;
       background: var(--bg);
       border-bottom: 1px solid var(--border);
-      transition: background .3s, border-color .3s;
     }
     nav {
       max-width: 1080px; margin: 0 auto; padding: 0 28px;
@@ -101,115 +82,223 @@
       display: flex; align-items: center; justify-content: space-between; gap: 16px;
     }
     .nav-brand img { height: 38px; width: 38px; border-radius: 50%; object-fit: cover; display: block; }
-    .nav-links { display: flex; gap: 4px; list-style: none; align-items: center; }
+    .nav-links { display: flex; gap: 4px; list-style: none; }
     .nav-links a {
       font-size: 12px; color: var(--text-dim); padding: 5px 10px; border-radius: 6px;
       transition: color .2s, background .2s;
     }
     .nav-links a:hover { color: var(--accent); background: var(--accent-bg); opacity: 1; }
-    .nav-links .nav-resume a {
-      color: var(--accent);
-      border: 1px solid var(--accent-tag-border);
-      border-radius: 6px;
-      padding: 4px 10px;
-    }
-    .nav-links .nav-resume a:hover { background: var(--accent-bg); border-color: var(--accent); }
 
     #theme-toggle {
       background: var(--surface);
       border: 1px solid var(--border-mid);
       color: var(--text-dim);
       cursor: pointer;
-      width: 36px; height: 36px;
+      width: 36px;
+      height: 36px;
       border-radius: 8px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 15px; flex-shrink: 0;
-      transition: background .3s, border-color .2s, color .2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      flex-shrink: 0;
     }
     #theme-toggle::after { display: none; }
     #theme-toggle:hover { color: var(--accent); border-color: var(--accent); }
 
+    /* HERO */
     .hero { padding: 80px 0 60px; border-bottom: 1px solid var(--border); }
-    .hero-top { display: flex; align-items: flex-start; gap: 24px; margin-bottom: 28px; flex-wrap: wrap; }
-    .hero-avatar { width: 96px; height: 96px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); flex-shrink: 0; }
+
+    .hero-top {
+      display: flex; align-items: flex-start; gap: 24px; margin-bottom: 28px; flex-wrap: wrap;
+    }
+    .hero-avatar {
+      width: 96px; height: 96px; border-radius: 50%; object-fit: cover;
+      border: 2px solid var(--accent); flex-shrink: 0;
+    }
     .hero-identity { flex: 1; min-width: 200px; max-width: 520px; }
-    .hero-eyebrow { font-size: 11px; color: var(--accent); letter-spacing: .14em; text-transform: uppercase; font-weight: 500; margin-bottom: 10px; }
-    .hero h1 { font-family: 'Fraunces', serif; font-size: clamp(32px, 6vw, 52px); font-weight: 900; color: var(--text); line-height: 1.0; letter-spacing: -.5px; margin-bottom: 8px; }
+    .hero-eyebrow {
+      font-size: 11px; color: var(--accent); letter-spacing: .14em;
+      text-transform: uppercase; font-weight: 500; margin-bottom: 10px;
+    }
+    .hero h1 {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(32px, 6vw, 52px);
+      font-weight: 900;
+      color: var(--text);
+      line-height: 1.0;
+      letter-spacing: -.5px;
+      margin-bottom: 8px;
+    }
     .hero h1 .name { color: var(--accent); }
-    .hero-subtitle { font-size: 13px; color: var(--text-dim); letter-spacing: .04em; }
-    .hero-bio { font-size: 16px; color: var(--text-dim); line-height: 1.9; margin-bottom: 36px; }
+    .hero-subtitle {
+      font-size: 13px; color: var(--text-dim); letter-spacing: .04em;
+    }
+
+    .hero-bio {
+      font-size: 16px; color: var(--text-dim); line-height: 1.9;
+      margin-bottom: 36px;
+    }
     .hero-bio p + p { margin-top: 14px; }
+
     .hero-links { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
 
     .btn-ghost {
       display: inline-flex; align-items: center; gap: 6px;
       padding: 8px 18px; border-radius: 20px;
-      font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
-      background: transparent; color: var(--text-dim);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px; font-weight: 500;
+      background: transparent;
+      color: var(--text-dim);
       border: 1px solid var(--border-mid);
-      transition: all .2s; cursor: pointer; text-decoration: none;
+      transition: all .2s; cursor: pointer;
+      text-decoration: none;
     }
     .btn-ghost:hover { color: var(--accent); border-color: var(--accent); opacity: 1; }
+
     .hero-sep { width: 1px; height: 18px; background: var(--border-mid); }
 
+    /* SECTIONS */
     section { padding: 64px 0; border-bottom: 1px solid var(--border); }
     section:last-of-type { border-bottom: none; }
+
     #projects { padding-top: 80px; padding-bottom: 80px; }
 
-    .section-label { font-size: 11px; color: var(--accent); letter-spacing: .14em; text-transform: uppercase; font-weight: 500; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
-    .section-label::before { content: '—'; opacity: 0.5; font-family: 'DM Sans', sans-serif; }
-    .section-title { font-family: 'Fraunces', serif; font-size: 28px; font-weight: 700; color: var(--text); margin-bottom: 32px; letter-spacing: -.2px; }
+    .section-label {
+      font-size: 11px; color: var(--accent); letter-spacing: .14em;
+      text-transform: uppercase; font-weight: 500; margin-bottom: 6px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .section-label::before {
+      content: '—';
+      opacity: 0.5;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .section-title {
+      font-family: 'Fraunces', serif;
+      font-size: 28px; font-weight: 700;
+      color: var(--text); margin-bottom: 32px; letter-spacing: -.2px;
+    }
 
+    /* SKILLS */
     .skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
     @media (max-width: 560px) { .skills-grid { grid-template-columns: 1fr; } }
 
-    .skill-group { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 10px; padding: 20px; transition: border-color .2s; }
+    .skill-group {
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      border-radius: 10px; padding: 20px;
+      transition: border-color .2s;
+    }
     .skill-group:hover { border-color: var(--accent-bg); }
-    .skill-group-title { font-size: 11px; color: var(--accent); letter-spacing: .08em; font-weight: 500; margin-bottom: 14px; font-family: 'JetBrains Mono', monospace; }
+    .skill-group-title {
+      font-size: 11px; color: var(--accent); letter-spacing: .08em;
+      font-weight: 500; margin-bottom: 14px;
+      font-family: 'JetBrains Mono', monospace;
+    }
     .tags { display: flex; flex-wrap: wrap; gap: 6px; }
-    .tag { background: var(--accent-bg); color: var(--accent-tag); border: 1px solid var(--accent-tag-border); padding: 4px 10px; border-radius: 4px; font-size: 11px; font-family: 'JetBrains Mono', monospace; }
+    .tag {
+      background: var(--accent-bg); color: var(--accent-tag);
+      border: 1px solid var(--accent-tag-border);
+      padding: 4px 10px; border-radius: 4px;
+      font-size: 11px;
+      font-family: 'JetBrains Mono', monospace;
+    }
 
+    /* PROJECTS */
     .projects-list { display: flex; flex-direction: column; gap: 20px; }
-    .project-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 28px; transition: border-color .2s, transform .15s ease; }
+
+    .project-card {
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      border-radius: 12px; padding: 28px;
+      transition: border-color .2s, transform .15s ease;
+    }
     .project-card:hover { border-color: var(--accent); transform: translateY(-2px); }
-    .project-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
-    .project-name { font-family: 'Fraunces', serif; font-size: 19px; font-weight: 700; color: var(--text); }
-    .project-status { font-size: 10px; letter-spacing: .08em; text-transform: uppercase; padding: 4px 12px; border-radius: 20px; flex-shrink: 0; font-weight: 500; font-family: 'JetBrains Mono', monospace; }
+
+    .project-header {
+      display: flex; align-items: flex-start;
+      justify-content: space-between; gap: 12px; margin-bottom: 12px;
+    }
+    .project-name {
+      font-family: 'Fraunces', serif; font-size: 19px; font-weight: 700; color: var(--text);
+    }
+    .project-status {
+      font-size: 10px; letter-spacing: .08em; text-transform: uppercase;
+      padding: 4px 12px; border-radius: 20px; flex-shrink: 0; font-weight: 500;
+      font-family: 'JetBrains Mono', monospace;
+    }
     .status-active { background: var(--accent-bg); color: var(--accent); border: 1px solid var(--accent-tag-border); }
     .status-wip { background: var(--wip-bg); color: var(--wip-text); border: 1px solid var(--wip-border); }
-    .project-desc { font-size: 15px; color: var(--text-dim); line-height: 1.8; margin-bottom: 18px; }
-    .project-meta { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 18px; }
-    .project-meta-item { font-size: 11px; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; }
-    .project-meta-item span { color: var(--text-dim); }
-    .project-footer { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
-    .project-link { font-size: 11px; color: var(--accent-tag); font-family: 'JetBrains Mono', monospace; }
 
+    .project-desc { font-size: 15px; color: var(--text-dim); line-height: 1.8; margin-bottom: 18px; }
+
+    .project-meta {
+      display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 18px;
+    }
+    .project-meta-item {
+      font-size: 11px; color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .project-meta-item span { color: var(--text-dim); }
+
+    .project-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 12px;
+    }
+    .project-link {
+      font-size: 11px; color: var(--accent-tag);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* CERTS */
     .certs-list { display: flex; flex-direction: column; gap: 10px; }
-    .cert-item { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 8px; padding: 18px 22px; display: flex; align-items: center; gap: 16px; transition: border-color .2s; }
+    .cert-item {
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      border-radius: 8px; padding: 18px 22px;
+      display: flex; align-items: center; gap: 16px;
+      transition: border-color .2s;
+    }
     .cert-item:hover { border-color: var(--border-mid); }
     .cert-icon { font-size: 22px; flex-shrink: 0; width: 34px; text-align: center; }
     .cert-body { flex: 1; }
     .cert-name { font-size: 15px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
-    .cert-meta { font-size: 11px; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; }
-    .cert-badge { font-size: 10px; padding: 4px 10px; border-radius: 4px; letter-spacing: .06em; text-transform: uppercase; flex-shrink: 0; background: var(--accent-bg); color: var(--accent-tag); border: 1px solid var(--accent-tag-border); font-family: 'JetBrains Mono', monospace; }
+    .cert-meta {
+      font-size: 11px; color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .cert-badge {
+      font-size: 10px; padding: 4px 10px; border-radius: 4px;
+      letter-spacing: .06em; text-transform: uppercase; flex-shrink: 0;
+      background: var(--accent-bg); color: var(--accent-tag);
+      border: 1px solid var(--accent-tag-border);
+      font-family: 'JetBrains Mono', monospace;
+    }
 
+    /* HOBBIES — single column */
     .hobbies-list { display: flex; flex-direction: column; gap: 16px; }
-    .hobby-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 10px; padding: 24px; transition: border-color .2s, transform .15s ease; }
+
+    .hobby-card {
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      border-radius: 10px; padding: 24px;
+      transition: border-color .2s, transform .15s ease;
+    }
     .hobby-card:hover { border-color: var(--accent-bg); transform: translateY(-2px); }
-    .hobby-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+    .hobby-header {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 14px;
+    }
     .hobby-icon { font-size: 24px; }
-    .hobby-title { font-family: 'Fraunces', serif; font-size: 18px; font-weight: 700; color: var(--text); }
+    .hobby-title {
+      font-family: 'Fraunces', serif; font-size: 18px; font-weight: 700; color: var(--text);
+    }
     .hobby-body { font-size: 15px; color: var(--text-dim); line-height: 1.85; }
     .hobby-body p + p { margin-top: 10px; }
     .hobby-body strong { color: var(--text); font-weight: 500; }
 
-    footer { padding: 40px 0 20px; text-align: center; font-size: 11px; color: var(--text-muted); letter-spacing: .04em; font-family: 'JetBrains Mono', monospace; }
-    footer span { color: var(--accent); }
-
-    @media (max-width: 600px) {
-      .nav-links { display: none; }
-      .hero { padding: 48px 0 40px; }
+    footer {
+      padding: 40px 0 20px; text-align: center;
+      font-size: 11px; color: var(--text-muted); letter-spacing: .04em;
+      font-family: 'JetBrains Mono', monospace;
     }
+    footer span { color: var(--accent); }
   </style>
 </head>
 <body>
@@ -217,11 +306,14 @@
 <header>
   <nav>
     <div class="nav-brand">
-      <a href="#about"><img src="docs/logo.png" alt="jaime-builds" /></a>
+      <a href="#about"><img src="logo.png" alt="jaime-builds" /></a>
     </div>
     <ul class="nav-links">
-      <li><a href="#about">About</a></li>
-      <li class="nav-resume"><a href="#" onclick="return false;" target="_blank" rel="noopener">Resume ↗</a></li>
+      <li><a href="#about">about</a></li>
+      <li><a href="#skills">skills</a></li>
+      <li><a href="#projects">projects</a></li>
+      <li><a href="#certs">certs</a></li>
+      <li><a href="#hobbies">hobbies</a></li>
     </ul>
     <button id="theme-toggle" aria-label="Toggle theme">☀</button>
   </nav>
@@ -229,21 +321,24 @@
 
 <main class="wrapper">
 
+  <!-- ABOUT -->
   <section id="about" class="hero">
     <div class="hero-top">
-      <img class="hero-avatar" src="docs/avatar.png" alt="Jaime De La Paz" />
+      <img class="hero-avatar" src="avatar.png" alt="Jaime De La Paz" />
       <div class="hero-identity">
         <div class="hero-eyebrow">about me</div>
         <h1>Hey, I'm <span class="name">Jaime</span></h1>
         <p class="hero-subtitle">Enterprise Support Engineer @ Depot.dev &nbsp;·&nbsp; 15+ Years in the Trenches &nbsp;·&nbsp; Bilingual EN / ES</p>
       </div>
     </div>
+
     <div class="hero-bio">
       <p>I was born in Mexico and grew up in El Paso, TX. Computers got me early. My uncle showed me WordPerfect and some DOS commands when I was a kid, and I was hooked. I started doing science fair projects about how computers work, taught myself BASIC, and spent way too much time writing games on a TI-83 calculator. I won a scholarship for computer science and had every intention of making it a straight line. Life took me down a different path. I spent time as a forklift operator and a blackjack dealer before finding my way into a call center, then telecom support, then a helpdesk role at a moving company. Eventually I made it to Austin, TX as a Technical Support Engineer at Spiceworks, and that's where the career really took off.</p>
       <p>I've spent over 15 years making complex systems make sense for developers, customers, and everyone in between. Tier 3 escalation, large-scale server infrastructure, PCI compliance, infrastructure automation with Terraform and Terragrunt, endpoint and equipment management, and integrations across Shopify, Salesforce, Magento, and Kubernetes. Along the way I picked up deep experience in ClickHouse, Docker internals, and build tooling. The list is long and the curiosity hasn't worn off.</p>
       <p>I am currently an Enterprise Support Engineer at <a href="https://depot.dev" target="_blank" rel="noopener">Depot.dev</a>, helping developers get the most out of their Docker builds and CI pipelines. I believe that understanding the infrastructure behind the product is the best way to truly support it, and because of that I'm always looking to learn, grow, and add to my list of certifications.</p>
       <p>Based in Rogers City, MI, right on Lake Huron. Still as curious as the kid who entered his first DOS command.</p>
     </div>
+
     <div class="hero-links">
       <a href="#projects" class="btn-ghost">View my projects &rarr;</a>
       <div class="hero-sep"></div>
@@ -252,53 +347,135 @@
     </div>
   </section>
 
+  <!-- SKILLS -->
   <section id="skills">
     <div class="section-label">what I work with</div>
     <h2 class="section-title">Skills &amp; Tech Stack</h2>
     <div class="skills-grid">
+
       <div class="skill-group">
         <div class="skill-group-title">🗄️ &nbsp;Databases</div>
-        <div class="tags"><span class="tag">ClickHouse</span><span class="tag">PostgreSQL</span><span class="tag">MySQL</span><span class="tag">MariaDB</span><span class="tag">SQLite</span><span class="tag">SQL Server</span></div>
+        <div class="tags">
+          <span class="tag">ClickHouse</span><span class="tag">PostgreSQL</span>
+          <span class="tag">MySQL</span><span class="tag">MariaDB</span>
+          <span class="tag">SQLite</span><span class="tag">SQL Server</span>
+        </div>
       </div>
+
       <div class="skill-group">
         <div class="skill-group-title">🐧 &nbsp;Systems &amp; Infrastructure</div>
-        <div class="tags"><span class="tag">Linux (Ubuntu / CentOS)</span><span class="tag">Windows Server</span><span class="tag">Docker</span><span class="tag">Kubernetes</span><span class="tag">OpenShift</span><span class="tag">AWS</span><span class="tag">Cloudflare</span><span class="tag">Active Directory</span><span class="tag">VMware</span><span class="tag">VirtualBox</span><span class="tag">Hyper-V</span></div>
+        <div class="tags">
+          <span class="tag">Linux (Ubuntu / CentOS)</span><span class="tag">Windows Server</span>
+          <span class="tag">Docker</span><span class="tag">Kubernetes</span>
+          <span class="tag">OpenShift</span><span class="tag">AWS</span>
+          <span class="tag">Cloudflare</span><span class="tag">Active Directory</span>
+          <span class="tag">VMware</span><span class="tag">VirtualBox</span>
+          <span class="tag">Hyper-V</span>
+        </div>
       </div>
+
       <div class="skill-group">
         <div class="skill-group-title">🔌 &nbsp;APIs &amp; Integrations</div>
-        <div class="tags"><span class="tag">REST APIs</span><span class="tag">GraphQL</span><span class="tag">Shopify</span><span class="tag">Magento</span><span class="tag">Salesforce</span><span class="tag">Stripe</span><span class="tag">Zendesk</span><span class="tag">SAML / OAuth</span><span class="tag">SSO</span><span class="tag">OpenID Connect</span><span class="tag">Webhooks</span><span class="tag">Postman</span><span class="tag">RabbitMQ</span><span class="tag">Zapier</span></div>
+        <div class="tags">
+          <span class="tag">REST APIs</span><span class="tag">GraphQL</span>
+          <span class="tag">Shopify</span><span class="tag">Magento</span>
+          <span class="tag">Salesforce</span><span class="tag">Stripe</span>
+          <span class="tag">Zendesk</span><span class="tag">SAML / OAuth</span>
+          <span class="tag">SSO</span><span class="tag">OpenID Connect</span>
+          <span class="tag">Webhooks</span><span class="tag">Postman</span>
+          <span class="tag">RabbitMQ</span><span class="tag">Zapier</span>
+        </div>
       </div>
+
       <div class="skill-group">
         <div class="skill-group-title">🎯 &nbsp;Support &amp; Operations</div>
-        <div class="tags"><span class="tag">Tier 3 Escalation</span><span class="tag">Incident Response</span><span class="tag">On-Call Management</span><span class="tag">SLA Management</span><span class="tag">Root Cause Analysis</span><span class="tag">PCI Compliance</span><span class="tag">Zendesk</span><span class="tag">Jira</span><span class="tag">Jira Service Desk</span><span class="tag">Confluence</span><span class="tag">ServiceNow</span><span class="tag">Intercom</span><span class="tag">Spiceworks</span></div>
+        <div class="tags">
+          <span class="tag">Tier 3 Escalation</span><span class="tag">Incident Response</span>
+          <span class="tag">On-Call Management</span><span class="tag">SLA Management</span>
+          <span class="tag">Root Cause Analysis</span><span class="tag">PCI Compliance</span>
+          <span class="tag">Zendesk</span><span class="tag">Jira</span>
+          <span class="tag">Jira Service Desk</span><span class="tag">Confluence</span>
+          <span class="tag">ServiceNow</span><span class="tag">Intercom</span>
+          <span class="tag">Spiceworks</span>
+        </div>
       </div>
+
       <div class="skill-group">
         <div class="skill-group-title">💻 &nbsp;Languages &amp; Scripting</div>
-        <div class="tags"><span class="tag">SQL</span><span class="tag">Python</span><span class="tag">Bash</span><span class="tag">PowerShell</span><span class="tag">Go</span><span class="tag">JavaScript</span><span class="tag">TypeScript</span><span class="tag">YAML</span><span class="tag">JSON</span><span class="tag">HTML</span><span class="tag">RegEx</span></div>
+        <div class="tags">
+          <span class="tag">SQL</span><span class="tag">Python</span>
+          <span class="tag">Bash</span><span class="tag">PowerShell</span>
+          <span class="tag">Go</span><span class="tag">JavaScript</span>
+          <span class="tag">TypeScript</span><span class="tag">YAML</span>
+          <span class="tag">JSON</span><span class="tag">HTML</span>
+          <span class="tag">RegEx</span>
+        </div>
       </div>
+
       <div class="skill-group">
         <div class="skill-group-title">🔍 &nbsp;Monitoring &amp; Observability</div>
-        <div class="tags"><span class="tag">Datadog</span><span class="tag">New Relic</span><span class="tag">Icinga</span><span class="tag">Prometheus</span><span class="tag">Grafana</span><span class="tag">Kibana</span><span class="tag">OpenSearch</span><span class="tag">OpenTelemetry</span><span class="tag">Axiom</span><span class="tag">Honeycomb</span><span class="tag">CloudWatch</span><span class="tag">Sumo Logic</span><span class="tag">PagerDuty</span></div>
+        <div class="tags">
+          <span class="tag">Datadog</span><span class="tag">New Relic</span>
+          <span class="tag">Icinga</span><span class="tag">Prometheus</span>
+          <span class="tag">Grafana</span><span class="tag">Kibana</span>
+          <span class="tag">OpenSearch</span><span class="tag">OpenTelemetry</span>
+          <span class="tag">Axiom</span><span class="tag">Honeycomb</span>
+          <span class="tag">CloudWatch</span><span class="tag">Sumo Logic</span>
+          <span class="tag">PagerDuty</span>
+        </div>
       </div>
+
       <div class="skill-group">
         <div class="skill-group-title">⚙️ &nbsp;DevOps &amp; CI/CD</div>
-        <div class="tags"><span class="tag">Git</span><span class="tag">GitHub Actions</span><span class="tag">GitLab</span><span class="tag">Bitbucket</span><span class="tag">Jenkins</span><span class="tag">Depot</span><span class="tag">Terraform</span><span class="tag">Terragrunt</span><span class="tag">CI/CD Pipelines</span><span class="tag">Infrastructure-as-Code</span></div>
+        <div class="tags">
+          <span class="tag">Git</span><span class="tag">GitHub Actions</span>
+          <span class="tag">GitLab</span><span class="tag">Bitbucket</span>
+          <span class="tag">Jenkins</span><span class="tag">Depot</span>
+          <span class="tag">Terraform</span><span class="tag">Terragrunt</span>
+          <span class="tag">CI/CD Pipelines</span><span class="tag">Infrastructure-as-Code</span>
+        </div>
       </div>
+
       <div class="skill-group">
         <div class="skill-group-title">🖥️ &nbsp;Web &amp; Frameworks</div>
-        <div class="tags"><span class="tag">Flask</span><span class="tag">SQLAlchemy</span><span class="tag">React</span><span class="tag">Bootstrap</span><span class="tag">Chart.js</span><span class="tag">WebSockets</span><span class="tag">Jinja2</span></div>
+        <div class="tags">
+          <span class="tag">Flask</span><span class="tag">SQLAlchemy</span>
+          <span class="tag">React</span><span class="tag">Bootstrap</span>
+          <span class="tag">Chart.js</span><span class="tag">WebSockets</span>
+          <span class="tag">Jinja2</span>
+        </div>
       </div>
+
       <div class="skill-group">
         <div class="skill-group-title">📱 &nbsp;Device &amp; Endpoint Management</div>
-        <div class="tags"><span class="tag">MDM</span><span class="tag">Kolide</span><span class="tag">Sophos</span><span class="tag">Bitdefender</span><span class="tag">Endpoint Troubleshooting</span><span class="tag">Laptop / Equipment Management</span><span class="tag">Device Provisioning</span><span class="tag">Patch Management</span></div>
+        <div class="tags">
+          <span class="tag">MDM</span><span class="tag">Kolide</span>
+          <span class="tag">Sophos</span><span class="tag">Bitdefender</span>
+          <span class="tag">Endpoint Troubleshooting</span>
+          <span class="tag">Laptop / Equipment Management</span>
+          <span class="tag">Device Provisioning</span><span class="tag">Patch Management</span>
+        </div>
       </div>
+
       <div class="skill-group">
         <div class="skill-group-title">🤖 &nbsp;AI &amp; LLMs</div>
-        <div class="tags"><span class="tag">Claude</span><span class="tag">ChatGPT</span><span class="tag">Gemini</span><span class="tag">Qwen3.5</span><span class="tag">Gemma 4</span><span class="tag">Mistral</span><span class="tag">DeepSeek R1</span><span class="tag">Ollama</span><span class="tag">Jan.ai</span><span class="tag">Cursor</span><span class="tag">Prompt Engineering</span><span class="tag">Claude Skills Development</span><span class="tag">LLM Administration</span><span class="tag">AI-assisted Workflows</span></div>
+        <div class="tags">
+          <span class="tag">Claude</span><span class="tag">ChatGPT</span>
+          <span class="tag">Gemini</span><span class="tag">Qwen3.5</span>
+          <span class="tag">Gemma 4</span><span class="tag">Mistral</span>
+          <span class="tag">DeepSeek R1</span><span class="tag">Ollama</span>
+          <span class="tag">Jan.ai</span><span class="tag">Cursor</span>
+          <span class="tag">Prompt Engineering</span>
+          <span class="tag">Claude Skills Development</span>
+          <span class="tag">LLM Administration</span>
+          <span class="tag">AI-assisted Workflows</span>
+        </div>
       </div>
+
     </div>
   </section>
 
+  <!-- PROJECTS -->
   <section id="projects">
     <div class="section-label">things I've built</div>
     <h2 class="section-title">Projects &amp; Portfolio</h2>
@@ -317,7 +494,12 @@
           <div class="project-meta-item">🔄 <span>Daily TMDB sync</span></div>
         </div>
         <div class="project-footer">
-          <div class="tags"><span class="tag">Python</span><span class="tag">Flask</span><span class="tag">SQLAlchemy</span><span class="tag">PostgreSQL</span><span class="tag">Chart.js</span><span class="tag">Bootstrap</span><span class="tag">GitHub Actions</span><span class="tag">TMDB API</span></div>
+          <div class="tags">
+            <span class="tag">Python</span><span class="tag">Flask</span>
+            <span class="tag">SQLAlchemy</span><span class="tag">PostgreSQL</span>
+            <span class="tag">Chart.js</span><span class="tag">Bootstrap</span>
+            <span class="tag">GitHub Actions</span><span class="tag">TMDB API</span>
+          </div>
           <a class="project-link" href="https://github.com/jaime-builds/movie-analytics-dashboard" target="_blank" rel="noopener">github ↗</a>
         </div>
       </div>
@@ -335,7 +517,12 @@
           <div class="project-meta-item">🗼 <span>4 tower types</span></div>
         </div>
         <div class="project-footer">
-          <div class="tags"><span class="tag">Go</span><span class="tag">React</span><span class="tag">TypeScript</span><span class="tag">WebSockets</span><span class="tag">HTML5 Canvas</span><span class="tag">PostgreSQL</span><span class="tag">Vite</span></div>
+          <div class="tags">
+            <span class="tag">Go</span><span class="tag">React</span>
+            <span class="tag">TypeScript</span><span class="tag">WebSockets</span>
+            <span class="tag">HTML5 Canvas</span><span class="tag">PostgreSQL</span>
+            <span class="tag">Vite</span>
+          </div>
           <a class="project-link" href="https://github.com/jaime-builds/rust-rush" target="_blank" rel="noopener">github ↗</a>
         </div>
       </div>
@@ -343,31 +530,113 @@
     </div>
   </section>
 
+  <!-- CERTIFICATIONS -->
   <section id="certs">
     <div class="section-label">credentials</div>
     <h2 class="section-title">Certifications</h2>
     <div class="certs-list">
-      <div class="cert-item"><div class="cert-icon">🐶</div><div class="cert-body"><div class="cert-name">Datadog: Configuration Learning Path</div><div class="cert-meta">Datadog &nbsp;·&nbsp; January 2026</div></div><div class="cert-badge">Earned</div></div>
-      <div class="cert-item"><div class="cert-icon">🐶</div><div class="cert-body"><div class="cert-name">Datadog: Core Skills Learning Path</div><div class="cert-meta">Datadog &nbsp;·&nbsp; January 2026</div></div><div class="cert-badge">Earned</div></div>
-      <div class="cert-item"><div class="cert-icon">🤖</div><div class="cert-body"><div class="cert-name">Getting Started with Artificial Intelligence</div><div class="cert-meta">IBM &nbsp;·&nbsp; January 2026</div></div><div class="cert-badge">Earned</div></div>
-      <div class="cert-item"><div class="cert-icon">📡</div><div class="cert-body"><div class="cert-name">LFS148: Getting Started with OpenTelemetry</div><div class="cert-meta">The Linux Foundation &nbsp;·&nbsp; January 2026</div></div><div class="cert-badge">Earned</div></div>
-      <div class="cert-item"><div class="cert-icon">🛍️</div><div class="cert-body"><div class="cert-name">Shopify: Development Fundamentals Verified Skill Badge</div><div class="cert-meta">Shopify &nbsp;·&nbsp; December 2024 &nbsp;·&nbsp; Expires December 2026</div></div><div class="cert-badge">Earned</div></div>
-      <div class="cert-item"><div class="cert-icon">🛍️</div><div class="cert-body"><div class="cert-name">Shopify: Foundations Certification</div><div class="cert-meta">Shopify &nbsp;·&nbsp; June 2024 &nbsp;·&nbsp; Expires June 2026</div></div><div class="cert-badge">Earned</div></div>
-      <div class="cert-item"><div class="cert-icon">🗄️</div><div class="cert-body"><div class="cert-name">ClickHouse Core Certification</div><div class="cert-meta">ClickHouse, Inc. &nbsp;·&nbsp; February 2025 &nbsp;·&nbsp; Expires February 2027</div></div><div class="cert-badge">Earned</div></div>
-      <div class="cert-item"><div class="cert-icon">🐍</div><div class="cert-body"><div class="cert-name">Learn to Code in Python</div><div class="cert-meta">Boot.dev &nbsp;·&nbsp; February 2026</div></div><div class="cert-badge">Earned</div></div>
-      <div class="cert-item"><div class="cert-icon">🐍</div><div class="cert-body"><div class="cert-name">Build a Bookbot in Python</div><div class="cert-meta">Boot.dev &nbsp;·&nbsp; February 2026</div></div><div class="cert-badge">Earned</div></div>
-      <div class="cert-item"><div class="cert-icon">🐧</div><div class="cert-body"><div class="cert-name">Learn Linux</div><div class="cert-meta">Boot.dev &nbsp;·&nbsp; February 2026</div></div><div class="cert-badge">Earned</div></div>
-      <div class="cert-item"><div class="cert-icon">🌿</div><div class="cert-body"><div class="cert-name">Learn Git</div><div class="cert-meta">Boot.dev &nbsp;·&nbsp; March 2026</div></div><div class="cert-badge">Earned</div></div>
+      <div class="cert-item">
+        <div class="cert-icon">🐶</div>
+        <div class="cert-body">
+          <div class="cert-name">Datadog: Configuration Learning Path</div>
+          <div class="cert-meta">Datadog &nbsp;·&nbsp; January 2026</div>
+        </div>
+        <div class="cert-badge">Earned</div>
+      </div>
+      <div class="cert-item">
+        <div class="cert-icon">🐶</div>
+        <div class="cert-body">
+          <div class="cert-name">Datadog: Core Skills Learning Path</div>
+          <div class="cert-meta">Datadog &nbsp;·&nbsp; January 2026</div>
+        </div>
+        <div class="cert-badge">Earned</div>
+      </div>
+      <div class="cert-item">
+        <div class="cert-icon">🤖</div>
+        <div class="cert-body">
+          <div class="cert-name">Getting Started with Artificial Intelligence</div>
+          <div class="cert-meta">IBM &nbsp;·&nbsp; January 2026</div>
+        </div>
+        <div class="cert-badge">Earned</div>
+      </div>
+      <div class="cert-item">
+        <div class="cert-icon">📡</div>
+        <div class="cert-body">
+          <div class="cert-name">LFS148: Getting Started with OpenTelemetry</div>
+          <div class="cert-meta">The Linux Foundation &nbsp;·&nbsp; January 2026</div>
+        </div>
+        <div class="cert-badge">Earned</div>
+      </div>
+      <div class="cert-item">
+        <div class="cert-icon">🛍️</div>
+        <div class="cert-body">
+          <div class="cert-name">Shopify: Development Fundamentals Verified Skill Badge</div>
+          <div class="cert-meta">Shopify &nbsp;·&nbsp; December 2024 &nbsp;·&nbsp; Expires December 2026</div>
+        </div>
+        <div class="cert-badge">Earned</div>
+      </div>
+      <div class="cert-item">
+        <div class="cert-icon">🛍️</div>
+        <div class="cert-body">
+          <div class="cert-name">Shopify: Foundations Certification</div>
+          <div class="cert-meta">Shopify &nbsp;·&nbsp; June 2024 &nbsp;·&nbsp; Expires June 2026</div>
+        </div>
+        <div class="cert-badge">Earned</div>
+      </div>
+      <div class="cert-item">
+        <div class="cert-icon">🗄️</div>
+        <div class="cert-body">
+          <div class="cert-name">ClickHouse Core Certification</div>
+          <div class="cert-meta">ClickHouse, Inc. &nbsp;·&nbsp; February 2025 &nbsp;·&nbsp; Expires February 2027</div>
+        </div>
+        <div class="cert-badge">Earned</div>
+      </div>
+      <div class="cert-item">
+        <div class="cert-icon">🐍</div>
+        <div class="cert-body">
+          <div class="cert-name">Learn to Code in Python</div>
+          <div class="cert-meta">Boot.dev &nbsp;·&nbsp; February 2026</div>
+        </div>
+        <div class="cert-badge">Earned</div>
+      </div>
+      <div class="cert-item">
+        <div class="cert-icon">🐍</div>
+        <div class="cert-body">
+          <div class="cert-name">Build a Bookbot in Python</div>
+          <div class="cert-meta">Boot.dev &nbsp;·&nbsp; February 2026</div>
+        </div>
+        <div class="cert-badge">Earned</div>
+      </div>
+      <div class="cert-item">
+        <div class="cert-icon">🐧</div>
+        <div class="cert-body">
+          <div class="cert-name">Learn Linux</div>
+          <div class="cert-meta">Boot.dev &nbsp;·&nbsp; February 2026</div>
+        </div>
+        <div class="cert-badge">Earned</div>
+      </div>
+      <div class="cert-item">
+        <div class="cert-icon">🌿</div>
+        <div class="cert-body">
+          <div class="cert-name">Learn Git</div>
+          <div class="cert-meta">Boot.dev &nbsp;·&nbsp; March 2026</div>
+        </div>
+        <div class="cert-badge">Earned</div>
+      </div>
     </div>
   </section>
 
+  <!-- HOBBIES -->
   <section id="hobbies">
     <div class="section-label">outside of work</div>
     <h2 class="section-title">Hobbies &amp; Interests</h2>
     <div class="hobbies-list">
 
       <div class="hobby-card">
-        <div class="hobby-header"><div class="hobby-icon">🎮</div><div class="hobby-title">Video Games</div></div>
+        <div class="hobby-header">
+          <div class="hobby-icon">🎮</div>
+          <div class="hobby-title">Video Games</div>
+        </div>
         <div class="hobby-body">
           <p>I've been into gaming since I was a kid. The game that started it all was <strong>Super Mario Bros. 3</strong>, the first game I ever beat from beginning to end. That set the tone. Over the years a handful of others really got their hooks in me: <strong>StarCraft</strong>, <strong>Age of Empires</strong>, <strong>Diablo</strong>, <strong>Civilization</strong>, <strong>Escape Velocity</strong>. I still remember playing <strong>StarCraft</strong> with friends before class started in high school.</p>
           <p>These days I gravitate toward survival, creative, simulator, and strategy titles. Current favorites include <strong>Grounded</strong>, <strong>Palworld</strong>, <strong>Minecraft</strong>, <strong>X-COM</strong>, <strong>Vampire Survivors</strong>, and <strong>Uncharted</strong>. For retro, the taste shifts a bit. Platformers like <strong>Mario 64</strong> and <strong>GoldenEye</strong>, RPGs like <strong>Quest 64</strong> and <strong>Gladius</strong>. Some classics just don't age.</p>
@@ -376,7 +645,10 @@
       </div>
 
       <div class="hobby-card">
-        <div class="hobby-header"><div class="hobby-icon">🎬</div><div class="hobby-title">Movies &amp; TV</div></div>
+        <div class="hobby-header">
+          <div class="hobby-icon">🎬</div>
+          <div class="hobby-title">Movies &amp; TV</div>
+        </div>
         <div class="hobby-body">
           <p>Some movies I keep coming back to: <strong>The Dark Knight</strong>, <strong>Shawshank Redemption</strong>, <strong>Goodfellas</strong>, <strong>Fight Club</strong>, <strong>The Martian</strong>, <strong>Office Space</strong>, <strong>Glass Onion</strong>, <strong>Monty Python and the Holy Grail</strong>. More than genres, I follow filmmakers. <strong>Christopher Nolan</strong>, <strong>Quentin Tarantino</strong>, <strong>Edgar Wright</strong>, <strong>Wes Anderson</strong>. Every <strong>Marvel</strong> movie gets a watch from me. Not all of them earn a rewatch, but they all get a fair shot.</p>
           <p>On TV, the rewatches are <strong>The Office</strong>, <strong>The Simpsons</strong>, <strong>Game of Thrones</strong>, <strong>Spartacus</strong>, and <strong>Trial and Error</strong>. Recently I've been into <strong>The Bear</strong>, <strong>Paradise</strong>, <strong>Only Murders in the Building</strong>, <strong>Black Mirror</strong>, and <strong>DTF: St. Louis</strong>. <strong>Survivor</strong> and <strong>The Traitors</strong> are always running in the background somewhere. I also watch a lot of documentaries. The <strong>Untold</strong> series on Netflix, <strong>30 for 30</strong>, true crime. Give me something well-researched and well-told and I'm watching it.</p>
@@ -384,7 +656,10 @@
       </div>
 
       <div class="hobby-card">
-        <div class="hobby-header"><div class="hobby-icon">🎸</div><div class="hobby-title">Music</div></div>
+        <div class="hobby-header">
+          <div class="hobby-icon">🎸</div>
+          <div class="hobby-title">Music</div>
+        </div>
         <div class="hobby-body">
           <p>My mom introduced me to <strong>The Beatles</strong> and the oldies when I was a kid, and it never wore off. I played alto saxophone in concert and marching band all through high school, competed in solo and ensemble, and finished my senior year in jazz band on baritone sax. At some point the instrument stopped and the listening never did.</p>
           <p>My taste runs all over the place. <strong>The Beatles</strong> are my all-time favorite band and Layla by <strong>Derek and the Dominos</strong> is my favorite song. From there, the list goes to <strong>Juanes</strong>, <strong>Mana</strong>, <strong>Eminem</strong>, <strong>Santana</strong>, <strong>Jay-Z</strong>, <strong>Metallica</strong>, and <strong>Vicente Fernandez</strong>, to name a few. Classic rock to norteño to hip hop to metal, it all depends on the mood. I have many different playlists ready to go depending on what mood I'm in, including one with 448 of my favorite songs that I can put on shuffle and never skip. That probably says more about my taste than any genre label could.</p>
@@ -392,7 +667,10 @@
       </div>
 
       <div class="hobby-card">
-        <div class="hobby-header"><div class="hobby-icon">🏈</div><div class="hobby-title">Sports</div></div>
+        <div class="hobby-header">
+          <div class="hobby-icon">🏈</div>
+          <div class="hobby-title">Sports</div>
+        </div>
         <div class="hobby-body">
           <p>Football is my sport. I grew up in Texas surrounded by Cowboys fans, and I think that's exactly why I went the other way. The <strong>New England Patriots</strong> had just redesigned their logo from Patriot Pat to the Flying Elvis and I loved it. That was enough. It wasn't great at first, but I stuck with it, and then it was nothing but winning for a long time.</p>
           <p>Beyond football I follow the <strong>Dallas Mavericks</strong> and the <strong>University of Texas Longhorns</strong>. Football season for UT is a given, and I'm in for basketball when March Madness hits. For soccer, I try to catch every <strong>Mexico</strong> game I can. Teams like the <strong>Rangers</strong>, <strong>Stars</strong>, <strong>Manchester United</strong>, and <strong>Real Madrid</strong> stay on my radar, but I'm honest about it: more reading and score-checking than sitting down for full games outside of the playoffs.</p>
@@ -409,18 +687,5 @@
 
 </main>
 
-<script>
-  const toggle = document.getElementById('theme-toggle');
-  const root = document.documentElement;
-  const saved = localStorage.getItem('jb-theme') || 'dark';
-  root.setAttribute('data-theme', saved);
-  toggle.textContent = saved === 'dark' ? '☀' : '🌙';
-  toggle.addEventListener('click', () => {
-    const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-    root.setAttribute('data-theme', next);
-    toggle.textContent = next === 'dark' ? '☀' : '🌙';
-    localStorage.setItem('jb-theme', next);
-  });
-</script>
 </body>
 </html>
