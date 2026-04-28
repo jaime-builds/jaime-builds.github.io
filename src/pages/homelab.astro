@@ -1,0 +1,22 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Homelab — Jaime De La Paz">
+  <main class="wrapper">
+    <section class="placeholder">
+      <div class="section-label">what's running</div>
+      <h1 class="section-title">Homelab</h1>
+      <p class="coming-soon">Coming soon.</p>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .wrapper { max-width: 1080px; margin: 0 auto; padding: 0 28px 120px; }
+  .placeholder { padding: 80px 0; }
+  .section-label { font-size: 11px; color: var(--accent); letter-spacing: .14em; text-transform: uppercase; font-weight: 500; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+  .section-label::before { content: '—'; opacity: 0.5; }
+  .section-title { font-family: 'Fraunces', serif; font-size: 28px; font-weight: 700; color: var(--text); margin-bottom: 24px; letter-spacing: -.2px; }
+  .coming-soon { font-size: 15px; color: var(--text-dim); }
+</style>
