@@ -1,0 +1,21 @@
+name: Deploy to jaime-site
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: [self-hosted, jaime-site]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Sync site files to deploy target
+        run: |
+          mkdir -p /deploy-target
+          rsync -av --delete ./index.html /deploy-target/
+          rsync -av --delete ./projects/ /deploy-target/projects/
+          rsync -av --delete ./homelab/ /deploy-target/homelab/
+          rsync -av --delete ./docs/ /deploy-target/docs/
