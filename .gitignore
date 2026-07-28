@@ -8,3 +8,8 @@ Thumbs.db
 
 # Misc
 *.log
+
+# Node / Astro (scaffold abandoned 2026-07-27, kept for reference — see jaime-build-website.md)
+node_modules/
+.astro/
+dist/
