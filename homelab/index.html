@@ -229,14 +229,14 @@
   <div class="page-head">
     <div class="section-label">what's running at home</div>
     <h1 class="page-title">Homelab</h1>
-    <p class="page-intro">A snapshot of what's currently running at home. Media server, book pipeline, monitoring, home automation, and a handful of self-built tools, all running on a small self-hosted server behind a reverse proxy and tunnel — no ports opened to the internet.</p>
+    <p class="page-intro">A snapshot of what's currently running at home. Media server, book pipeline, monitoring, home automation, and a handful of self-built tools, all running on a small self-hosted server behind a reverse proxy and tunnel, with no ports opened to the internet.</p>
   </div>
 
   <section id="topology">
     <div class="section-label">how it connects</div>
     <h2 class="section-title">Network Topology</h2>
     <figure class="diagram">
-      <img src="../docs/network-topology.svg" alt="Network topology diagram: Internet to a fiber ISP connection to a Wi-Fi 7 router. The router feeds a multi-gigabit switch, a directly connected Gaming PC, and two isolated wireless networks — Wi-Fi Main for trusted devices and Wi-Fi IoT. The switch connects to the Media Server running Unraid, which has a multi-bay USB drive enclosure attached. A Cloudflare Tunnel runs outbound only from the Media Server, so no ports are forwarded on the router and all external access goes through the tunnel." />
+      <img src="../docs/network-topology.svg" alt="Network topology diagram: Internet to a fiber ISP connection to a Wi-Fi 7 router. The router feeds a multi-gigabit switch, a directly connected Gaming PC, and two isolated wireless networks, Wi-Fi Main for trusted devices and Wi-Fi IoT. The switch connects to the Media Server running Unraid, which has a multi-bay USB drive enclosure attached. A Cloudflare Tunnel runs outbound only from the Media Server, so no ports are forwarded on the router and all external access goes through the tunnel." />
     </figure>
     <p class="diagram-hint">scroll the diagram sideways to read it →</p>
   </section>
@@ -268,7 +268,7 @@
     <div class="section-label">why it's built this way</div>
     <h2 class="section-title">Key Decisions</h2>
     <div class="decisions-card">
-      <p>Everything routes through a Cloudflare Tunnel rather than forwarded ports — no inbound holes in the firewall, and it works the same whether at home or traveling. Storage runs on Unraid with parity protection, so any single drive can fail without losing data. Media, photos, and files are self-hosted (Immich, Nextcloud, Plex/Jellyfin) instead of paying for cloud storage subscriptions. Network-wide DNS filtering through AdGuard Home blocks ads and trackers for every device on the network, not just the ones with an extension installed.</p>
+      <p>Everything routes through a Cloudflare Tunnel rather than forwarded ports, so there are no inbound holes in the firewall, and it works the same whether at home or traveling. Storage runs on Unraid with parity protection, so any single drive can fail without losing data. Media, photos, and files are self-hosted (Immich, Nextcloud, Plex/Jellyfin) instead of paying for cloud storage subscriptions. Network-wide DNS filtering through AdGuard Home blocks ads and trackers for every device on the network, not just the ones with an extension installed.</p>
     </div>
   </section>
 
@@ -276,7 +276,7 @@
     <div class="section-label">acquisition to library</div>
     <h2 class="section-title">Media Stack Flow</h2>
     <figure class="diagram">
-      <img src="../docs/media-stack-flow.svg" alt="Media stack flow diagram: two acquisition lanes — video from a private tracker, books from a self-built book search interface — both routing through an off-site seedbox that downloads and seeds for ratio. A scheduled rclone sync pulls content into the parity-protected Unraid storage array, which then fans out to Plex and Jellyfin, self-built AI-scheduled virtual live TV channels, and the ebook and audiobook library with auto-import on arrival. Nothing torrents directly on the home network." />
+      <img src="../docs/media-stack-flow.svg" alt="Media stack flow diagram: two acquisition lanes, video from a private tracker and books from a self-built book search interface, both routing through an off-site seedbox that downloads and seeds for ratio. A scheduled rclone sync pulls content into the parity-protected Unraid storage array, which then fans out to Plex and Jellyfin, self-built AI-scheduled virtual live TV channels, and the ebook and audiobook library with auto-import on arrival. Nothing torrents directly on the home network." />
     </figure>
     <p class="diagram-hint">scroll the diagram sideways to read it →</p>
   </section>
