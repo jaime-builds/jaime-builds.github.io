@@ -143,12 +143,9 @@
 
     .project-card {
       background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 28px;
-      transition: border-color .2s, transform .15s ease;
       display: flex; flex-direction: column;
+      color: inherit;
     }
-    .project-card:hover { border-color: var(--accent); transform: translateY(-2px); }
-    .project-card.is-static { color: inherit; }
-    .project-card.is-static:hover { border-color: var(--card-border); transform: none; }
     .project-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
     .project-name { font-family: 'Fraunces', serif; font-size: 19px; font-weight: 700; color: var(--text); }
     .project-status { font-size: 10px; letter-spacing: .08em; text-transform: uppercase; padding: 4px 12px; border-radius: 20px; flex-shrink: 0; font-weight: 500; font-family: 'JetBrains Mono', monospace; }
@@ -157,7 +154,6 @@
     .status-live { background: var(--surface); color: var(--text-dim); border: 1px solid var(--border-mid); }
     .project-desc { font-size: 15px; color: var(--text-dim); line-height: 1.8; margin-bottom: 18px; }
     .project-footer { display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-top: auto; }
-    .project-link { font-size: 11px; color: var(--accent-tag); font-family: 'JetBrains Mono', monospace; flex-shrink: 0; }
     .project-pending { font-size: 11px; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; flex-shrink: 0; }
 
     footer { padding: 40px 0 20px; text-align: center; font-size: 11px; color: var(--text-muted); letter-spacing: .04em; font-family: 'JetBrains Mono', monospace; }
@@ -177,7 +173,8 @@
       <a href="../index.html"><img src="../docs/logo.png" alt="jaime-builds" /></a>
     </div>
     <ul class="nav-links">
-      <li><a href="../index.html#about">About</a></li>
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="../about/">About</a></li>
       <li><a href="./" aria-current="page">Projects</a></li>
       <li><a href="../homelab/">Homelab</a></li>
     </ul>
@@ -195,7 +192,7 @@
   <section id="projects">
     <div class="projects-grid">
 
-      <a class="project-card" href="../index.html#projects">
+      <div class="project-card">
         <div class="project-header">
           <div class="project-name">🎬 Movie Analytics Dashboard</div>
           <div class="project-status status-active">Active</div>
@@ -203,11 +200,10 @@
         <p class="project-desc">Full-stack movie discovery platform pulling live TMDB data, with a custom hidden-gems scoring engine</p>
         <div class="project-footer">
           <div class="tags"><span class="tag">Python</span><span class="tag">Flask</span><span class="tag">PostgreSQL</span><span class="tag">TMDB API</span></div>
-          <span class="project-link">read more ↗</span>
         </div>
-      </a>
+      </div>
 
-      <a class="project-card" href="../index.html#projects">
+      <div class="project-card">
         <div class="project-header">
           <div class="project-name">🦀 Rust Rush — Tower Defense</div>
           <div class="project-status status-wip">In Progress</div>
@@ -215,11 +211,10 @@
         <p class="project-desc">Real-time browser tower defense with a server-authoritative Go backend running at 60 FPS</p>
         <div class="project-footer">
           <div class="tags"><span class="tag">Go</span><span class="tag">React</span><span class="tag">WebSockets</span><span class="tag">PostgreSQL</span></div>
-          <span class="project-link">read more ↗</span>
         </div>
-      </a>
+      </div>
 
-      <div class="project-card is-static">
+      <div class="project-card">
         <div class="project-header">
           <div class="project-name">🖥️ Self-Hosted Infrastructure</div>
           <div class="project-status status-live">Live</div>
@@ -231,7 +226,7 @@
         </div>
       </div>
 
-      <div class="project-card is-static">
+      <div class="project-card">
         <div class="project-header">
           <div class="project-name">📺 Media Automation Stack</div>
           <div class="project-status status-live">Live</div>
@@ -243,7 +238,7 @@
         </div>
       </div>
 
-      <div class="project-card is-static">
+      <div class="project-card">
         <div class="project-header">
           <div class="project-name">📚 Calibre + Kindle Setup</div>
           <div class="project-status status-live">Live</div>
