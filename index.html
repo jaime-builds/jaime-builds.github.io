@@ -29,6 +29,9 @@
       --wip-bg: #1e1a0a;
       --wip-text: #d4a017;
       --wip-border: #2e2810;
+      --live-bg: #16220d;
+      --live-text: #97c459;
+      --live-border: #2a3d18;
     }
 
     [data-theme="light"] {
@@ -49,6 +52,9 @@
       --wip-bg: #f5ead0;
       --wip-text: #8a5a10;
       --wip-border: #d4b070;
+      --live-bg: #e8f0d8;
+      --live-text: #3b6d11;
+      --live-border: #b8d090;
     }
 
     html { scroll-behavior: smooth; }
@@ -160,7 +166,7 @@
     .project-status { font-size: 10px; letter-spacing: .08em; text-transform: uppercase; padding: 4px 12px; border-radius: 20px; flex-shrink: 0; font-weight: 500; font-family: 'JetBrains Mono', monospace; }
     .status-active { background: var(--accent-bg); color: var(--accent); border: 1px solid var(--accent-tag-border); }
     .status-wip { background: var(--wip-bg); color: var(--wip-text); border: 1px solid var(--wip-border); }
-    .status-live { background: var(--surface); color: var(--text-dim); border: 1px solid var(--border-mid); }
+    .status-live { background: var(--live-bg); color: var(--live-text); border: 1px solid var(--live-border); }
     .project-desc { font-size: 15px; color: var(--text-dim); line-height: 1.8; margin-bottom: 18px; }
     .project-meta { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 18px; }
     .project-meta-item { font-size: 11px; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; }
@@ -240,7 +246,7 @@
       <div class="project-card">
         <div class="project-header">
           <div class="project-name">🎬 Movie Analytics Dashboard</div>
-          <div class="project-status status-active">Active</div>
+          <div class="project-status status-live">Live</div>
         </div>
         <p class="project-desc">A full-stack movie discovery platform with user authentication, personalized collections (favorites &amp; watchlists), ratings and reviews, and a rich analytics dashboard. Pulls live data from the TMDB API, syncing 8,000+ movies daily. The SQL is the real showpiece, with window functions, subqueries, a custom hidden-gems scoring algorithm, and a normalized 14-table schema. Ships with GitHub Actions CI/CD, 80%+ test coverage, and a RESTful API with 12 endpoints.</p>
         <div class="project-meta">
@@ -251,14 +257,14 @@
         </div>
         <div class="project-footer">
           <div class="tags"><span class="tag">Python</span><span class="tag">Flask</span><span class="tag">SQLAlchemy</span><span class="tag">PostgreSQL</span><span class="tag">Chart.js</span><span class="tag">Bootstrap</span><span class="tag">GitHub Actions</span><span class="tag">TMDB API</span></div>
-          <a class="project-link" href="https://github.com/jaime-builds/movie-analytics-dashboard" target="_blank" rel="noopener">github ↗</a>
+          <a class="project-link" href="https://movie-dashboard.jaime.build" target="_blank" rel="noopener">visit site ↗</a>
         </div>
       </div>
 
       <div class="project-card">
         <div class="project-header">
           <div class="project-name">🦀 Rust Rush — Tower Defense</div>
-          <div class="project-status status-wip">In Progress</div>
+          <div class="project-status status-live">Live</div>
         </div>
         <p class="project-desc">A real-time tower defense game running in the browser, built with a server-authoritative Go backend and a React + Canvas frontend. All game logic, including BFS pathfinding, projectile physics, tower targeting, and damage calculations, lives on the server at 60 FPS. The client just renders. Features WebSocket updates, 4 tower types, dynamic path recalculation mid-wave, and visual effects (muzzle flashes, explosions, health bars). MVP is complete; wave systems and multiplayer lobbies are next on the roadmap.</p>
         <div class="project-meta">
@@ -269,7 +275,7 @@
         </div>
         <div class="project-footer">
           <div class="tags"><span class="tag">Go</span><span class="tag">React</span><span class="tag">TypeScript</span><span class="tag">WebSockets</span><span class="tag">HTML5 Canvas</span><span class="tag">PostgreSQL</span><span class="tag">Vite</span></div>
-          <a class="project-link" href="https://github.com/jaime-builds/rust-rush" target="_blank" rel="noopener">github ↗</a>
+          <a class="project-link" href="https://rust-rush.jaime.build" target="_blank" rel="noopener">visit site ↗</a>
         </div>
       </div>
 
