@@ -29,6 +29,9 @@
       --wip-bg: #1e1a0a;
       --wip-text: #d4a017;
       --wip-border: #2e2810;
+      --live-bg: #16220d;
+      --live-text: #97c459;
+      --live-border: #2a3d18;
     }
 
     [data-theme="light"] {
@@ -49,6 +52,9 @@
       --wip-bg: #f5ead0;
       --wip-text: #8a5a10;
       --wip-border: #d4b070;
+      --live-bg: #e8f0d8;
+      --live-text: #3b6d11;
+      --live-border: #b8d090;
     }
 
     html { scroll-behavior: smooth; }
@@ -151,7 +157,7 @@
     .project-status { font-size: 10px; letter-spacing: .08em; text-transform: uppercase; padding: 4px 12px; border-radius: 20px; flex-shrink: 0; font-weight: 500; font-family: 'JetBrains Mono', monospace; }
     .status-active { background: var(--accent-bg); color: var(--accent); border: 1px solid var(--accent-tag-border); }
     .status-wip { background: var(--wip-bg); color: var(--wip-text); border: 1px solid var(--wip-border); }
-    .status-live { background: var(--surface); color: var(--text-dim); border: 1px solid var(--border-mid); }
+    .status-live { background: var(--live-bg); color: var(--live-text); border: 1px solid var(--live-border); }
     .project-desc { font-size: 15px; color: var(--text-dim); line-height: 1.8; margin-bottom: 18px; }
     .project-footer { display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-top: auto; }
     .project-pending { font-size: 11px; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; flex-shrink: 0; }
@@ -195,7 +201,7 @@
       <div class="project-card">
         <div class="project-header">
           <div class="project-name">🎬 Movie Analytics Dashboard</div>
-          <div class="project-status status-active">Active</div>
+          <div class="project-status status-live">Live</div>
         </div>
         <p class="project-desc">Full-stack movie discovery platform pulling live TMDB data, with a custom hidden-gems scoring engine</p>
         <div class="project-footer">
@@ -206,7 +212,7 @@
       <div class="project-card">
         <div class="project-header">
           <div class="project-name">🦀 Rust Rush — Tower Defense</div>
-          <div class="project-status status-wip">In Progress</div>
+          <div class="project-status status-live">Live</div>
         </div>
         <p class="project-desc">Real-time browser tower defense with a server-authoritative Go backend running at 60 FPS</p>
         <div class="project-footer">
