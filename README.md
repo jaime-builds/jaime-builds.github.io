@@ -1,39 +1,40 @@
 # jaime.builds — Personal Portfolio Site
 
-> Personal portfolio and resume site for Jaime A. De La Paz — Technical Support Engineer, IT Manager, and all-around person who likes to build things.
+> Personal portfolio and resume site for Jaime A. De La Paz — Enterprise Support Engineer and all-around person who likes to build things.
 
-🌐 **Live site:** [jaime-builds.github.io](https://jaime-builds.github.io) *(or [jaime.build](https://jaime.build) if custom domain is configured)*
+🌐 **Live site:** [jaime.build](https://jaime.build) *(GitHub Pages, custom domain via Cloudflare)*
 
 ---
 
 ## About
 
-A single-page portfolio site built with vanilla HTML, CSS, and JavaScript — no frameworks, no build tools, no dependencies. Just one file that loads fast and works everywhere.
+A personal portfolio site built across four pages with vanilla HTML, CSS, and JavaScript, no frameworks, no build tools, no dependencies. Home, About, Projects, and a full Homelab tour, each a standalone HTML file sharing one design system.
 
-Features a dark/light mode toggle (preference saved to `localStorage`), smooth scroll navigation, and a terminal-inspired aesthetic that feels at home alongside my other projects.
+Features a dark/light mode toggle (preference saved to `localStorage`), smooth scroll navigation, and a warm, editorial look built around serif headings and a gold accent.
 
 ---
 
-## Sections
+## Pages
 
-| Section | Description |
-|---|---|
-| **About** | Who I am, what I do, where I'm based |
-| **Skills** | Full tech stack across 8 categories |
-| **Projects** | Movie Analytics Dashboard & Rust Rush |
-| **Certifications** | All current certs with status badges |
-| **Hobbies** | Movies, games, music, hockey |
-| **Contact** | Email, phone, LinkedIn, GitHub |
+| Page | Path | Description |
+|---|---|---|
+| Home | `index.html` | Intro, featured projects, homelab snapshot, more projects, about teaser |
+| About | `about/` | Full bio, skills & tech stack, certifications, hobbies |
+| Projects | `projects/` | Full projects grid, live status badges, tags |
+| Movie Analytics Dashboard write-up | `projects/movie-analytics-dashboard/` | Dedicated write-up: motivation, stack decisions, and technical deep dives, with screenshots |
+| Homelab | `homelab/` | Full infrastructure tour: diagrams, hardware, every service |
+
+Project write-ups live in their own folder under `projects/`, one per finished project, and are linked from both the Projects grid card and the Home page featured card once they exist.
 
 ---
 
 ## Tech
 
-- **HTML5** — semantic structure
-- **CSS3** — custom properties (CSS variables) for theming, no frameworks
+- **HTML5** — semantic structure, one page per section
+- **CSS3** — custom properties (CSS variables) for theming and dark/light mode, no frameworks
 - **Vanilla JS** — theme toggle, localStorage persistence, smooth scroll
-- **Fonts** — [JetBrains Mono](https://fonts.google.com/specimen/JetBrains+Mono) + [Syne](https://fonts.google.com/specimen/Syne) via Google Fonts
-- **Hosting** — GitHub Pages (free, automatic HTTPS)
+- **Fonts** — [Fraunces](https://fonts.google.com/specimen/Fraunces) (headings), [DM Sans](https://fonts.google.com/specimen/DM+Sans) (body), [JetBrains Mono](https://fonts.google.com/specimen/JetBrains+Mono) (labels, tags, code) via Google Fonts
+- **Hosting** — GitHub Pages (free, automatic HTTPS), custom domain via Cloudflare
 
 No npm. No build step. Clone and open.
 
@@ -46,7 +47,7 @@ No npm. No build step. Clone and open.
 git clone https://github.com/jaime-builds/jaime-builds.github.io.git
 cd jaime-builds.github.io
 
-# Open in browser — no server needed
+# Open any page in browser — no server needed
 open index.html
 
 # Or serve locally if you prefer
@@ -86,18 +87,13 @@ CNAME www  jaime-builds.github.io
 
 ## Updating the Site
 
-Everything lives in `index.html`. The sections are clearly commented:
+Each page is a self-contained HTML file with its own `<style>` block, all sharing the same CSS variable system (`--bg`, `--text`, `--accent`, `--card-bg`, and so on) so the theme toggle stays consistent everywhere.
 
-```
-<!-- ABOUT -->
-<!-- SKILLS -->
-<!-- PROJECTS -->
-<!-- CERTIFICATIONS -->
-<!-- HOBBIES -->
-<!-- CONTACT -->
-```
+**To add or update a project card:** copy an existing `.project-card` block in `projects/index.html`, and in `index.html`'s featured section too if it should be featured there.
 
-To add a new project card, copy an existing `.project-card` block and update the content. To add a cert, copy a `.cert-item` block.
+**To add a dedicated write-up page for a finished project:** create a new folder under `projects/` (e.g. `projects/your-project-name/`) with an `index.html`, following the structure in `projects/movie-analytics-dashboard/`. Then link to it from that project's card footer on both the Projects grid and the Home page featured card.
+
+**To add a cert:** copy a `.cert-item` block in `about/index.html`.
 
 ---
 
@@ -105,20 +101,28 @@ To add a new project card, copy an existing `.project-card` block and update the
 
 ```
 jaime-builds.github.io/
-├── index.html          # The entire site
+├── index.html                          # Home page
+├── about/
+│   └── index.html                      # About page
+├── projects/
+│   ├── index.html                      # Projects grid
+│   └── movie-analytics-dashboard/
+│       └── index.html                  # Dedicated write-up page
+├── homelab/
+│   └── index.html                      # Homelab tour
+├── docs/                                # Screenshots, diagrams, logo, avatar
 ├── .gitignore
-├── README.md
-└── docs/               # Screenshots, assets (optional)
+└── README.md
 ```
 
 ---
 
 ## Other Projects
 
-| Project | Description | Stack |
-|---|---|---|
-| [movie-analytics-dashboard](https://github.com/jaime-builds/movie-analytics-dashboard) | Full-stack movie discovery platform with analytics | Python, Flask, PostgreSQL |
-| [rust-rush](https://github.com/jaime-builds/rust-rush) | Real-time tower defense game | Go, React, TypeScript, WebSockets |
+| Project | Description | Stack | Write-up |
+|---|---|---|---|
+| [movie-analytics-dashboard](https://github.com/jaime-builds/movie-analytics-dashboard) | Full-stack movie discovery platform with analytics | Python, Flask, PostgreSQL | [on-site](https://jaime.build/projects/movie-analytics-dashboard/) |
+| [rust-rush](https://github.com/jaime-builds/rust-rush) | Real-time tower defense game | Go, React, TypeScript, WebSockets | — |
 
 ---
 

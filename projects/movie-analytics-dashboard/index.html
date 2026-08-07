@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Movie Analytics Dashboard — Jaime De La Paz</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@300;700;900&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    [data-theme="dark"] {
+      --bg: #0f1117;
+      --bg-alt: #13151c;
+      --surface: #17191f;
+      --border: #1e2028;
+      --border-mid: #25272f;
+      --text: #f0f2f8;
+      --text-dim: #9ca3af;
+      --text-muted: #3d4048;
+      --accent: #c9a85d;
+      --accent-bg: #1a160c;
+      --accent-tag: #d4b472;
+      --accent-tag-border: #2e2518;
+      --card-bg: #13151c;
+      --card-border: #1e2028;
+      --live-bg: #16220d;
+      --live-text: #97c459;
+      --live-border: #2a3d18;
+      --code-bg: #0b0c11;
+    }
+
+    [data-theme="light"] {
+      --bg: #ede8dc;
+      --bg-alt: #e4ddd0;
+      --surface: #dcd5c6;
+      --border: #ccc4b2;
+      --border-mid: #bcb49e;
+      --text: #1c1a16;
+      --text-dim: #4a4438;
+      --text-muted: #8a8070;
+      --accent: #8a6820;
+      --accent-bg: #e8dfc8;
+      --accent-tag: #7a5c18;
+      --accent-tag-border: #c0a870;
+      --card-bg: #e4ddd0;
+      --card-border: #ccc4b2;
+      --live-bg: #e8f0d8;
+      --live-text: #3b6d11;
+      --live-border: #b8d090;
+      --code-bg: #ddd4c0;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      transition: background .3s, color .3s;
+    }
+
+    a {
+      color: var(--accent-tag);
+      text-decoration: none;
+      position: relative;
+      transition: opacity .2s;
+    }
+    a::after {
+      content: '';
+      position: absolute;
+      left: 0; bottom: -2px;
+      width: 100%; height: 1px;
+      background: currentColor;
+      opacity: 0.35;
+      transform: scaleX(0.5);
+      transform-origin: left;
+      transition: opacity .2s, transform .2s;
+    }
+    a:hover { opacity: 1; }
+    a:hover::after { opacity: 0.9; transform: scaleX(1); }
+
+    .nav-links a::after,
+    .btn-ghost::after,
+    .nav-brand a::after { display: none; }
+
+    .wrapper { max-width: 860px; margin: 0 auto; padding: 0 28px 120px; }
+
+    header {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      transition: background .3s, border-color .3s;
+    }
+    nav {
+      max-width: 1080px; margin: 0 auto; padding: 0 28px;
+      height: 58px;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    }
+    .nav-brand img { height: 38px; width: 38px; border-radius: 50%; object-fit: cover; display: block; }
+    .nav-links { display: flex; gap: 4px; list-style: none; align-items: center; }
+    .nav-links a {
+      font-size: 12px; color: var(--text-dim); padding: 5px 10px; border-radius: 6px;
+      transition: color .2s, background .2s;
+    }
+    .nav-links a:hover { color: var(--accent); background: var(--accent-bg); opacity: 1; }
+    .nav-links a[aria-current="page"] { color: var(--accent); }
+
+    #theme-toggle {
+      background: var(--surface);
+      border: 1px solid var(--border-mid);
+      color: var(--text-dim);
+      cursor: pointer;
+      width: 36px; height: 36px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px; flex-shrink: 0;
+      transition: background .3s, border-color .2s, color .2s;
+    }
+    #theme-toggle::after { display: none; }
+    #theme-toggle:hover { color: var(--accent); border-color: var(--accent); }
+
+    .back-link { display: block; padding: 24px 0 0; font-size: 12px; }
+
+    .hero { padding: 24px 0 40px; border-bottom: 1px solid var(--border); }
+    .hero-eyebrow { font-size: 11px; color: var(--accent); letter-spacing: .14em; text-transform: uppercase; font-weight: 500; margin-bottom: 10px; }
+    .hero-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 10px; }
+    .hero h1 { font-family: 'Fraunces', serif; font-size: clamp(28px, 5.5vw, 44px); font-weight: 900; color: var(--text); line-height: 1.05; letter-spacing: -.5px; }
+    .project-status { font-size: 10px; letter-spacing: .08em; text-transform: uppercase; padding: 5px 14px; border-radius: 20px; flex-shrink: 0; font-weight: 500; font-family: 'JetBrains Mono', monospace; margin-top: 6px; }
+    .status-live { background: var(--live-bg); color: var(--live-text); border: 1px solid var(--live-border); }
+    .hero-subtitle { font-size: 14px; color: var(--text-dim); letter-spacing: .02em; margin-bottom: 24px; }
+    .hero-links { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 18px; border-radius: 20px;
+      font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
+      background: transparent; color: var(--text-dim);
+      border: 1px solid var(--border-mid);
+      transition: all .2s; cursor: pointer; text-decoration: none;
+    }
+    .btn-ghost:hover { color: var(--accent); border-color: var(--accent); opacity: 1; }
+    .hero-sep { width: 1px; height: 18px; background: var(--border-mid); }
+
+    .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-top: 28px; }
+    .stat-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 10px; padding: 16px 18px; }
+    .stat-num { font-family: 'Fraunces', serif; font-size: 24px; font-weight: 700; color: var(--accent); line-height: 1; margin-bottom: 6px; }
+    .stat-label { font-size: 11px; color: var(--text-muted); letter-spacing: .06em; text-transform: uppercase; font-family: 'JetBrains Mono', monospace; }
+
+    section.writeup { padding: 48px 0; border-bottom: 1px solid var(--border); }
+    section.writeup:last-of-type { border-bottom: none; }
+
+    .section-label { font-size: 11px; color: var(--accent); letter-spacing: .14em; text-transform: uppercase; font-weight: 500; margin-bottom: 14px; display: flex; align-items: center; gap: 6px; }
+    .section-label::before { content: '—'; opacity: 0.5; font-family: 'DM Sans', sans-serif; }
+    .section-title { font-family: 'Fraunces', serif; font-size: 26px; font-weight: 700; color: var(--text); margin-bottom: 20px; letter-spacing: -.2px; }
+
+    .sub-title { font-family: 'Fraunces', serif; font-size: 19px; font-weight: 700; color: var(--text); margin: 30px 0 12px; }
+    section.writeup > .sub-title:first-of-type { margin-top: 4px; }
+
+    .prose { font-size: 15.5px; color: var(--text-dim); line-height: 1.9; }
+    .prose p { margin-bottom: 16px; }
+    .prose p:last-child { margin-bottom: 0; }
+    .prose strong { color: var(--text); font-weight: 500; }
+    .prose code { font-family: 'JetBrains Mono', monospace; font-size: 13px; background: var(--code-bg); color: var(--accent-tag); padding: 2px 6px; border-radius: 4px; }
+    .prose ul { margin: 4px 0 16px; padding-left: 20px; }
+    .prose ul li { margin-bottom: 8px; }
+
+    .stack-item { margin-bottom: 18px; }
+    .stack-item:last-child { margin-bottom: 0; }
+
+    pre {
+      background: var(--code-bg); border: 1px solid var(--card-border); border-radius: 8px;
+      padding: 16px 18px; overflow-x: auto; margin: 18px 0;
+      font-family: 'JetBrains Mono', monospace; font-size: 13px; line-height: 1.65; color: var(--text-dim);
+    }
+    pre code { background: none; padding: 0; color: inherit; }
+
+    figure { margin: 22px 0; }
+    figure img {
+      width: 100%; display: block; border-radius: 10px; border: 1px solid var(--card-border);
+    }
+    figcaption { font-size: 12px; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; margin-top: 8px; text-align: center; }
+
+    .fig-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media (max-width: 640px) { .fig-pair { grid-template-columns: 1fr; } }
+    .fig-pair figure { margin: 0; }
+
+    footer { padding: 40px 0 20px; text-align: center; font-size: 11px; color: var(--text-muted); letter-spacing: .04em; font-family: 'JetBrains Mono', monospace; }
+    footer span { color: var(--accent); }
+
+    @media (max-width: 600px) {
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <div class="nav-brand">
+      <a href="../../index.html"><img src="../../docs/logo.png" alt="jaime-builds" /></a>
+    </div>
+    <ul class="nav-links">
+      <li><a href="../../index.html">Home</a></li>
+      <li><a href="../../about/">About</a></li>
+      <li><a href="../" aria-current="page">Projects</a></li>
+      <li><a href="../../homelab/">Homelab</a></li>
+    </ul>
+    <button id="theme-toggle" aria-label="Toggle theme">☀</button>
+  </nav>
+</header>
+
+<main class="wrapper">
+
+  <a href="../" class="back-link btn-ghost" style="display: inline-flex; margin-top: 24px;">&larr; All projects</a>
+
+  <div class="hero">
+    <div class="hero-eyebrow">project write-up</div>
+    <div class="hero-top">
+      <h1>🎬 Movie Analytics Dashboard</h1>
+      <div class="project-status status-live">Live</div>
+    </div>
+    <p class="hero-subtitle">Full-stack movie discovery platform · Python · Flask · PostgreSQL</p>
+    <div class="hero-links">
+      <a href="https://movie-dashboard.jaime.build" class="btn-ghost" target="_blank" rel="noopener">Visit site ↗</a>
+      <a href="https://github.com/jaime-builds/movie-analytics-dashboard" class="btn-ghost" target="_blank" rel="noopener">GitHub ↗</a>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-num">10,090</div><div class="stat-label">Movies</div></div>
+      <div class="stat-card"><div class="stat-num">18</div><div class="stat-label">DB Tables</div></div>
+      <div class="stat-card"><div class="stat-num">66</div><div class="stat-label">Routes</div></div>
+      <div class="stat-card"><div class="stat-num">463</div><div class="stat-label">Tests Passing</div></div>
+      <div class="stat-card"><div class="stat-num">86%</div><div class="stat-label">Test Coverage</div></div>
+    </div>
+  </div>
+
+  <section class="writeup" id="why">
+    <div class="section-label">motivation</div>
+    <h2 class="section-title">Why I built it</h2>
+    <div class="prose">
+      <p>I wanted to learn. That's the real reason this project exists. I wanted to pick up some coding, understand how databases and APIs connect, get more hands-on with AI tools, and learn a bit of frontend design. Movies were the natural subject. I've always loved watching films, reading about their production and box office numbers, and following the actors and directors behind them. Building a movie dashboard let me learn the things I wanted to learn while working on something I already cared about.</p>
+    </div>
+  </section>
+
+  <section class="writeup" id="what-it-is">
+    <div class="section-label">the app</div>
+    <h2 class="section-title">What it is</h2>
+    <div class="prose">
+      <p>Movie Analytics Dashboard is a full-stack movie discovery platform. It pulls data from The Movie Database (TMDB) API and stores it locally: 10,090 movies, 7,378 directors, and 19 genres as of the last count. Users can create accounts, build favorites and watchlists, rate and review movies, and organize films into named collections.</p>
+
+      <figure>
+        <img src="../../docs/movie-analytics-homepage.png" alt="Movie Analytics Dashboard homepage showing the stats bar, Movie of the Day, and feature shortcut cards" />
+        <figcaption>The homepage: live stats, Movie of the Day, and feature shortcuts</figcaption>
+      </figure>
+
+      <p>The analytics side is where most of the SQL work lives. Six Chart.js visualizations break the library down by genre, release timeline, ratings, and budget versus revenue, including a scatter plot with a break-even line and a most-profitable-movies chart. Hidden Gems runs a small scoring formula against every movie in the database:</p>
+
+      <pre><code>gem_score = vote_average / (log(popularity + 2) * 2)</code></pre>
+
+      <p>The idea is to surface well-rated movies nobody's heard of, filtered to a vote average of 7.0 or higher, popularity capped at 20, and at least 50 votes so a single 10/10 rating from three people doesn't sneak in. That same pool feeds the homepage's Movie of the Day, more on that below.</p>
+
+      <div class="fig-pair">
+        <figure>
+          <img src="../../docs/movie-dashboard-analytics-1.png" alt="Analytics dashboard showing total movies, average rating, total revenue, and a genre distribution pie chart" />
+          <figcaption>Analytics dashboard: KPI cards and genre distribution</figcaption>
+        </figure>
+        <figure>
+          <img src="../../docs/movie-dashboard-analytics-2.png" alt="Analytics dashboard showing movies by release year, average rating by genre, and top production companies" />
+          <figcaption>Release timeline, ratings by genre, and top studios</figcaption>
+        </figure>
+      </div>
+
+      <p>The actor collaboration network is the feature I'm proudest of visually. It's a D3.js force-directed graph built from any actor's page: the actor sits at the center, up to 30 collaborators orbit around them with their TMDB profile photos attached, and the connecting lines are weighted by how many films they've shared. Hovering an edge shows the actual movie titles. Dragging a node pins it in place. It's the one page where the data actually looks alive instead of sitting in a table.</p>
+
+      <figure>
+        <img src="../../docs/movie-dashboard-actor-graph.png" alt="D3.js force-directed collaboration network graph centered on Jackie Chan, showing 30 collaborators connected by shared-film edges" />
+        <figcaption>Jackie Chan's collaboration network, 30 collaborators deep</figcaption>
+      </figure>
+
+      <p>The whole thing runs on Python and Flask, backed by PostgreSQL, with 18 database tables and 66 routes across 32 pages, 21 actions, and 13 API endpoints. The test suite has 463 passing tests and sat at 86% coverage as of the last measurement. It runs in Docker on my home server behind a Cloudflare Tunnel, with no ports opened to the internet.</p>
+    </div>
+  </section>
+
+  <section class="writeup" id="stack">
+    <div class="section-label">technical decisions</div>
+    <h2 class="section-title">The stack, and why</h2>
+    <div class="prose">
+      <div class="stack-item"><p><strong>Python and Flask.</strong> I was learning Python through Boot.dev while building this, and I already knew a little going in. Flask kept the framework itself out of the way so I could focus on learning the actual concepts: routes, database queries, API calls.</p></div>
+      <div class="stack-item"><p><strong>SQLAlchemy and Alembic.</strong> SQLAlchemy paired naturally with Flask and gave me an easier on-ramp into database concepts than writing raw SQL from day one. Alembic came with it as the standard way to change a schema without wiping the data every time.</p></div>
+      <div class="stack-item"><p><strong>SQLite, then PostgreSQL.</strong> I started on SQLite because I already knew it and it needed zero setup. I knew going in it had limits. As I got more comfortable with Postgres, and after running into a couple of database lockup issues while developing, I decided to switch before going live rather than find out about Postgres's stricter rules for the first time in production.</p></div>
+      <div class="stack-item"><p><strong>Chart.js and D3.</strong> This was my first time working with any charting library, so Chart.js was the straightforward choice for the standard bar and line charts on the analytics pages. D3 stepped in for one specific job Chart.js doesn't do: the actor collaboration network page needed a force-directed graph.</p></div>
+      <div class="stack-item"><p><strong>Bootstrap 5.</strong> The fastest way to a decent-looking UI without hand-rolling CSS, which meant I could spend my learning time on the backend and database side instead of frontend from scratch.</p></div>
+      <div class="stack-item"><p><strong>Docker.</strong> I wanted the deployment story to be portable and repeatable, something that would work the same whether it was running on a hosting platform or on my own server later. It's also a real skill worth having on its own.</p></div>
+      <div class="stack-item"><p><strong>GitHub Actions.</strong> I wanted to treat this like a real project, not a tutorial. That meant pull requests and CI checks that had to pass before anything merged, which is what GitHub Actions runs on every push: tests across three Python versions, linting, and a security scan.</p></div>
+      <div class="stack-item"><p><strong>Redis, briefly.</strong> Railway's setup pushed toward adding Redis for caching and rate limiting, so I added it. When I moved to self-hosting, I dropped it. The app already fell back cleanly to in-process caching, and running my own Redis instance for a single-user app wasn't worth the extra moving part.</p></div>
+    </div>
+  </section>
+
+  <section class="writeup" id="interesting-parts">
+    <div class="section-label">along the way</div>
+    <h2 class="section-title">The interesting parts</h2>
+    <div class="prose">
+
+      <h3 class="sub-title">Moving off Railway</h3>
+      <p>The dashboard started on Railway, a hosting platform that made the first deploy easy: push to main, and it built and shipped on its own. It worked well until I wanted more control and a lower bill, so I migrated the whole thing to my own home server.</p>
+      <p>That move surfaced a bug that had been invisible the whole time on Railway. Alembic, the migration tool, stores its current schema version in a column that was only 32 characters wide. One of my migration IDs was 36 characters. SQLite never enforces column length, so the mismatch sat there silently for months. The first migration run against real PostgreSQL failed outright and rolled back the entire migration history in one transaction, leaving an empty database instead of a partial one. I fixed it by running the early migrations in a throwaway container, widening the column, then letting the rest catch up.</p>
+      <p>Two more Postgres-only bugs showed up during the first data sync: a cast column too narrow for some ensemble voice-cast credits, and a handful of deadlocks from running too many sync workers in parallel. Neither was fatal. Postgres just enforces things SQLite lets slide, and I found out the hard way.</p>
+
+      <h3 class="sub-title">Writing tests for the first time</h3>
+      <p>I'd never written a test suite before this project. Getting the first batch to pass green was one of the better moments of the whole build. It wasn't just satisfying, it changed how I thought about the app: what happens when a user isn't logged in, what happens when two requests hit the same row at once, what a broken migration actually does to a live database.</p>
+      <p>The suite grew with the app and now sits at 463 tests, covering authentication, routes, the API, the database models, and the admin panel. One early mistake taught me the most. My test fixture pointed at the real database instead of an isolated one, so running pytest wiped my actual movie data. I fixed it by switching to an in-memory SQLite database for every test run, then spent 45 minutes re-syncing 8,000 movies to undo the damage. I've never made that mistake twice.</p>
+
+      <h3 class="sub-title">User accounts, ratings, and reviews</h3>
+      <p>Adding user accounts tied to ratings and reviews was new territory too. Showing a page to anyone who visits is easy. The harder part is making sure a user can only edit their own review, that a banned user's session gets cleared even though there's no live session store to clear it from, and that soft-deleted content disappears everywhere it needs to.</p>
+      <p>Security got the most careful attention here, and it's the subject of its own section below.</p>
+
+      <h3 class="sub-title">The security audit</h3>
+      <p>Once the core features worked, I ran a real audit against my own code rather than assuming a working app is a safe one. It found real problems.</p>
+      <p>The analytics page was caching the full rendered HTML for an hour, which meant one logged-in user's navbar and username could get served to a completely different visitor for the rest of that hour. The collection-name dropdown built its HTML with string interpolation, which is a straight path to a cross-site scripting bug if a collection name ever contained a script tag. Login redirects trusted whatever <code>next</code> URL was in the query string, which is an open-redirect vulnerability if left unchecked. None of these needed a live attacker to be a real problem, they just needed a normal user typing the wrong thing into a field or clicking the wrong link.</p>
+      <p>Fixing it took five rounds over about a week:</p>
+      <ul>
+        <li>Removed the leaky analytics cache and rebuilt the collection dropdown with safe DOM APIs instead of string interpolation. Validated every login redirect against external URLs, protocol-relative links, and backslash tricks.</li>
+        <li>Added CSRF protection across every route that changes data, with a shared <code>csrfFetch()</code> helper so JavaScript POST requests carry the token automatically. Converted <code>/logout</code> from a GET request to a POST, since a GET-triggered logout can be forged from an image tag on another site.</li>
+        <li>Added missing database indexes on foreign keys that were doing full table scans, and a database-level constraint enforcing one review per user per movie, so the rule can't be bypassed by anything that skips the application layer.</li>
+        <li>Fixed a few smaller correctness bugs the audit turned up along the way: director and studio average ratings were counting unrated movies as zero instead of excluding them, which skewed the numbers.</li>
+        <li>Hardened the production config: it now refuses to start if the secret key is left at its insecure default, forces <code>DEBUG</code> off outside local development, and sets secure cookie flags.</li>
+      </ul>
+      <p>Getting all of this right without a security background meant reading a fair amount about what each vulnerability class actually does, not just applying a fix I didn't understand.</p>
+
+      <h3 class="sub-title">The CI that wasn't running</h3>
+      <p>The CSRF fix above accidentally broke something else, and I didn't notice for weeks.</p>
+      <p>Before CSRF protection went in, the app initialized its database with a plain <code>Base.metadata.create_all()</code> call. Adding Alembic as the single source of truth for schema changes meant that old code path had to go, so it was changed to raise a <code>RuntimeError</code> if anything tried to call it directly. That was the right call. The problem is the GitHub Actions test workflow still had a leftover step that called it: <code>python -m src.models</code>, the old database-init command, sitting right there in <code>tests.yml</code>.</p>
+      <p>Every push after that fix broke CI. Not with a confusing failure either. A clean, obvious <code>RuntimeError</code>. It just didn't get looked at, because the two GitHub Actions workflows for this repo are fully independent: <code>tests.yml</code> runs the test suite, and a separate <code>ci.yml</code> builds and pushes the Docker image, with a comment in the file that says testing is handled elsewhere. Nothing stopped the Docker build workflow from going green and deploying while the test workflow sat red in the background. Railway auto-deploys on every push to main regardless of CI status, so for however long that gap lasted, every deploy shipped without a single test actually running against it.</p>
+      <p>I only caught it by checking the Actions run history directly instead of assuming things were fine because the site was still up. The fix was one line, swap <code>python -m src.models</code> for <code>alembic upgrade head</code> in the workflow file, but the real fix was the habit: don't just look at whether the site loads, look at whether the pipeline that's supposed to protect it actually ran.</p>
+
+      <h3 class="sub-title">Movie of the Day</h3>
+      <p>A small feature with a genuinely fun problem to solve. The homepage shows one featured movie, picked from the Hidden Gems pool, and it needs three things: the same movie for every visitor on a given day, no repeats within 30 days, and no chance of two people getting a different pick if they both load the homepage in the same second.</p>
+      <p>Python's built-in <code>hash()</code> function is randomized per process, so two different app workers would pick two different "random" movies for the same day. The fix was a SHA-256 hash of the date string instead, which is deterministic and identical across every worker:</p>
+      <pre><code>import hashlib
+
+def pick_movie_of_the_day(date_str, eligible_movie_ids):
+    digest = hashlib.sha256(date_str.encode()).hexdigest()
+    index = int(digest, 16) % len(eligible_movie_ids)
+    return eligible_movie_ids[index]</code></pre>
+      <p>The eligible pool is Hidden Gems minus whatever's been picked in the last 30 days, sorted by movie ID so the indexing is stable. If two requests both land on the exact same untouched day at the exact same moment, both workers try to insert the same pick into a table with a unique constraint on the date. One wins, the other catches the resulting <code>IntegrityError</code> on that constraint and just reads back the winning row instead of erroring out. It's a small amount of code doing a surprisingly careful job.</p>
+
+      <h3 class="sub-title">Building the admin dashboard</h3>
+      <p>The most recent addition, and the biggest single feature added after the app first went live. Up to this point, moderation meant editing the database directly. The admin panel replaced that with fourteen routes behind a proper <code>is_admin</code> flag: a dashboard home with top-line stats and a live tail of the last 20 warning and error log lines, a users page with search and ban and unban controls, and moderation views for every rating and review, including the ones that have been hidden.</p>
+      <p>The trickiest part was ban enforcement. There's no server-side session store, sessions are just signed cookies, so there's no clean way to reach into an existing session and kill it. Instead, the check lives in <code>get_current_user()</code>, the one function every authenticated route already calls to figure out who's asking. If that user is banned, the function returns <code>None</code> instead of the user object, clears their session, shows a message, and lets the request continue as if they'd never logged in, all without adding a second database query to every request the way a separate ban-check hook would have.</p>
+      <p>Soft deletes needed their own thought too. Ratings and reviews get an <code>is_deleted</code> flag instead of being removed outright, so a moderator can restore something they took down by mistake. But the app already enforced one rating and one review per user per movie at the database level, which meant a moderated user could just resubmit their rating and silently overwrite the hidden row, undoing the moderation. That path now returns a clear error instead of allowing the rewrite.</p>
+      <p>An admin can't ban their own account. It's a small guard, but it's the kind of edge case that's easy to skip until it happens to you at 11pm.</p>
+
+    </div>
+  </section>
+
+  <section class="writeup" id="whats-next">
+    <div class="section-label">roadmap</div>
+    <h2 class="section-title">What's next</h2>
+    <div class="prose">
+      <p>The roadmap has a mix of small polish and bigger changes. SEO work (meta tags, proper social preview images) and performance monitoring are on the list, along with a user activity feed and letting collections be made public instead of always private. On the data side, the TMDB sync currently uses the popular-movies endpoint, which caps out around 10,000 movies no matter what. Switching to TMDB's full data dump removes that ceiling entirely. Further out: OAuth login, a personal year-in-review stats page, and a proper full-text search instead of the current title/overview matching.</p>
+    </div>
+  </section>
+
+  <section class="writeup" id="differently">
+    <div class="section-label">retrospective</div>
+    <h2 class="section-title">What I'd do differently</h2>
+    <div class="prose">
+      <p>I'd spend more time planning up front. A few times during the build I pivoted when I didn't need to, chasing an idea mid-sprint instead of finishing the one I'd already started. The plan was usually right. Sticking to it would have saved some rework.</p>
+    </div>
+  </section>
+
+  <div style="padding: 8px 0 40px; display: flex; gap: 10px; flex-wrap: wrap;">
+    <a href="https://movie-dashboard.jaime.build" class="btn-ghost" target="_blank" rel="noopener">Visit site ↗</a>
+    <a href="../" class="btn-ghost">&larr; All projects</a>
+  </div>
+
+  <footer>
+    <p>Jaime A. De La Paz &nbsp;·&nbsp; Rogers City, MI &nbsp;·&nbsp; <span>&copy; 2026</span></p>
+  </footer>
+
+</main>
+
+<script>
+  const toggle = document.getElementById('theme-toggle');
+  const root = document.documentElement;
+  const saved = localStorage.getItem('jb-theme') || 'dark';
+  root.setAttribute('data-theme', saved);
+  toggle.textContent = saved === 'dark' ? '☀' : '🌙';
+  toggle.addEventListener('click', () => {
+    const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    toggle.textContent = next === 'dark' ? '☀' : '🌙';
+    localStorage.setItem('jb-theme', next);
+  });
+</script>
+</body>
+</html>
