@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calibre + Kindle Setup — Jaime De La Paz</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@300;700;900&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    [data-theme="dark"] {
+      --bg: #0f1117;
+      --bg-alt: #13151c;
+      --surface: #17191f;
+      --border: #1e2028;
+      --border-mid: #25272f;
+      --text: #f0f2f8;
+      --text-dim: #9ca3af;
+      --text-muted: #3d4048;
+      --accent: #c9a85d;
+      --accent-bg: #1a160c;
+      --accent-tag: #d4b472;
+      --accent-tag-border: #2e2518;
+      --card-bg: #13151c;
+      --card-border: #1e2028;
+      --live-bg: #16220d;
+      --live-text: #97c459;
+      --live-border: #2a3d18;
+      --code-bg: #0b0c11;
+    }
+
+    [data-theme="light"] {
+      --bg: #ede8dc;
+      --bg-alt: #e4ddd0;
+      --surface: #dcd5c6;
+      --border: #ccc4b2;
+      --border-mid: #bcb49e;
+      --text: #1c1a16;
+      --text-dim: #4a4438;
+      --text-muted: #8a8070;
+      --accent: #8a6820;
+      --accent-bg: #e8dfc8;
+      --accent-tag: #7a5c18;
+      --accent-tag-border: #c0a870;
+      --card-bg: #e4ddd0;
+      --card-border: #ccc4b2;
+      --live-bg: #e8f0d8;
+      --live-text: #3b6d11;
+      --live-border: #b8d090;
+      --code-bg: #ddd4c0;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      transition: background .3s, color .3s;
+    }
+
+    a {
+      color: var(--accent-tag);
+      text-decoration: none;
+      position: relative;
+      transition: opacity .2s;
+    }
+    a::after {
+      content: '';
+      position: absolute;
+      left: 0; bottom: -2px;
+      width: 100%; height: 1px;
+      background: currentColor;
+      opacity: 0.35;
+      transform: scaleX(0.5);
+      transform-origin: left;
+      transition: opacity .2s, transform .2s;
+    }
+    a:hover { opacity: 1; }
+    a:hover::after { opacity: 0.9; transform: scaleX(1); }
+
+    .nav-links a::after,
+    .btn-ghost::after,
+    .nav-brand a::after { display: none; }
+
+    .wrapper { max-width: 860px; margin: 0 auto; padding: 0 28px 120px; }
+
+    header {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      transition: background .3s, border-color .3s;
+    }
+    nav {
+      max-width: 1080px; margin: 0 auto; padding: 0 28px;
+      height: 58px;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    }
+    .nav-brand img { height: 38px; width: 38px; border-radius: 50%; object-fit: cover; display: block; }
+    .nav-links { display: flex; gap: 4px; list-style: none; align-items: center; }
+    .nav-links a {
+      font-size: 12px; color: var(--text-dim); padding: 5px 10px; border-radius: 6px;
+      transition: color .2s, background .2s;
+    }
+    .nav-links a:hover { color: var(--accent); background: var(--accent-bg); opacity: 1; }
+    .nav-links a[aria-current="page"] { color: var(--accent); }
+
+    #theme-toggle {
+      background: var(--surface);
+      border: 1px solid var(--border-mid);
+      color: var(--text-dim);
+      cursor: pointer;
+      width: 36px; height: 36px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px; flex-shrink: 0;
+      transition: background .3s, border-color .2s, color .2s;
+    }
+    #theme-toggle::after { display: none; }
+    #theme-toggle:hover { color: var(--accent); border-color: var(--accent); }
+
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 18px; border-radius: 20px;
+      font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
+      background: transparent; color: var(--text-dim);
+      border: 1px solid var(--border-mid);
+      transition: all .2s; cursor: pointer; text-decoration: none;
+    }
+    .btn-ghost:hover { color: var(--accent); border-color: var(--accent); opacity: 1; }
+
+    .back-link { display: block; padding: 24px 0 0; font-size: 12px; }
+
+    .hero { padding: 24px 0 40px; border-bottom: 1px solid var(--border); }
+    .hero-eyebrow { font-size: 11px; color: var(--accent); letter-spacing: .14em; text-transform: uppercase; font-weight: 500; margin-bottom: 10px; }
+    .hero-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 10px; }
+    .hero h1 { font-family: 'Fraunces', serif; font-size: clamp(28px, 5.5vw, 44px); font-weight: 900; color: var(--text); line-height: 1.05; letter-spacing: -.5px; }
+    .project-status { font-size: 10px; letter-spacing: .08em; text-transform: uppercase; padding: 5px 14px; border-radius: 20px; flex-shrink: 0; font-weight: 500; font-family: 'JetBrains Mono', monospace; margin-top: 6px; }
+    .status-complete { background: var(--accent-bg); color: var(--accent-tag); border: 1px solid var(--accent-tag-border); }
+    .hero-tagline { font-family: 'Fraunces', serif; font-size: 18px; font-weight: 300; color: var(--text-dim); margin-bottom: 10px; }
+    .hero-subtitle { font-size: 14px; color: var(--text-dim); letter-spacing: .02em; }
+
+    .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-top: 28px; }
+    .stat-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 10px; padding: 16px 18px; }
+    .stat-num { font-family: 'Fraunces', serif; font-size: 24px; font-weight: 700; color: var(--accent); line-height: 1; margin-bottom: 6px; }
+    .stat-label { font-size: 11px; color: var(--text-muted); letter-spacing: .06em; text-transform: uppercase; font-family: 'JetBrains Mono', monospace; }
+
+    section.writeup { padding: 48px 0; border-bottom: 1px solid var(--border); }
+    section.writeup:last-of-type { border-bottom: none; }
+
+    .section-label { font-size: 11px; color: var(--accent); letter-spacing: .14em; text-transform: uppercase; font-weight: 500; margin-bottom: 14px; display: flex; align-items: center; gap: 6px; }
+    .section-label::before { content: '—'; opacity: 0.5; font-family: 'DM Sans', sans-serif; }
+    .section-title { font-family: 'Fraunces', serif; font-size: 26px; font-weight: 700; color: var(--text); margin-bottom: 20px; letter-spacing: -.2px; }
+
+    .prose { font-size: 15.5px; color: var(--text-dim); line-height: 1.9; }
+    .prose p { margin-bottom: 16px; }
+    .prose p:last-child { margin-bottom: 0; }
+    .prose strong { color: var(--text); font-weight: 500; }
+    .prose code { font-family: 'JetBrains Mono', monospace; font-size: 13px; background: var(--code-bg); color: var(--accent-tag); padding: 2px 6px; border-radius: 4px; }
+
+    .pipeline-diagram { margin: 22px 0 26px; }
+    .pipeline-diagram svg { width: 100%; height: auto; display: block; }
+    .pipeline-stage { fill: none; stroke: var(--border-mid); stroke-dasharray: 3 4; }
+    .pipeline-stage-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: .04em; fill: var(--text-muted); }
+    .pipeline-node { fill: var(--card-bg); stroke: var(--card-border); stroke-width: 1; }
+    .pipeline-node-title { font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; fill: var(--text); }
+    .pipeline-node-sub { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; fill: var(--text-dim); }
+    .pipeline-arrow { fill: none; stroke: var(--accent); stroke-width: 1.2; }
+    figcaption.pipeline-caption { font-size: 12px; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; margin-top: 8px; text-align: center; }
+
+    footer { padding: 40px 0 20px; text-align: center; font-size: 11px; color: var(--text-muted); letter-spacing: .04em; font-family: 'JetBrains Mono', monospace; }
+    footer span { color: var(--accent); }
+
+    @media (max-width: 600px) {
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <div class="nav-brand">
+      <a href="../../index.html"><img src="../../docs/logo.png" alt="jaime-builds" /></a>
+    </div>
+    <ul class="nav-links">
+      <li><a href="../../index.html">Home</a></li>
+      <li><a href="../../about/">About</a></li>
+      <li><a href="../" aria-current="page">Projects</a></li>
+      <li><a href="../../homelab/">Homelab</a></li>
+    </ul>
+    <button id="theme-toggle" aria-label="Toggle theme">☀</button>
+  </nav>
+</header>
+
+<main class="wrapper">
+
+  <a href="../" class="back-link btn-ghost" style="display: inline-flex; margin-top: 24px;">&larr; All projects</a>
+
+  <div class="hero">
+    <div class="hero-eyebrow">project write-up</div>
+    <div class="hero-top">
+      <h1>📚 Calibre + Kindle Setup</h1>
+      <div class="project-status status-complete">Complete</div>
+    </div>
+    <p class="hero-tagline">An ebook pipeline where finding the book is the only manual step.</p>
+    <p class="hero-subtitle">Automated ebook pipeline, search to Kindle · CWA · Prowlarr · Deluge · rclone</p>
+
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-num">28</div><div class="stat-label">Input Formats</div></div>
+      <div class="stat-card"><div class="stat-num">15 min</div><div class="stat-label">Sync Interval</div></div>
+      <div class="stat-card"><div class="stat-num">~30 sec</div><div class="stat-label">Manual Effort / Book</div></div>
+      <div class="stat-card"><div class="stat-num">2</div><div class="stat-label">Readers</div></div>
+    </div>
+  </div>
+
+  <section class="writeup" id="why">
+    <div class="section-label">motivation</div>
+    <h2 class="section-title">Why I built it</h2>
+    <div class="prose">
+      <p>I read on a Kindle, and for years the path from finding a book to actually reading it ran through Calibre on my desktop. Calibre is powerful, but the workflow around it was manual at every step. Every book meant sitting at the PC and downloading a file, opening Calibre, importing it, fixing the metadata, converting the format if the Kindle didn't like it, then emailing it to the device. Calibre-Web put a browser front end on the library, which helped for browsing, but it didn't fix the part that mattered. Calibre desktop was still the required middleman for getting books in.</p>
+      <p>The goal was a pipeline where finding a book is the only manual step. Everything after that, including download, transfer, conversion, cleanup, and delivery to the Kindle, should happen on its own.</p>
+    </div>
+  </section>
+
+  <section class="writeup" id="what-it-is">
+    <div class="section-label">the pipeline</div>
+    <h2 class="section-title">What it is</h2>
+    <div class="prose">
+      <p>The pipeline runs across three machines: a seedbox, my home server, and whatever browser I happen to be in.</p>
+
+      <figure class="pipeline-diagram">
+        <svg viewBox="0 0 680 324" role="img" aria-label="Diagram showing a book flowing from Shelfmark search on the seedbox, through Prowlarr and the books folder, then to rclone sync, CWA, and Kindle delivery on the home server">
+          <defs>
+            <marker id="pipe-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </marker>
+          </defs>
+
+          <rect class="pipeline-stage" x="40" y="40" width="600" height="112" rx="16"/>
+          <text class="pipeline-stage-label" x="56" y="62">on the seedbox</text>
+
+          <g>
+            <rect class="pipeline-node" x="68" y="76" width="168" height="56" rx="8"/>
+            <text class="pipeline-node-title" x="152" y="98" text-anchor="middle">Shelfmark</text>
+            <text class="pipeline-node-sub" x="152" y="116" text-anchor="middle">search &amp; grab</text>
+          </g>
+          <g>
+            <rect class="pipeline-node" x="256" y="76" width="168" height="56" rx="8"/>
+            <text class="pipeline-node-title" x="340" y="98" text-anchor="middle">Prowlarr</text>
+            <text class="pipeline-node-sub" x="340" y="116" text-anchor="middle">indexer manager</text>
+          </g>
+          <g>
+            <rect class="pipeline-node" x="444" y="76" width="168" height="56" rx="8"/>
+            <text class="pipeline-node-title" x="528" y="98" text-anchor="middle">Books folder</text>
+            <text class="pipeline-node-sub" x="528" y="116" text-anchor="middle">completed download</text>
+          </g>
+
+          <path class="pipeline-arrow" d="M236 104 L254 104" marker-end="url(#pipe-arrow)"/>
+          <path class="pipeline-arrow" d="M424 104 L442 104" marker-end="url(#pipe-arrow)"/>
+
+          <rect class="pipeline-stage" x="40" y="172" width="600" height="112" rx="16"/>
+          <text class="pipeline-stage-label" x="56" y="194">on my home server</text>
+
+          <g>
+            <rect class="pipeline-node" x="68" y="208" width="168" height="56" rx="8"/>
+            <text class="pipeline-node-title" x="152" y="230" text-anchor="middle">rclone sync</text>
+            <text class="pipeline-node-sub" x="152" y="248" text-anchor="middle">every 15 minutes</text>
+          </g>
+          <g>
+            <rect class="pipeline-node" x="256" y="208" width="168" height="56" rx="8"/>
+            <text class="pipeline-node-title" x="340" y="230" text-anchor="middle">CWA</text>
+            <text class="pipeline-node-sub" x="340" y="248" text-anchor="middle">convert &amp; import</text>
+          </g>
+          <g>
+            <rect class="pipeline-node" x="444" y="208" width="168" height="56" rx="8"/>
+            <text class="pipeline-node-title" x="528" y="230" text-anchor="middle">Kindle</text>
+            <text class="pipeline-node-sub" x="528" y="248" text-anchor="middle">one-click delivery</text>
+          </g>
+
+          <path class="pipeline-arrow" d="M236 236 L254 236" marker-end="url(#pipe-arrow)"/>
+          <path class="pipeline-arrow" d="M424 236 L442 236" marker-end="url(#pipe-arrow)"/>
+
+          <path class="pipeline-arrow" d="M528 132 L528 162 L152 162 L152 206" marker-end="url(#pipe-arrow)"/>
+        </svg>
+        <figcaption class="pipeline-caption">Shelfmark search is the only manual step, roughly thirty seconds</figcaption>
+      </figure>
+
+      <p>It starts in Shelfmark, a self-hosted book search UI running on my server. I search for a title, and Shelfmark queries a private tracker through Prowlarr, my indexer manager. I pick a release and grab it. That's the entire manual portion, maybe thirty seconds.</p>
+      <p>From there the torrent lands in Deluge on a remote seedbox with a <code>books</code> label attached. The label routes the completed download into a dedicated books folder automatically. Back on my home server, a scheduled rclone script runs every fifteen minutes and copies anything new from that folder into a local ingest directory. It copies rather than moves, so the original files stay on the seedbox and keep seeding for ratio.</p>
+      <p>Calibre-Web Automated watches that ingest directory. When a file appears, CWA converts it to EPUB if it isn't one already, runs its EPUB fixer, checks for duplicates, and imports it into the library. The ingest folder empties itself as files are processed. A few minutes after I clicked grab in Shelfmark, the book is sitting in the library in a browser tab, cover and all.</p>
+      <p>The last step is metadata. Auto-fetch is on, but results for books with common titles can land on the wrong edition, so I review each new arrival in the browser and correct the title, author, series, and category tag where needed. Then it goes to the Kindle with one click.</p>
+    </div>
+  </section>
+
+  <section class="writeup" id="decision">
+    <div class="section-label">technical decisions</div>
+    <h2 class="section-title">Why CWA over the alternatives</h2>
+    <div class="prose">
+      <p>The evaluation came down to five options: keeping Calibre plus Calibre-Web, Booklore, Kavita, Audiobookshelf, or building something custom.</p>
+      <p>Keeping the status quo was out because Calibre desktop was the whole problem. Booklore was a strong contender with a nicer UI, but it has no format conversion, and conversion was non-negotiable for a Kindle-centered library. It also drags in a MariaDB dependency and is a younger project. Kavita came from the comic and manga world, and its better metadata sits behind a monthly subscription. Audiobookshelf already runs in my homelab for audiobooks, but its ebook support is basic by its own admission. A custom build was tempting and got far enough to be scoped, roughly six to eight working sessions to an MVP, before I admitted that CWA already covered the workflow I was about to build.</p>
+      <p>CWA won because it replaces both halves of the old setup at once. It creates and manages its own Calibre database with no desktop app anywhere, it bundles the full Calibre conversion engine inside the container, and its metadata editing writes changes back into the EPUB file itself instead of only updating the UI database. That last one matters more than it sounds. With stock Calibre-Web, the library could show a corrected title while the file on disk, the one that actually gets emailed to the Kindle, still carried the wrong one. With CWA, what I see in the browser is what arrives on the device. It's also GPL v3, so if it ever falls short I can fork it or lift its EPUB fixer for a custom build.</p>
+    </div>
+  </section>
+
+  <section class="writeup" id="conversion">
+    <div class="section-label">conversion</div>
+    <h2 class="section-title">Format conversion, and why it mattered</h2>
+    <div class="prose">
+      <p>Books don't arrive in a tidy uniform format. Sources hand you EPUB, MOBI, AZW3, and older formats, and the Kindle delivery path wants a clean EPUB. Before CWA, any file in the wrong format meant a trip through Calibre's converter by hand. Now the conversion target is set once in the admin panel and every incoming file that isn't an EPUB gets converted during ingest without me knowing about it.</p>
+      <p>The EPUB fixer is the quieter half of the same feature. Amazon's delivery service rejects files over problems you'd never spot by reading them: missing UTF-8 encoding declarations, broken internal links, invalid language tags, malformed XML. CWA runs the fixer on every book automatically and backs up the original first. Since it went in, "the Kindle silently didn't receive the book" stopped being a thing I troubleshoot.</p>
+    </div>
+  </section>
+
+  <section class="writeup" id="delivery">
+    <div class="section-label">delivery</div>
+    <h2 class="section-title">Send to Kindle, and the second reader</h2>
+    <div class="prose">
+      <p>Delivery is plain email under the hood. CWA has one SMTP configuration at the admin level, a Gmail account with an app password, and that single setup handles all outgoing mail. Separately, each user profile has its own send-to-eReader address. My profile points at my Kindle address, my wife's profile points at hers.</p>
+      <p>That split is what makes the library work for two people without any extra machinery. She logs into CWA with her own account, browses the same library, and sends a book to her own Kindle. She also has her own Shelfmark account, so she can grab books herself and they flow through the same pipeline. The only shared prerequisite is that the sending address has to be on each Amazon account's approved sender list, which is a one-time setting on Amazon's side.</p>
+    </div>
+  </section>
+
+  <section class="writeup" id="hiccups">
+    <div class="section-label">along the way</div>
+    <h2 class="section-title">The hiccups</h2>
+    <div class="prose">
+      <p><strong>Metadata providers are a mixed bag.</strong> Amazon's provider is broken upstream, since Amazon actively blocks CWA's scraper, and there's no fix. Google Books works but rate-limits hard, and once it starts returning 429s it stays sulking for a few hours. Hardcover ended up as the primary provider, configured through an API token, with Google as the fallback for the gaps.</p>
+      <p><strong>Direct database edits need a WAL checkpoint.</strong> I locked myself out of the admin account at one point and recovered by writing a new password hash straight into CWA's SQLite database. The edit didn't take at first, because SQLite's write-ahead log hadn't flushed. The fix is running a WAL checkpoint after the update and then restarting the container. Now it's in my notes forever.</p>
+      <p><strong>An rsync merged my ebooks and audiobooks.</strong> During the migration of the library onto my current server, a sync accidentally combined the ebook and audiobook folders into one share. Untangling them by hand and keeping them as strictly separate shares afterward was the lesson.</p>
+      <p><strong>The ingest watcher isn't instant everywhere.</strong> In the original deployment on a Windows-based Docker host, filesystem notifications weren't reliable, so CWA fell back to polling the ingest folder. That added a few seconds of delay before a dropped file was noticed. In practice it never mattered, since nobody is staring at the folder waiting, and the later move to a Linux server made it moot anyway.</p>
+      <p>The setup has also moved once. It was first deployed on a Windows machine running Docker, then migrated to my Unraid server along with the rest of the homelab. The migration is where the share merge above happened, but CWA itself moved cleanly. Its whole state lives in the library folder and one config directory, so pointing a fresh container at both brought everything back.</p>
+    </div>
+  </section>
+
+  <section class="writeup" id="differently">
+    <div class="section-label">retrospective</div>
+    <h2 class="section-title">What I'd do differently</h2>
+    <div class="prose">
+      <p>I'd have skipped the custom-build detour in the evaluation. I spent real effort scoping an app I was never going to need, because CWA already existed and did the job. The better habit, and one I've since applied elsewhere, is to exhaust the existing open source options thoroughly before letting "I could build this" get momentum.</p>
+    </div>
+  </section>
+
+  <div style="padding: 8px 0 40px; display: flex; gap: 10px; flex-wrap: wrap;">
+    <a href="../" class="btn-ghost">&larr; All projects</a>
+  </div>
+
+  <footer>
+    <p>Jaime A. De La Paz &nbsp;·&nbsp; Rogers City, MI &nbsp;·&nbsp; <span>&copy; 2026</span></p>
+  </footer>
+
+</main>
+
+<script>
+  const toggle = document.getElementById('theme-toggle');
+  const root = document.documentElement;
+  const saved = localStorage.getItem('jb-theme') || 'dark';
+  root.setAttribute('data-theme', saved);
+  toggle.textContent = saved === 'dark' ? '☀' : '🌙';
+  toggle.addEventListener('click', () => {
+    const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    toggle.textContent = next === 'dark' ? '☀' : '🌙';
+    localStorage.setItem('jb-theme', next);
+  });
+</script>
+</body>
+</html>
