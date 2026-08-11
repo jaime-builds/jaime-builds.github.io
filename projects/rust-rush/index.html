@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rust Rush — Jaime De La Paz</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@300;700;900&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    [data-theme="dark"] {
+      --bg: #0f1117;
+      --bg-alt: #13151c;
+      --surface: #17191f;
+      --border: #1e2028;
+      --border-mid: #25272f;
+      --text: #f0f2f8;
+      --text-dim: #9ca3af;
+      --text-muted: #3d4048;
+      --accent: #c9a85d;
+      --accent-bg: #1a160c;
+      --accent-tag: #d4b472;
+      --accent-tag-border: #2e2518;
+      --card-bg: #13151c;
+      --card-border: #1e2028;
+      --live-bg: #16220d;
+      --live-text: #97c459;
+      --live-border: #2a3d18;
+      --code-bg: #0b0c11;
+    }
+
+    [data-theme="light"] {
+      --bg: #ede8dc;
+      --bg-alt: #e4ddd0;
+      --surface: #dcd5c6;
+      --border: #ccc4b2;
+      --border-mid: #bcb49e;
+      --text: #1c1a16;
+      --text-dim: #4a4438;
+      --text-muted: #8a8070;
+      --accent: #8a6820;
+      --accent-bg: #e8dfc8;
+      --accent-tag: #7a5c18;
+      --accent-tag-border: #c0a870;
+      --card-bg: #e4ddd0;
+      --card-border: #ccc4b2;
+      --live-bg: #e8f0d8;
+      --live-text: #3b6d11;
+      --live-border: #b8d090;
+      --code-bg: #ddd4c0;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      transition: background .3s, color .3s;
+    }
+
+    a {
+      color: var(--accent-tag);
+      text-decoration: none;
+      position: relative;
+      transition: opacity .2s;
+    }
+    a::after {
+      content: '';
+      position: absolute;
+      left: 0; bottom: -2px;
+      width: 100%; height: 1px;
+      background: currentColor;
+      opacity: 0.35;
+      transform: scaleX(0.5);
+      transform-origin: left;
+      transition: opacity .2s, transform .2s;
+    }
+    a:hover { opacity: 1; }
+    a:hover::after { opacity: 0.9; transform: scaleX(1); }
+
+    .nav-links a::after,
+    .btn-ghost::after,
+    .nav-brand a::after { display: none; }
+
+    .wrapper { max-width: 860px; margin: 0 auto; padding: 0 28px 120px; }
+
+    header {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      transition: background .3s, border-color .3s;
+    }
+    nav {
+      max-width: 1080px; margin: 0 auto; padding: 0 28px;
+      height: 58px;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    }
+    .nav-brand img { height: 38px; width: 38px; border-radius: 50%; object-fit: cover; display: block; }
+    .nav-links { display: flex; gap: 4px; list-style: none; align-items: center; }
+    .nav-links a {
+      font-size: 12px; color: var(--text-dim); padding: 5px 10px; border-radius: 6px;
+      transition: color .2s, background .2s;
+    }
+    .nav-links a:hover { color: var(--accent); background: var(--accent-bg); opacity: 1; }
+    .nav-links a[aria-current="page"] { color: var(--accent); }
+
+    #theme-toggle {
+      background: var(--surface);
+      border: 1px solid var(--border-mid);
+      color: var(--text-dim);
+      cursor: pointer;
+      width: 36px; height: 36px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px; flex-shrink: 0;
+      transition: background .3s, border-color .2s, color .2s;
+    }
+    #theme-toggle::after { display: none; }
+    #theme-toggle:hover { color: var(--accent); border-color: var(--accent); }
+
+    .back-link { display: block; padding: 24px 0 0; font-size: 12px; }
+
+    .hero { padding: 24px 0 40px; border-bottom: 1px solid var(--border); }
+    .hero-eyebrow { font-size: 11px; color: var(--accent); letter-spacing: .14em; text-transform: uppercase; font-weight: 500; margin-bottom: 10px; }
+    .hero-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 10px; }
+    .hero h1 { font-family: 'Fraunces', serif; font-size: clamp(28px, 5.5vw, 44px); font-weight: 900; color: var(--text); line-height: 1.05; letter-spacing: -.5px; }
+    .project-status { font-size: 10px; letter-spacing: .08em; text-transform: uppercase; padding: 5px 14px; border-radius: 20px; flex-shrink: 0; font-weight: 500; font-family: 'JetBrains Mono', monospace; margin-top: 6px; }
+    .status-live { background: var(--live-bg); color: var(--live-text); border: 1px solid var(--live-border); }
+    .hero-subtitle { font-size: 14px; color: var(--text-dim); letter-spacing: .02em; margin-bottom: 24px; }
+    .hero-links { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 18px; border-radius: 20px;
+      font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
+      background: transparent; color: var(--text-dim);
+      border: 1px solid var(--border-mid);
+      transition: all .2s; cursor: pointer; text-decoration: none;
+    }
+    .btn-ghost:hover { color: var(--accent); border-color: var(--accent); opacity: 1; }
+    .hero-sep { width: 1px; height: 18px; background: var(--border-mid); }
+
+    .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-top: 28px; }
+    .stat-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 10px; padding: 16px 18px; }
+    .stat-num { font-family: 'Fraunces', serif; font-size: 24px; font-weight: 700; color: var(--accent); line-height: 1; margin-bottom: 6px; }
+    .stat-label { font-size: 11px; color: var(--text-muted); letter-spacing: .06em; text-transform: uppercase; font-family: 'JetBrains Mono', monospace; }
+
+    section.writeup { padding: 48px 0; border-bottom: 1px solid var(--border); }
+    section.writeup:last-of-type { border-bottom: none; }
+
+    .section-label { font-size: 11px; color: var(--accent); letter-spacing: .14em; text-transform: uppercase; font-weight: 500; margin-bottom: 14px; display: flex; align-items: center; gap: 6px; }
+    .section-label::before { content: '—'; opacity: 0.5; font-family: 'DM Sans', sans-serif; }
+    .section-title { font-family: 'Fraunces', serif; font-size: 26px; font-weight: 700; color: var(--text); margin-bottom: 20px; letter-spacing: -.2px; }
+
+    .sub-title { font-family: 'Fraunces', serif; font-size: 19px; font-weight: 700; color: var(--text); margin: 30px 0 12px; }
+    section.writeup > .sub-title:first-of-type { margin-top: 4px; }
+
+    .prose { font-size: 15.5px; color: var(--text-dim); line-height: 1.9; }
+    .prose p { margin-bottom: 16px; }
+    .prose p:last-child { margin-bottom: 0; }
+    .prose strong { color: var(--text); font-weight: 500; }
+    .prose code { font-family: 'JetBrains Mono', monospace; font-size: 13px; background: var(--code-bg); color: var(--accent-tag); padding: 2px 6px; border-radius: 4px; }
+    .prose ul { margin: 4px 0 16px; padding-left: 20px; }
+    .prose ul li { margin-bottom: 8px; }
+
+    .stack-item { margin-bottom: 18px; }
+    .stack-item:last-child { margin-bottom: 0; }
+
+    figure { margin: 22px 0; }
+    figure img {
+      width: 100%; display: block; border-radius: 10px; border: 1px solid var(--card-border);
+    }
+    figcaption { font-size: 12px; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; margin-top: 8px; text-align: center; }
+
+    footer { padding: 40px 0 20px; text-align: center; font-size: 11px; color: var(--text-muted); letter-spacing: .04em; font-family: 'JetBrains Mono', monospace; }
+    footer span { color: var(--accent); }
+
+    @media (max-width: 600px) {
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <div class="nav-brand">
+      <a href="../../index.html"><img src="../../docs/logo.png" alt="jaime-builds" /></a>
+    </div>
+    <ul class="nav-links">
+      <li><a href="../../index.html">Home</a></li>
+      <li><a href="../../about/">About</a></li>
+      <li><a href="../" aria-current="page">Projects</a></li>
+      <li><a href="../../homelab/">Homelab</a></li>
+    </ul>
+    <button id="theme-toggle" aria-label="Toggle theme">☀</button>
+  </nav>
+</header>
+
+<main class="wrapper">
+
+  <a href="../" class="back-link btn-ghost" style="display: inline-flex; margin-top: 24px;">&larr; All projects</a>
+
+  <div class="hero">
+    <div class="hero-eyebrow">project write-up</div>
+    <div class="hero-top">
+      <h1>🦀 Rust Rush — Tower Defense</h1>
+      <div class="project-status status-live">Live</div>
+    </div>
+    <p class="hero-subtitle">Real-time browser tower defense · Go · React · WebSockets</p>
+    <div class="hero-links">
+      <a href="https://rust-rush.jaime.build" class="btn-ghost" target="_blank" rel="noopener">Play it ↗</a>
+      <a href="https://github.com/jaime-builds/rust-rush" class="btn-ghost" target="_blank" rel="noopener">GitHub ↗</a>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-num">23</div><div class="stat-label">Phases</div></div>
+      <div class="stat-card"><div class="stat-num">6</div><div class="stat-label">Maps</div></div>
+      <div class="stat-card"><div class="stat-num">15</div><div class="stat-label">Tower Forms</div></div>
+      <div class="stat-card"><div class="stat-num">60 FPS</div><div class="stat-label">Server Loop</div></div>
+      <div class="stat-card"><div class="stat-num">60/sec</div><div class="stat-label">WS Messages</div></div>
+      <div class="stat-card"><div class="stat-num">47</div><div class="stat-label">Go Tests</div></div>
+      <div class="stat-card"><div class="stat-num">6 mo</div><div class="stat-label">Build Time</div></div>
+    </div>
+  </div>
+
+  <section class="writeup" id="why">
+    <div class="section-label">motivation</div>
+    <h2 class="section-title">Why I built it</h2>
+    <div class="prose">
+      <p>I'd never made a game before. I have played a lot of them, though, and tower defense is the genre I keep coming back to: Fieldrunners, Bloons, Plants vs. Zombies. I wanted to try building my own version and learn something in the process.</p>
+      <p>The original plan was to learn Rust. The first prototype used Macroquad, a Rust game engine that opens a native desktop window, and it didn't last long. A downloadable exe has less portfolio value than a link anyone can click, and Macroquad would have meant writing the entire frontend in Rust too. So the project shifted to a Go server with a React client. I'd taken a Go course a while back and this was a chance to refresh it with a real project, and everything else, WebSockets, Canvas rendering, game loops, pathfinding, was new territory. The Rust in Rust Rush survived as a crab theme rather than the language. The name was too good to throw away.</p>
+    </div>
+  </section>
+
+  <section class="writeup" id="what-it-is">
+    <div class="section-label">the game</div>
+    <h2 class="section-title">What it is</h2>
+    <div class="prose">
+      <p>Rust Rush is a real-time tower defense game that runs in the browser. You place towers on a grid, enemies path around them toward your goal, and you survive escalating waves by upgrading, evolving, and selling towers as the economy allows. It's live at <a href="https://rust-rush.jaime.build" target="_blank" rel="noopener">rust-rush.jaime.build</a>, self-hosted on my home server behind a Cloudflare Tunnel.</p>
+
+      <p>The architecture is the part I'm most deliberate about: the game is fully server-authoritative. Every piece of game logic, pathfinding, tower targeting, projectile physics, damage, wave spawning, win and loss detection, runs in Go at 60 frames per second. The React client renders state and sends inputs over a WebSocket at 60 messages per second, and that's all it does. No game outcome is ever computed in the browser, which means there's nothing for a player to tamper with client-side.</p>
+
+      <figure>
+        <img src="../../docs/rust-rush-combat.png" alt="Late wave of Rust Rush in progress, showing evolved towers, projectiles, and Tesla arcs hitting several enemies on a map with obstacles" />
+        <figcaption>A late wave in progress. Every projectile and path on screen is computed server-side at 60 FPS.</figcaption>
+      </figure>
+
+      <p>There are 5 base tower types, each with a distinct job. Pulse is the reliable workhorse, Railgun the long-range single-target specialist, Mortar the splash damage, Stasis the slow debuff, and Tesla the chain lightning that arcs between enemies. Each tower upgrades through 4 levels, and at MAX level every tower can permanently evolve into one of two terminal forms, 10 in total, from a piercing rail shot that punches through everything in a line to a support tower that deals no damage at all and instead buffs its neighbors.</p>
+
+      <p>The game has 6 maps, each a different obstacle layout, unlocked one at a time in a fixed sequence. Every map has a win wave: survive to it and you get a Zone Secured victory screen with the option to keep going in Endless mode. Beating a map also unlocks a Harder difficulty on it, with a tighter economy and tougher bosses. Enemies path around your towers with BFS pathfinding that recalculates in real time, so placing a tower mid-wave instantly reroutes everything on the board.</p>
+
+      <p>On top of that sits a full presentation layer: a sci-fi visual theme where towers are geometric hardware and enemies are heading-rotated craft, procedurally synthesized sound with no audio files anywhere in the project, screen shake, a settings menu, hotkeys, real speed controls with a true pause, and an in-game glossary covering every tower, evolution, and enemy type. A private SQLite stats store records one row per completed game behind an admin login, with no player accounts anywhere.</p>
+    </div>
+  </section>
+
+  <section class="writeup" id="stack">
+    <div class="section-label">technical decisions</div>
+    <h2 class="section-title">The stack, and why</h2>
+    <div class="prose">
+      <div class="stack-item"><p><strong>Go.</strong> I'd taken a Go course before this project and wanted to put it to real use. It turned out to be a great fit for a game server: goroutines handle the wave spawner and the 60 FPS loop naturally, and channels gave me a clean answer to problems like "cancel this wave mid-spawn when the player hits New Game."</p></div>
+      <div class="stack-item"><p><strong>React and TypeScript.</strong> Once the native-window Rust prototype was out, the frontend needed to be a web app, and React was the natural pick. TypeScript earned its keep by forcing the client's types to mirror the server's Go structs, so a field added on one side couldn't silently go missing on the other.</p></div>
+      <div class="stack-item"><p><strong>HTML5 Canvas.</strong> A tower defense game redraws dozens of moving objects 60 times per second, which is exactly what the DOM is bad at and Canvas is built for. The whole board is one canvas element with an animation loop reading game state from refs.</p></div>
+      <div class="stack-item"><p><strong>WebSockets.</strong> The server broadcasts a full game snapshot 60 times per second and the client sends inputs back on the same connection. Gorilla WebSocket on the Go side, a custom hook on the React side.</p></div>
+      <div class="stack-item"><p><strong>BFS pathfinding.</strong> Enemies need the shortest path around whatever the player has built, recalculated every time a tower is placed. BFS on a uniform grid gives that without the extra machinery of A*, and a later optimization pass rewrote it as an integer-indexed search, 47 times faster than the first version and proven byte-identical across 500 randomized boards.</p></div>
+      <div class="stack-item"><p><strong>SQLite.</strong> The stats store needed to be tiny: one row per completed game, no accounts, no names. A pure-Go SQLite driver meant no database container and no C toolchain in the build, just a file on a volume mount.</p></div>
+      <div class="stack-item"><p><strong>Self-hosting over a platform.</strong> The plan was originally to deploy on a hosting platform, but by mid-2026 Railway and Fly.io had dropped their free tiers and Render's remaining one cold-starts after 15 minutes idle, which kills an always-on WebSocket game. So it runs in Docker on my home server instead, routed through a Cloudflare Tunnel with no ports opened to the internet, the same pattern as everything else I self-host.</p></div>
+    </div>
+  </section>
+
+  <section class="writeup" id="interesting-parts">
+    <div class="section-label">along the way</div>
+    <h2 class="section-title">The interesting parts</h2>
+    <div class="prose">
+
+      <h3 class="sub-title">Making the server the only source of truth</h3>
+      <p>Early on, some game logic lived in the browser. The turning point was moving all of it to the server and demoting the client to a pure renderer. It sounds like a purity argument, but it has concrete payoffs: the client can't cheat, the client can't drift out of sync with the rules, and every behavior has exactly one implementation to test.</p>
+      <p>Keeping that discipline took ongoing effort. A duplicate BFS implementation snuck into the client for debug spawns and had to be deleted. The wave preview strip could have recomputed wave composition in TypeScript, but instead the server includes it in every snapshot, built from the same function that actually spawns the waves, so what the preview shows and what arrives can never disagree. Even the fast-forward button's state comes from the server, which means it survives a page reload mid-game.</p>
+
+      <h3 class="sub-title">Tuning the difficulty curve</h3>
+      <p>The first playable version had a problem: I survived to wave 55 with $67,000 in the bank. Enemies had flat stats at every wave, so towers got relatively stronger forever and gold piled up faster than it could be spent.</p>
+      <p>The fix was scaling enemy health and speed at spawn time, and the tuning took two passes. The first attempt applied a 15% compound health multiplier from wave 1, and I was dead by wave 6. The second started a 10% multiplier at wave 5 instead, giving the early game a grace period before the wall arrives, plus a speed ramp capped at +80% and a quadratic bump in enemy counts past wave 10. Playtesting settled at a consistent game over around wave 22, which was the target. The lesson that stuck: compound scaling needs a grace period, because a curve that feels fair at wave 15 is brutal if it starts at wave 1.</p>
+
+      <h3 class="sub-title">The evolution system, and one accounting trick</h3>
+      <p>Tower upgrades plateau at level 4, and for a long time that was just where progression ended. The evolution system replaced that plateau with a real decision: every MAX-level tower can permanently transform into one of two specialized final forms. Pulse forks into a close-range shredder or a multi-shot volley. Stasis becomes either a constant slow aura or a single-target root. Tesla splits into a continuous laser or a support tower that buffs its neighbors and never fires a shot.</p>
+      <p>Evolving costs twice everything you've spent on that tower so far, and the design detail I like most is where that cost goes: it's added to the tower's running total-spent figure. Selling any tower refunds 70% of total spent, so by folding the evolution cost into the same number, the sell-refund math needed zero special cases.</p>
+      <p>It's also the game's first irreversible action. Nothing else in Rust Rush is permanent, so the evolve flow shows both options up front and asks for confirmation before committing, the only confirmation dialog in the game.</p>
+
+      <figure>
+        <img src="../../docs/rust-rush-evolve.png" alt="Evolve panel showing both evolution options for a MAX-level tower, with a confirmation step before committing" />
+        <figcaption>The evolve panel. Both terminal forms shown before the game's only irreversible choice.</figcaption>
+      </figure>
+
+      <h3 class="sub-title">My difficulty instinct was backwards</h3>
+      <p>The 6 maps needed an unlock order from easiest to hardest, and my instinct was obvious: more obstacles means harder. Rank them by wall count, done.</p>
+      <p>My own playtest data disagreed. The Clearway, a completely open board with zero obstacles and the shortest possible path, produced my best run in the entire project, wave 25 with a new high score. Meanwhile obstacle count and path length pull difficulty in opposite directions: walls eat buildable cells, which means less total firepower, but they also stretch the path, which means every enemy spends more time inside tower range. Neither effect can be eyeballed in isolation.</p>
+      <p>So instead of guessing, I ranked the maps with a measured simulation: a deterministic bot playing every map with identical fixed tower budgets at six spending levels, no upgrades, no clever placement, summing waves survived and score across all runs. The result confirmed the instinct was wrong. The Switchback, the map with the most obstacles and the longest path, measured as the easiest in the roster, because its 44-cell route gives towers more than twice the time on target of a 20-cell map. The simulation lives in the repo as a test, so the ranking is reproducible, and the final unlock order came straight from its output.</p>
+
+      <figure>
+        <img src="../../docs/rust-rush-map-select.png" alt="Map select screen showing real unlock progress across the six maps, with several secured and at least one still locked" />
+        <figcaption>Map select. The unlock order came from the simulation, not my gut.</figcaption>
+      </figure>
+
+      <h3 class="sub-title">An audit that found bugs months old</h3>
+      <p>Midway through the project I ran a full audit of the documentation against the actual code, verifying every claim in the TODO and README rather than trusting the checkboxes, with AI review helping work through the roughly 280 claims. Most held up. Eleven were wrong, and two of the wrong ones were real behavior bugs that had been latent for months, both proven with a failing test before the fix.</p>
+      <p>The first: "trapped enemies stop moving" was false. An enemy fully walled in by towers was treated as having reached the goal, so it dealt 10 damage and vanished. The documented behavior, and the fair one, is that a trapped enemy waits and resumes when a path reopens, which is what it does now. The second: the "wave freezes when path blocked" fix only covered blocking a path mid-wave. Starting a wave against an already-blocked path soft-locked the game forever.</p>
+      <p>The same pass caught a class of concurrency bugs waiting to happen: the WebSocket hub's client map was being written from three goroutines with no synchronization, two connections arriving at the same moment could create duplicate rooms with doubled game loops, and a race in the wave-start handler could double-spawn a wave. All of it got mutexes, atomic gates, and a stress test. The habit I took away is the same one from my other projects: verify claims against reality on a schedule, because "the docs say it works" and "it works" drift apart quietly.</p>
+
+      <h3 class="sub-title">Sound with no sound files</h3>
+      <p>The game has music and sound effects, and the repo contains zero audio files. Everything is synthesized live in the browser through the Web Audio API: oscillators, filters, and envelopes. The background music is a generative ambient pad, a low drone with a sparse arpeggio wandering over it, so it never loops in a way you can catch. The effects are deliberately minimal, four in total: explosions, plus one-off stings for evolving a tower, starting a wave, and game over. No placement clicks, no per-shot pew-pew, because a late wave has dozens of towers firing and that gets exhausting fast.</p>
+      <p>Procedural audio fit the project for practical reasons too. There are no samples to license, manage, or ship, and the synth aesthetic matches a neon sci-fi game natively. The whole sound engine is one TypeScript file.</p>
+
+      <h3 class="sub-title">Pausing a game that lives on a server</h3>
+      <p>Pause sounds trivial until the simulation runs on a server. The 60 FPS loop, the projectiles in flight, the tower cooldowns, and a separate goroutine actively spawning the current wave on its own timers all have to freeze together and resume with no catch-up jump.</p>
+      <p>The implementation keeps the 60Hz loop ticking but has the update function return immediately while paused, so nothing advances. The spawn goroutine holds its timers rather than sleeping through them, so an enemy due in two seconds is still due in two seconds after a ten-minute pause. Pause also composes with the speed control: pause at 3x, resume at 3x.</p>
+
+    </div>
+  </section>
+
+  <section class="writeup" id="whats-next">
+    <div class="section-label">roadmap</div>
+    <h2 class="section-title">What's next</h2>
+    <div class="prose">
+      <p>The project hit my "done for now" milestone with the July 30 deployment, and I mean the "for now." The deprioritized list is real: a map editor with user-created maps, multiplayer with a co-op mode, user accounts with a proper leaderboard instead of the current per-browser high score, and achievements. Smaller items first, like showing the special stats (slow duration, splash radius) in the tower info panel, which the towers already track internally but the UI never displays. The four later maps also got their difficulty ranking from the simulation rather than my own full playthroughs, so a spot-check run on each is on the list if anything ever feels off.</p>
+    </div>
+  </section>
+
+  <section class="writeup" id="differently">
+    <div class="section-label">retrospective</div>
+    <h2 class="section-title">What I'd do differently</h2>
+    <div class="prose">
+      <p>I'd write the balancing simulation earlier. The fixed-budget bot that ranked the maps took one session to build and immediately settled a question I'd been reasoning about by feel, and it would have been just as useful back when I was hand-tuning the health curve through trial and error. I'd also keep documentation honest as I go rather than in periodic sweeps. The mid-project audit found real bugs precisely because the docs had drifted far enough from the code to be worth checking, and catching that drift at write time is cheaper than excavating it months later.</p>
+    </div>
+  </section>
+
+  <div style="padding: 8px 0 40px; display: flex; gap: 10px; flex-wrap: wrap;">
+    <a href="https://rust-rush.jaime.build" class="btn-ghost" target="_blank" rel="noopener">Play it ↗</a>
+    <a href="../" class="btn-ghost">&larr; All projects</a>
+  </div>
+
+  <footer>
+    <p>Jaime A. De La Paz &nbsp;·&nbsp; Rogers City, MI &nbsp;·&nbsp; <span>&copy; 2026</span></p>
+  </footer>
+
+</main>
+
+<script>
+  const toggle = document.getElementById('theme-toggle');
+  const root = document.documentElement;
+  const saved = localStorage.getItem('jb-theme') || 'dark';
+  root.setAttribute('data-theme', saved);
+  toggle.textContent = saved === 'dark' ? '☀' : '🌙';
+  toggle.addEventListener('click', () => {
+    const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    toggle.textContent = next === 'dark' ? '☀' : '🌙';
+    localStorage.setItem('jb-theme', next);
+  });
+</script>
+</body>
+</html>
