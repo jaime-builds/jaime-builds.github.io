@@ -181,6 +181,37 @@
     .hobby-body p + p { margin-top: 10px; }
     .hobby-body strong { color: var(--text); font-weight: 500; }
 
+    .hobby-card.gitcg-card { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+    .hobby-card.gitcg-card .gitcg-thumb { width: 140px; border-radius: 10px; border: 1px solid var(--card-border); cursor: pointer; transition: transform .15s ease; flex-shrink: 0; display: block; }
+    .hobby-card.gitcg-card .gitcg-thumb:hover { transform: scale(1.04); }
+    .hobby-card.gitcg-card .hobby-text { flex: 1; min-width: 200px; }
+
+    .lightbox-overlay {
+      display: none;
+      position: fixed; inset: 0; z-index: 1000;
+      background: rgba(10, 10, 14, 0.85);
+      align-items: center; justify-content: center;
+      padding: 32px;
+      cursor: pointer;
+    }
+    .lightbox-overlay.open { display: flex; }
+    .lightbox-overlay img {
+      max-width: min(90vw, 480px);
+      max-height: 85vh;
+      border-radius: 14px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+      cursor: default;
+    }
+    .lightbox-close {
+      position: absolute; top: 20px; right: 28px;
+      color: #f0f2f8; font-size: 28px; line-height: 1;
+      background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2);
+      width: 40px; height: 40px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+    }
+    .lightbox-close:hover { background: rgba(255,255,255,0.18); }
+
     footer { padding: 40px 0 20px; text-align: center; font-size: 11px; color: var(--text-muted); letter-spacing: .04em; font-family: 'JetBrains Mono', monospace; }
     footer span { color: var(--accent); }
 
@@ -336,8 +367,23 @@
         </div>
       </div>
 
+      <div class="hobby-card gitcg-card">
+        <img class="gitcg-thumb" src="../docs/jaime-builds-gitcg.png" alt="Jaime's GitHub profile trading card" onclick="openLightbox()" />
+        <div class="hobby-text">
+          <div class="hobby-header"><div class="hobby-icon">🃏</div><div class="hobby-title">GitHub Profile Card</div></div>
+          <div class="hobby-body">
+            <p>Generated with <strong>GiTCG</strong>, a fun little tool that turns any GitHub profile into a trading-card-style graphic. Click the card for the full-size version.</p>
+          </div>
+        </div>
+      </div>
+
     </div>
   </section>
+
+  <div class="lightbox-overlay" id="lightbox" onclick="closeLightbox(event)">
+    <div class="lightbox-close" onclick="closeLightbox(event)">&times;</div>
+    <img src="../docs/jaime-builds-gitcg.png" alt="Jaime's GitHub profile trading card, full size" />
+  </div>
 
   <footer>
     <p>Jaime A. De La Paz &nbsp;·&nbsp; Rogers City, MI &nbsp;·&nbsp; <span>&copy; 2026</span></p>
@@ -356,6 +402,16 @@
     root.setAttribute('data-theme', next);
     toggle.textContent = next === 'dark' ? '☀' : '🌙';
     localStorage.setItem('jb-theme', next);
+  });
+
+  function openLightbox() {
+    document.getElementById('lightbox').classList.add('open');
+  }
+  function closeLightbox(e) {
+    document.getElementById('lightbox').classList.remove('open');
+  }
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeLightbox();
   });
 </script>
 </body>
