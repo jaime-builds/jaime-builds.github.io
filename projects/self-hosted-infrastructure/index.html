@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Self-Hosted Infrastructure — Jaime De La Paz</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@300;700;900&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    [data-theme="dark"] {
+      --bg: #0f1117;
+      --bg-alt: #13151c;
+      --surface: #17191f;
+      --border: #1e2028;
+      --border-mid: #25272f;
+      --text: #f0f2f8;
+      --text-dim: #9ca3af;
+      --text-muted: #3d4048;
+      --accent: #c9a85d;
+      --accent-bg: #1a160c;
+      --accent-tag: #d4b472;
+      --accent-tag-border: #2e2518;
+      --card-bg: #13151c;
+      --card-border: #1e2028;
+      --live-bg: #16220d;
+      --live-text: #97c459;
+      --live-border: #2a3d18;
+      --code-bg: #0b0c11;
+    }
+
+    [data-theme="light"] {
+      --bg: #ede8dc;
+      --bg-alt: #e4ddd0;
+      --surface: #dcd5c6;
+      --border: #ccc4b2;
+      --border-mid: #bcb49e;
+      --text: #1c1a16;
+      --text-dim: #4a4438;
+      --text-muted: #8a8070;
+      --accent: #8a6820;
+      --accent-bg: #e8dfc8;
+      --accent-tag: #7a5c18;
+      --accent-tag-border: #c0a870;
+      --card-bg: #e4ddd0;
+      --card-border: #ccc4b2;
+      --live-bg: #e8f0d8;
+      --live-text: #3b6d11;
+      --live-border: #b8d090;
+      --code-bg: #ddd4c0;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      transition: background .3s, color .3s;
+    }
+
+    a {
+      color: var(--accent-tag);
+      text-decoration: none;
+      position: relative;
+      transition: opacity .2s;
+    }
+    a::after {
+      content: '';
+      position: absolute;
+      left: 0; bottom: -2px;
+      width: 100%; height: 1px;
+      background: currentColor;
+      opacity: 0.35;
+      transform: scaleX(0.5);
+      transform-origin: left;
+      transition: opacity .2s, transform .2s;
+    }
+    a:hover { opacity: 1; }
+    a:hover::after { opacity: 0.9; transform: scaleX(1); }
+
+    .nav-links a::after,
+    .btn-ghost::after,
+    .nav-brand a::after { display: none; }
+
+    .wrapper { max-width: 860px; margin: 0 auto; padding: 0 28px 120px; }
+
+    header {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      transition: background .3s, border-color .3s;
+    }
+    nav {
+      max-width: 1080px; margin: 0 auto; padding: 0 28px;
+      height: 58px;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    }
+    .nav-brand img { height: 38px; width: 38px; border-radius: 50%; object-fit: cover; display: block; }
+    .nav-links { display: flex; gap: 4px; list-style: none; align-items: center; }
+    .nav-links a {
+      font-size: 12px; color: var(--text-dim); padding: 5px 10px; border-radius: 6px;
+      transition: color .2s, background .2s;
+    }
+    .nav-links a:hover { color: var(--accent); background: var(--accent-bg); opacity: 1; }
+    .nav-links a[aria-current="page"] { color: var(--accent); }
+
+    #theme-toggle {
+      background: var(--surface);
+      border: 1px solid var(--border-mid);
+      color: var(--text-dim);
+      cursor: pointer;
+      width: 36px; height: 36px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px; flex-shrink: 0;
+      transition: background .3s, border-color .2s, color .2s;
+    }
+    #theme-toggle::after { display: none; }
+    #theme-toggle:hover { color: var(--accent); border-color: var(--accent); }
+
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 18px; border-radius: 20px;
+      font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
+      background: transparent; color: var(--text-dim);
+      border: 1px solid var(--border-mid);
+      transition: all .2s; cursor: pointer; text-decoration: none;
+    }
+    .btn-ghost:hover { color: var(--accent); border-color: var(--accent); opacity: 1; }
+
+    .back-link { display: block; padding: 24px 0 0; font-size: 12px; }
+
+    .hero { padding: 24px 0 40px; border-bottom: 1px solid var(--border); }
+    .hero-eyebrow { font-size: 11px; color: var(--accent); letter-spacing: .14em; text-transform: uppercase; font-weight: 500; margin-bottom: 10px; }
+    .hero-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 10px; }
+    .hero h1 { font-family: 'Fraunces', serif; font-size: clamp(28px, 5.5vw, 44px); font-weight: 900; color: var(--text); line-height: 1.05; letter-spacing: -.5px; }
+    .project-status { font-size: 10px; letter-spacing: .08em; text-transform: uppercase; padding: 5px 14px; border-radius: 20px; flex-shrink: 0; font-weight: 500; font-family: 'JetBrains Mono', monospace; margin-top: 6px; }
+    .status-live { background: var(--live-bg); color: var(--live-text); border: 1px solid var(--live-border); }
+    .hero-tagline { font-family: 'Fraunces', serif; font-size: 18px; font-weight: 300; color: var(--text-dim); margin-bottom: 10px; }
+    .hero-subtitle { font-size: 14px; color: var(--text-dim); letter-spacing: .02em; }
+
+    .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-top: 28px; }
+    .stat-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 10px; padding: 16px 18px; }
+    .stat-num { font-family: 'Fraunces', serif; font-size: 24px; font-weight: 700; color: var(--accent); line-height: 1; margin-bottom: 6px; }
+    .stat-label { font-size: 11px; color: var(--text-muted); letter-spacing: .06em; text-transform: uppercase; font-family: 'JetBrains Mono', monospace; }
+
+    section.writeup { padding: 48px 0; border-bottom: 1px solid var(--border); }
+    section.writeup:last-of-type { border-bottom: none; }
+
+    .section-label { font-size: 11px; color: var(--accent); letter-spacing: .14em; text-transform: uppercase; font-weight: 500; margin-bottom: 14px; display: flex; align-items: center; gap: 6px; }
+    .section-label::before { content: '—'; opacity: 0.5; font-family: 'DM Sans', sans-serif; }
+    .section-title { font-family: 'Fraunces', serif; font-size: 26px; font-weight: 700; color: var(--text); margin-bottom: 20px; letter-spacing: -.2px; }
+
+    .prose { font-size: 15.5px; color: var(--text-dim); line-height: 1.9; }
+    .prose p { margin-bottom: 16px; }
+    .prose p:last-child { margin-bottom: 0; }
+    .prose strong { color: var(--text); font-weight: 500; }
+    .prose code { font-family: 'JetBrains Mono', monospace; font-size: 13px; background: var(--code-bg); color: var(--accent-tag); padding: 2px 6px; border-radius: 4px; }
+
+    .pipeline-diagram { margin: 22px 0 26px; }
+    .pipeline-diagram svg { width: 100%; height: auto; display: block; }
+    .pipeline-stage { fill: none; stroke: var(--border-mid); stroke-dasharray: 3 4; }
+    .pipeline-stage-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: .04em; fill: var(--text-muted); }
+    .pipeline-node { fill: var(--card-bg); stroke: var(--card-border); stroke-width: 1; }
+    .pipeline-node-title { font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; fill: var(--text); }
+    .pipeline-node-sub { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; fill: var(--text-dim); }
+    .pipeline-arrow { fill: none; stroke: var(--accent); stroke-width: 1.2; }
+    figcaption.pipeline-caption { font-size: 12px; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; margin-top: 8px; text-align: center; }
+
+    footer { padding: 40px 0 20px; text-align: center; font-size: 11px; color: var(--text-muted); letter-spacing: .04em; font-family: 'JetBrains Mono', monospace; }
+    footer span { color: var(--accent); }
+
+    @media (max-width: 600px) {
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <div class="nav-brand">
+      <a href="../../index.html"><img src="../../docs/logo.png" alt="jaime-builds" /></a>
+    </div>
+    <ul class="nav-links">
+      <li><a href="../../index.html">Home</a></li>
+      <li><a href="../../about/">About</a></li>
+      <li><a href="../" aria-current="page">Projects</a></li>
+      <li><a href="../../homelab/">Homelab</a></li>
+    </ul>
+    <button id="theme-toggle" aria-label="Toggle theme">☀</button>
+  </nav>
+</header>
+
+<main class="wrapper">
+
+  <a href="../" class="back-link btn-ghost" style="display: inline-flex; margin-top: 24px;">&larr; All projects</a>
+
+  <div class="hero">
+    <div class="hero-eyebrow">project write-up</div>
+    <div class="hero-top">
+      <h1>🖥️ Self-Hosted Infrastructure</h1>
+      <div class="project-status status-live">Live</div>
+    </div>
+    <p class="hero-tagline">59 containers on one home server, 12 of them apps I wrote myself.</p>
+    <p class="hero-subtitle">A home server as a platform, from hosting to dev to AI ops · Unraid · Docker · Caddy · Let's Encrypt · MCP</p>
+
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-num">59</div><div class="stat-label">Containers Running</div></div>
+      <div class="stat-card"><div class="stat-num">12</div><div class="stat-label">Self-Built Apps</div></div>
+      <div class="stat-card"><div class="stat-num">47</div><div class="stat-label">Hosted Services</div></div>
+      <div class="stat-card"><div class="stat-num">37</div><div class="stat-label">Tech Queue Ideas</div></div>
+    </div>
+  </div>
+
+  <section class="writeup" id="why">
+    <div class="section-label">motivation</div>
+    <h2 class="section-title">Why I built it</h2>
+    <div class="prose">
+      <p>The <a href="../calibre-kindle-setup/">ebook pipeline</a> and the <a href="../media-automation-stack/">media stack</a> each started as one workflow I wanted to own instead of rent. The homelab is the same instinct applied to everything else. Photos, recipes, budgets, home automation, game servers, and the monitoring that watches all of it run on hardware in my house, with no subscription that can raise its price and no company that can sunset the product out from under me.</p>
+      <p>Owning the infrastructure changes how I treat it. When a service misbehaves I can read its logs, and when it disappoints me I can replace it. When nothing existing does what I want, I write my own and run it next to everything else. That last part turned out to matter more than I expected when this started.</p>
+    </div>
+  </section>
+
+  <section class="writeup" id="what-it-is">
+    <div class="section-label">the system</div>
+    <h2 class="section-title">What it is</h2>
+    <div class="prose">
+      <p>One mini PC running Unraid, with 59 Docker containers on it as of this writing. 47 of those are software other people wrote: the media servers, the book pipeline, photo backup, recipe management, budget tracking, home automation, DNS filtering, uptime monitoring, and the reverse proxy that fronts all of it. The other 12 are apps and tools I built myself, which get their own section below.</p>
+      <p>The <a href="../../homelab/">homelab page</a> keeps the current inventory: network layout, hardware, and the full services table. I won't repeat it here. This page covers how the system got to where it is and the decisions made along the way, because the container count is the least interesting number on it.</p>
+    </div>
+  </section>
+
+  <section class="writeup" id="ai-layer">
+    <div class="section-label">the ai layer</div>
+    <h2 class="section-title">The AI-operable layer</h2>
+    <div class="prose">
+      <p>The newest layer of the homelab exists so an AI assistant can operate it. A set of MCP servers sits behind one OAuth gateway, and through that gateway an assistant can query AdGuard's DNS logs, check array health on Unraid, read Uptime Kuma monitors, manage recipes in Mealie, post to Discord, and run Docker operations through a custom server I wrote called <code>p6ops</code>. This is write access, not just read: the assistant can restart containers, edit the Caddyfile, and pull image updates. The gateway handles authentication once, for every server behind it.</p>
+
+      <figure class="pipeline-diagram">
+        <svg viewBox="0 0 680 448" role="img" aria-label="Diagram showing an AI assistant connecting through the MCP OAuth Gateway to six backend MCP servers, AdGuard, Unraid, Uptime Kuma, Mealie, Discord, and p6ops, which control the running services">
+          <defs>
+            <marker id="flow-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </marker>
+          </defs>
+
+          <g>
+            <rect class="pipeline-node" x="256" y="12" width="168" height="56" rx="8"/>
+            <text class="pipeline-node-title" x="340" y="34" text-anchor="middle">AI assistant</text>
+            <text class="pipeline-node-sub" x="340" y="52" text-anchor="middle">tool calls over mcp</text>
+          </g>
+
+          <path class="pipeline-arrow" d="M340 68 L340 86" marker-end="url(#flow-arrow)"/>
+
+          <g>
+            <rect class="pipeline-node" x="256" y="88" width="168" height="56" rx="8"/>
+            <text class="pipeline-node-title" x="340" y="110" text-anchor="middle">MCP OAuth Gateway</text>
+            <text class="pipeline-node-sub" x="340" y="128" text-anchor="middle">auth &amp; routing</text>
+          </g>
+
+          <path class="pipeline-arrow" d="M340 144 L340 162" marker-end="url(#flow-arrow)"/>
+
+          <rect class="pipeline-stage" x="40" y="164" width="600" height="196" rx="16"/>
+          <text class="pipeline-stage-label" x="56" y="186">backend mcp servers</text>
+
+          <g>
+            <rect class="pipeline-node" x="68" y="200" width="168" height="56" rx="8"/>
+            <text class="pipeline-node-title" x="152" y="222" text-anchor="middle">AdGuard</text>
+            <text class="pipeline-node-sub" x="152" y="240" text-anchor="middle">dns filtering</text>
+          </g>
+          <g>
+            <rect class="pipeline-node" x="256" y="200" width="168" height="56" rx="8"/>
+            <text class="pipeline-node-title" x="340" y="222" text-anchor="middle">Unraid</text>
+            <text class="pipeline-node-sub" x="340" y="240" text-anchor="middle">system &amp; array</text>
+          </g>
+          <g>
+            <rect class="pipeline-node" x="444" y="200" width="168" height="56" rx="8"/>
+            <text class="pipeline-node-title" x="528" y="222" text-anchor="middle">Uptime Kuma</text>
+            <text class="pipeline-node-sub" x="528" y="240" text-anchor="middle">monitoring</text>
+          </g>
+          <g>
+            <rect class="pipeline-node" x="68" y="272" width="168" height="56" rx="8"/>
+            <text class="pipeline-node-title" x="152" y="294" text-anchor="middle">Mealie</text>
+            <text class="pipeline-node-sub" x="152" y="312" text-anchor="middle">recipes</text>
+          </g>
+          <g>
+            <rect class="pipeline-node" x="256" y="272" width="168" height="56" rx="8"/>
+            <text class="pipeline-node-title" x="340" y="294" text-anchor="middle">Discord</text>
+            <text class="pipeline-node-sub" x="340" y="312" text-anchor="middle">messaging</text>
+          </g>
+          <g>
+            <rect class="pipeline-node" x="444" y="272" width="168" height="56" rx="8"/>
+            <text class="pipeline-node-title" x="528" y="294" text-anchor="middle">p6ops</text>
+            <text class="pipeline-node-sub" x="528" y="312" text-anchor="middle">custom ops server</text>
+          </g>
+
+          <path class="pipeline-arrow" d="M340 360 L340 378" marker-end="url(#flow-arrow)"/>
+
+          <g>
+            <rect class="pipeline-node" x="196" y="380" width="288" height="56" rx="8"/>
+            <text class="pipeline-node-title" x="340" y="402" text-anchor="middle">The services themselves</text>
+            <text class="pipeline-node-sub" x="340" y="420" text-anchor="middle">dns · docker · monitors · configs</text>
+          </g>
+        </svg>
+        <figcaption class="pipeline-caption">One authenticated front door, six MCP servers behind it</figcaption>
+      </figure>
+
+      <p><code>p6ops</code> exists because of a lie. The Unraid MCP server has a container-update action, and it reports <code>success: true</code> every time. During one update I checked the container ID, image ID, and uptime before and after the call instead of trusting the response. Nothing had changed. The container sat on the old image with the old uptime while the tool reported success anyway. So I built <code>p6ops</code> around the opposite contract. Every mutating tool captures state before the change, re-reads it after with an independent call, and reports whether anything actually moved. The response says whatever it says. A changed container ID means the update actually ran.</p>
+    </div>
+  </section>
+
+  <section class="writeup" id="https">
+    <div class="section-label">the network</div>
+    <h2 class="section-title">HTTPS, done the hard way</h2>
+    <div class="prose">
+      <p>Every internal service started on plain HTTP at a <code>.lan</code> hostname, with DNS rewrites in AdGuard pointing the names at the server. It worked, and it aged badly. Browsers warn on every page, some web APIs refuse to run outside a secure context, and every login on my own network crossed the wire in cleartext.</p>
+      <p>Internal services can't get certificates through a normal HTTP challenge, since Let's Encrypt can't reach into a private network to verify anything. The DNS-01 challenge gets around that. You prove control of the domain by publishing a DNS record, and the certificate authority never needs to connect to the server at all. Setting it up meant rebuilding Caddy with the Cloudflare DNS plugin, which the stock image doesn't include, then issuing a real certificate for every service and moving each hostname onto the new naming scheme.</p>
+      <p>Everything internal now answers over HTTPS with a valid certificate and no browser warnings. Getting there produced some of the best debugging stories on this page, covered below.</p>
+    </div>
+  </section>
+
+  <section class="writeup" id="evolution">
+    <div class="section-label">evolution</div>
+    <h2 class="section-title">Built here, torn down here</h2>
+    <div class="prose">
+      <p>The homelab doubles as a dev platform. YTPlayer, LedgerView, RoadTrip, <a href="../rust-rush/">Rust Rush</a>, Roundup, Stash, an ESPN Fantasy MCP server, and an AI Trading Monitor all run in the same Docker environment as the hosted services, deployed the same way, proxied by the same Caddy, and watched by the same monitoring. The trading monitor is a dry-run algorithmic trading system with a circuit breaker that halts it when losses cross a threshold, and it has never touched a real dollar. The <a href="../movie-analytics-dashboard/">Movie Analytics Dashboard</a> lives here too and has its own write-up. Going from an idea to an app running behind HTTPS with monitoring in an afternoon, on hardware I already own, removed most of the friction between wanting a tool and having one.</p>
+      <p>Deletion is the other half of the discipline. Anything that stops earning its place gets removed. Hermes, a local-model AI agent project, went first, after the model fabricated data during testing and the project then hit an API credits wall. Syncthing never found a lasting use case after two pivots. MusicGrabber duplicated what Apple Music already covers. SmarTunarr and an older Obsidian MCP fork went the same way, the fork replaced by a cleaner vault server. The standing rule is no complexity without demonstrated value. 59 containers is already a lot, and it would be far more without the teardowns.</p>
+      <p>Laid end to end, the phases look like this.</p>
+
+      <figure class="pipeline-diagram">
+        <svg viewBox="0 0 680 106" role="img" aria-label="Timeline showing four phases: initial buildout on plain HTTP, the HTTPS rollout, the AI and MCP layer, and ongoing refinement with decommissions">
+          <defs>
+            <marker id="time-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </marker>
+          </defs>
+
+          <g>
+            <rect class="pipeline-node" x="20" y="24" width="140" height="56" rx="8"/>
+            <text class="pipeline-node-title" x="90" y="46" text-anchor="middle">Initial buildout</text>
+            <text class="pipeline-node-sub" x="90" y="64" text-anchor="middle">http, .lan names</text>
+          </g>
+          <g>
+            <rect class="pipeline-node" x="190" y="24" width="140" height="56" rx="8"/>
+            <text class="pipeline-node-title" x="260" y="46" text-anchor="middle">HTTPS rollout</text>
+            <text class="pipeline-node-sub" x="260" y="64" text-anchor="middle">caddy, dns-01</text>
+          </g>
+          <g>
+            <rect class="pipeline-node" x="360" y="24" width="140" height="56" rx="8"/>
+            <text class="pipeline-node-title" x="430" y="46" text-anchor="middle">AI &amp; MCP layer</text>
+            <text class="pipeline-node-sub" x="430" y="64" text-anchor="middle">gateway, servers</text>
+          </g>
+          <g>
+            <rect class="pipeline-node" x="530" y="24" width="140" height="56" rx="8"/>
+            <text class="pipeline-node-title" x="600" y="46" text-anchor="middle">Refinement</text>
+            <text class="pipeline-node-sub" x="600" y="64" text-anchor="middle">ongoing teardowns</text>
+          </g>
+
+          <path class="pipeline-arrow" d="M160 52 L188 52" marker-end="url(#time-arrow)"/>
+          <path class="pipeline-arrow" d="M330 52 L358 52" marker-end="url(#time-arrow)"/>
+          <path class="pipeline-arrow" d="M500 52 L528 52" marker-end="url(#time-arrow)"/>
+        </svg>
+        <figcaption class="pipeline-caption">Four phases so far, and the last one doesn't end</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="writeup" id="hiccups">
+    <div class="section-label">along the way</div>
+    <h2 class="section-title">The hiccups</h2>
+    <div class="prose">
+      <p><strong>One Caddy directive silently turned off certificate issuance.</strong> Caddy's <code>auto_https off</code> and <code>auto_https disable_redirects</code> read like neighbors and behave nothing alike. I wanted the second, to stop Caddy from forcing redirects during the migration, and wrote the first, which shuts down the entire automatic certificate engine. Nothing errored. Caddy started clean, the TLS policies looked correctly registered in the loaded config, and certificates simply never got issued. It took real debugging to find, because every place I checked said the setup was right. The fix was one word.</p>
+      <p><strong>An in-place DNS edit deleted around 28 rewrites.</strong> Partway through the HTTPS rollout, an edit meant to add new hostnames alongside the existing <code>.lan</code> entries removed roughly 28 of them instead. I looked at the restore job in front of me and decided against it. The <code>.lan</code> scheme was on its way out anyway, so instead of rebuilding the old entries I retired the naming scheme on the spot and finished moving everything to the HTTPS-only names. The mistake mostly changed the schedule.</p>
+      <p><strong>Palworld's map came back blank after moving off a paid host.</strong> Our Palworld server used to run on a paid host, until I brought it home. The migration was plain enough: export the save files over FTP, copy them into a fresh container's own save folder, start it up. Characters, inventory, and bases all survived. Map exploration didn't, and the fog of war covered the whole world as if nobody had ever left spawn. That looks like a corrupted save and isn't one. Palworld tracks exploration state separately from the rest of the save data, so a migrated world keeps everything you built and forgets where you've walked. Once you know that, the blank map reads as expected behavior instead of a failed migration.</p>
+    </div>
+  </section>
+
+  <section class="writeup" id="next">
+    <div class="section-label">backlog</div>
+    <h2 class="section-title">What's next</h2>
+    <div class="prose">
+      <p>The Tech Queue, my backlog of homelab ideas, holds 37 entries right now. Some will ship as containers, some will get cut once a better option shows up, and the queue refills faster than it drains either way. There is no finished state this is heading toward. The system keeps growing, I keep refining it, and that suits me fine.</p>
+    </div>
+  </section>
+
+  <section class="writeup" id="differently">
+    <div class="section-label">retrospective</div>
+    <h2 class="section-title">What I'd do differently</h2>
+    <div class="prose">
+      <p>I'd build HTTPS in from the start instead of treating it as a later upgrade. Launching everything on plain <code>.lan</code> HTTP felt simpler at the time and turned into a full network migration later: a rebuilt Caddy image, certificate issuance for every service, and roughly 28 DNS rewrites tangled up in the transition. Starting encrypted would have cost one extra afternoon of setup and saved the whole project.</p>
+      <p>I'd also stop trusting written docs for anything that changes often. During one deployment I picked a port by checking live container bindings directly, and it was the right call, because the reference doc's port table was stale and missing several ports already in use. Ports, running containers, and anything else that shifts weekly need verification against the live system. A doc records what was true when someone last edited it, and nothing more.</p>
+      <p>And I'd treat a decommission as its own checklist rather than a single delete. Tearing down a service means more than removing the container and its compose block. The dashboard still has a widget pointing at a dead URL, and home automation still lists an auto-discovered device the integration left behind. A few of my teardowns left that kind of debris, because "remove the service" only meant "remove the container" in my head, and the leftovers surfaced weeks later as mystery entries in other tools.</p>
+    </div>
+  </section>
+
+  <div style="padding: 8px 0 40px; display: flex; gap: 10px; flex-wrap: wrap;">
+    <a href="../" class="btn-ghost">&larr; All projects</a>
+  </div>
+
+  <footer>
+    <p>Jaime A. De La Paz &nbsp;·&nbsp; Rogers City, MI &nbsp;·&nbsp; <span>&copy; 2026</span></p>
+  </footer>
+
+</main>
+
+<script>
+  const toggle = document.getElementById('theme-toggle');
+  const root = document.documentElement;
+  const saved = localStorage.getItem('jb-theme') || 'dark';
+  root.setAttribute('data-theme', saved);
+  toggle.textContent = saved === 'dark' ? '☀' : '🌙';
+  toggle.addEventListener('click', () => {
+    const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    toggle.textContent = next === 'dark' ? '☀' : '🌙';
+    localStorage.setItem('jb-theme', next);
+  });
+</script>
+</body>
+</html>
