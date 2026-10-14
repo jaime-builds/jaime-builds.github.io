@@ -65,6 +65,9 @@
   </dl>
   </section>
 
+  <div class="wu-body">
+  <div class="wu-main">
+
   <section class="sec" id="why" aria-labelledby="why-h">
     <div class="sec-head">
       <div><h2 id="why-h">Why I built it</h2><svg class="wave" aria-hidden="true"><use href="#wave"/></svg></div>
@@ -204,12 +207,29 @@
       <div><h2 id="replaced-h">What replaced it</h2><svg class="wave" aria-hidden="true"><use href="#wave"/></svg></div>
     </div>
     <div class="prose">
-      <p>CWA came out on September 30, 2026, replaced by BookCrawler, a library manager I wrote myself. The rclone intake every fifteen minutes carried over unchanged. The bigger change was dropping format conversion. A look at the real library showed 3 MOBI files against 7 books too large for Kindle's email limit, so BookCrawler compresses oversized books instead of converting formats. It also writes metadata back into the EPUB, the same thing that made CWA worth choosing in the first place. The custom build I talked myself out of earlier came back, but this time for a reason I could measure: CWA's main feature, conversion, turned out to be the part I didn't need.</p>
+      <p>CWA came out on September 30, 2026, replaced by <a href="../bookcrawler/">BookCrawler</a>, a library manager I wrote myself. The rclone intake every fifteen minutes carried over unchanged. The bigger change was dropping format conversion. A look at the real library showed 3 MOBI files against 7 books too large for Kindle's email limit, so BookCrawler compresses oversized books instead of converting formats. It also writes metadata back into the EPUB, the same thing that made CWA worth choosing in the first place. The custom build I talked myself out of earlier came back, but this time for a reason I could measure: CWA's main feature, conversion, turned out to be the part I didn't need.</p>
     </div>
   </section>
 
   <div class="btns end">
     <a class="btn btn-fill" href="../">All projects</a>
+  </div>
+  </div>
+  <aside class="toc" aria-labelledby="toc-h">
+    <nav>
+      <h2 id="toc-h">On this page</h2>
+      <ol>
+        <li><a href="#why">Why I built it</a></li>
+        <li><a href="#what-it-is">What it is</a></li>
+        <li><a href="#decision">Why CWA over the alternatives</a></li>
+        <li><a href="#conversion">Format conversion, and why it mattered</a></li>
+        <li><a href="#delivery">Send to Kindle, and the second reader</a></li>
+        <li><a href="#hiccups">The hiccups</a></li>
+        <li><a href="#differently">What I'd do differently</a></li>
+        <li><a href="#replaced">What replaced it</a></li>
+      </ol>
+    </nav>
+  </aside>
   </div>
 </main>
 
