@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-W5mksKZi0jN1Mh3pl/WkKX4p6zH+wnU+aBc7pxrBklU=' 'sha256-y/MBcUsM3hUWViW7RabfgJybhlfGoUAVfTRJq/q1EtU='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'" />
+<meta name="referrer" content="strict-origin-when-cross-origin" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>BookCrawler — Jaime De La Paz</title>
+<link rel="preload" href="../../docs/fonts/albert-sans-latin.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="../../docs/fonts/besley-latin.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="stylesheet" href="../../docs/site.css" />
+<meta name="description" content="How I built BookCrawler, a self-hosted ebook library manager that writes metadata back into the EPUB files, compresses oversized books for Kindle, and replaced Calibre-Web Automated." />
+<link rel="canonical" href="https://jaime.build/projects/bookcrawler/" />
+<meta name="theme-color" content="#070f18" />
+<link rel="icon" href="../../docs/favicon-32.png" type="image/png" sizes="32x32" />
+<link rel="apple-touch-icon" href="../../docs/apple-touch-icon.png" />
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="jaime.build" />
+<meta property="og:title" content="BookCrawler — Jaime De La Paz" />
+<meta property="og:description" content="How I built BookCrawler, a self-hosted ebook library manager that writes metadata back into the EPUB files, compresses oversized books for Kindle, and replaced Calibre-Web Automated." />
+<meta property="og:url" content="https://jaime.build/projects/bookcrawler/" />
+<meta property="og:image" content="https://jaime.build/docs/og-default.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<script>try{var t=localStorage.getItem('jb-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}</script>
+<script src="../../docs/site.js" defer></script>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="wave" viewBox="0 0 46 10"><path d="M1 6.5c3.5-5 7.5-5 11 0s7.5 5 11 0 7.5-5 11 0 7.5 5 11 0" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+  <symbol id="out" viewBox="0 0 16 16"><path d="M5 11 11 5M6 5h5v5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+</svg>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="top">
+  <div class="shell">
+    <a class="brand" href="../../"><img src="../../docs/logo.png" alt="jaime.build home" width="36" height="36" /></a>
+    <nav aria-label="Main">
+      <ul class="nav">
+        <li><a href="../../projects/" aria-current="page">Projects</a></li>
+        <li><a href="../../homelab/">Homelab</a></li>
+        <li><a href="../../about/">About</a></li>
+        <li><button class="toggle" id="theme-toggle" type="button" aria-label="Switch to light theme">
+          <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M4.6 4.6l1.4 1.4M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4 6 18M18 6l1.4-1.4"/></svg>
+          <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>
+        </button></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="shell" id="main">
+  <section class="wu-hero" aria-labelledby="title">
+  <div>
+    <h1 id="title">BookCrawler</h1>
+    <p class="lead">The ebook library manager I wrote to replace Calibre-Web Automated, built around the book files instead of a database sitting next to them.</p>
+    <p class="sub">Self-built ebook library, metadata write-back, send to Kindle.</p>
+    <p class="stack">FastAPI · PostgreSQL · HTMX · Foliate.js</p>
+  </div>
+  <dl class="card stats" aria-label="Project facts">
+    <div><dt>Status</dt><dd>Live</dd></div>
+    <div><dt>Library</dt><dd>1,000-plus books</dd></div>
+    <div><dt>Metadata sources</dt><dd>4</dd></div>
+    <div><dt>Automated tests</dt><dd>600-plus</dd></div>
+  </dl>
+  </section>
+
+  <div class="wu-body">
+  <div class="wu-main">
+
+  <section class="sec" id="why" aria-labelledby="why-h">
+    <div class="sec-head">
+      <div><h2 id="why-h">Why I built it</h2><svg class="wave" aria-hidden="true"><use href="#wave"/></svg></div>
+    </div>
+    <div class="prose">
+      <p>The <a href="../calibre-kindle-setup/">Calibre and Kindle setup</a> write-up ends with a lesson: exhaust the open source options before letting "I could build this" get momentum. I took that seriously. I spent a few months living with the options I'd picked, tried the ones I hadn't, and kept a list of what each one got wrong.</p>
+      <p>Calibre-Web Automated (CWA) did its job, but three things kept coming up. Editing a book's metadata sent me back to page one of the library, so fixing ten books meant scrolling back to my place ten times. When a Kindle send failed, nothing in the app said so, and I found out when the book never showed up. And CWA's SQLite database locked up on me more than once. I trialed BookOrbit, which had the library UI I wanted, and Grimmory, which had the best metadata picker I'd used. Grimmory also lost my scroll position after every edit, and it was worse than CWA about it, because it landed somewhere random instead of at the top. Its send failures were logged on the server and invisible in the app.</p>
+      <p>By then the list was specific enough to build against. Every tool I'd tried covered some of it, and none covered the parts I cared about most. The format conversion that made CWA worth choosing turned out to be the part I barely used, which comes up again below.</p>
+    </div>
+  </section>
+
+  <section class="sec" id="what-it-is" aria-labelledby="what-it-is-h">
+    <div class="sec-head">
+      <div><h2 id="what-it-is-h">What it is</h2><svg class="wave" aria-hidden="true"><use href="#wave"/></svg></div>
+    </div>
+    <div class="prose">
+      <p>BookCrawler is a self-hosted web app that manages my ebook library. It scans the library folder, reads the metadata embedded in each EPUB, fetches better metadata from four outside sources, and writes corrections back into the EPUB file itself. It sends books to a Kindle by email, compresses the ones too big to send, and opens books in the browser with a built-in reader that remembers your place per account. It also serves an OPDS catalog, so reading apps on a phone can browse and download from the library directly.</p>
+
+      <figure class="pipeline-diagram">
+        <svg viewBox="0 0 680 456" role="img" aria-label="Diagram showing a book flowing from a Shelfmark search, through Prowlarr to the books folder on the seedbox, then to rclone sync, BookDrop, and the BookCrawler library on the home server, which sends it to a Kindle, the web reader, or OPDS reading apps">
+          <defs>
+            <marker id="pipe-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </marker>
+          </defs>
+
+          <rect class="pipeline-stage" x="40" y="40" width="600" height="112" rx="16"/>
+          <text class="pipeline-stage-label" x="56" y="62">search at home, download on the seedbox</text>
+
+          <g>
+            <rect class="pipeline-node" x="68" y="76" width="168" height="56" rx="8"/>
+            <text class="pipeline-node-title" x="152" y="98" text-anchor="middle">Shelfmark</text>
+            <text class="pipeline-node-sub" x="152" y="116" text-anchor="middle">search &amp; grab</text>
+          </g>
+          <g>
+            <rect class="pipeline-node" x="256" y="76" width="168" height="56" rx="8"/>
+            <text class="pipeline-node-title" x="340" y="98" text-anchor="middle">Prowlarr</text>
+            <text class="pipeline-node-sub" x="340" y="116" text-anchor="middle">indexer manager</text>
+          </g>
+          <g>
+            <rect class="pipeline-node" x="444" y="76" width="168" height="56" rx="8"/>
+            <text class="pipeline-node-title" x="528" y="98" text-anchor="middle">Books folder</text>
+            <text class="pipeline-node-sub" x="528" y="116" text-anchor="middle">completed download</text>
+          </g>
+
+          <path class="pipeline-arrow" d="M236 104 L254 104" marker-end="url(#pipe-arrow)"/>
+          <path class="pipeline-arrow" d="M424 104 L442 104" marker-end="url(#pipe-arrow)"/>
+
+          <rect class="pipeline-stage" x="40" y="172" width="600" height="112" rx="16"/>
+          <text class="pipeline-stage-label" x="56" y="194">on my home server</text>
+
+          <g>
+            <rect class="pipeline-node" x="68" y="208" width="168" height="56" rx="8"/>
+            <text class="pipeline-node-title" x="152" y="230" text-anchor="middle">rclone sync</text>
+            <text class="pipeline-node-sub" x="152" y="248" text-anchor="middle">every 15 minutes</text>
+          </g>
+          <g>
+            <rect class="pipeline-node" x="256" y="208" width="168" height="56" rx="8"/>
+            <text class="pipeline-node-title" x="340" y="230" text-anchor="middle">BookDrop</text>
+            <text class="pipeline-node-sub" x="340" y="248" text-anchor="middle">import &amp; dedupe</text>
+          </g>
+          <g>
+            <rect class="pipeline-node" x="444" y="208" width="168" height="56" rx="8"/>
+            <text class="pipeline-node-title" x="528" y="230" text-anchor="middle">Library</text>
+            <text class="pipeline-node-sub" x="528" y="248" text-anchor="middle">match &amp; write back</text>
+          </g>
+
+          <path class="pipeline-arrow" d="M236 236 L254 236" marker-end="url(#pipe-arrow)"/>
+          <path class="pipeline-arrow" d="M424 236 L442 236" marker-end="url(#pipe-arrow)"/>
+
+          <path class="pipeline-arrow" d="M528 132 L528 162 L152 162 L152 206" marker-end="url(#pipe-arrow)"/>
+
+          <rect class="pipeline-stage" x="40" y="304" width="600" height="112" rx="16"/>
+          <text class="pipeline-stage-label" x="56" y="326">wherever we're reading</text>
+
+          <g>
+            <rect class="pipeline-node" x="68" y="340" width="168" height="56" rx="8"/>
+            <text class="pipeline-node-title" x="152" y="362" text-anchor="middle">Kindle</text>
+            <text class="pipeline-node-sub" x="152" y="380" text-anchor="middle">send by email</text>
+          </g>
+          <g>
+            <rect class="pipeline-node" x="256" y="340" width="168" height="56" rx="8"/>
+            <text class="pipeline-node-title" x="340" y="362" text-anchor="middle">Web reader</text>
+            <text class="pipeline-node-sub" x="340" y="380" text-anchor="middle">in the browser</text>
+          </g>
+          <g>
+            <rect class="pipeline-node" x="444" y="340" width="168" height="56" rx="8"/>
+            <text class="pipeline-node-title" x="528" y="362" text-anchor="middle">OPDS</text>
+            <text class="pipeline-node-sub" x="528" y="380" text-anchor="middle">phone reading apps</text>
+          </g>
+
+          <path class="pipeline-arrow" d="M528 264 L528 294 L152 294 L152 338" marker-end="url(#pipe-arrow)"/>
+          <path class="pipeline-arrow" d="M340 294 L340 338" marker-end="url(#pipe-arrow)"/>
+          <path class="pipeline-arrow" d="M528 294 L528 338" marker-end="url(#pipe-arrow)"/>
+        </svg>
+        <figcaption>Search is still the only manual step. A strong match is applied on arrival, and only duplicates wait for me.</figcaption>
+      </figure>
+
+      <p>The front half of the pipeline didn't change. I still search in Shelfmark, the download still lands on a seedbox, and rclone still copies new books home every fifteen minutes. What changed is where they land. The rclone script drops them into a watched folder called BookDrop. BookCrawler reads each new file, searches the metadata sources for a match, and moves the book into the library. If the best match is a strong one, its metadata is written into the book right away without asking. Anything less comes in with the metadata the file already had, and I can fix it from the book's page later. The one thing that waits for me is a probable duplicate. It stays out of the library, in a review queue, until I choose to merge it, keep both, or delete it.</p>
+
+      <figure>
+        <img width="1279" height="507" loading="lazy" src="../../docs/bookcrawler-bookdrop.webp" alt="BookCrawler's BookDrop page showing the folder watcher status, an EPUB upload form, and one held duplicate with merge, keep both, and delete buttons" />
+        <figcaption>BookDrop, with one duplicate held for a decision (title blurred)</figcaption>
+      </figure>
+
+      <p>It runs as two containers in my homelab: the app and its PostgreSQL database. It's written in Python with FastAPI, and the pages are rendered on the server with HTMX, so there's no front-end framework to build or keep updated. The repo is private for now.</p>
+
+      <div class="fig-pair">
+        <figure>
+          <img width="1273" height="972" loading="lazy" src="../../docs/bookcrawler-dashboard.webp" alt="BookCrawler dashboard with counts of books, authors, series, and genres above a grid of recently added books, covers blurred" />
+          <figcaption>The dashboard on my real library (covers blurred)</figcaption>
+        </figure>
+        <figure>
+          <img width="1280" height="800" loading="lazy" src="../../docs/bookcrawler-library.webp" alt="BookCrawler library grid showing public-domain book covers with titles, authors, and series, plus search, sort, and filter controls" />
+          <figcaption>The library grid, shown with public-domain books</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="files" aria-labelledby="files-h">
+    <div class="sec-head">
+      <div><h2 id="files-h">The files are the source of truth</h2><svg class="wave" aria-hidden="true"><use href="#wave"/></svg></div>
+    </div>
+    <div class="prose">
+      <p>The requirement I cared most about came straight from CWA: when I fix a book's metadata, the fix has to land in the EPUB file, not just in the app's database. The file is what gets emailed to the Kindle and what any other reader app sees. If the app shows a corrected title while the file still carries the wrong one, the fix only exists in the app.</p>
+      <p>So every save writes into the book. Before BookCrawler touches an EPUB, it copies the original to a backup folder outside the library and verifies the copy against the original's hash. Then it edits only the metadata block and the cover, leaves the rest of the archive alone, re-reads the new file to confirm it's valid, and only then commits the change to the database. If the database step fails, the backup goes back in place.</p>
+      <p>Editing is compare-and-choose. I fetch candidates from the four sources, see each one beside the book's current values, and pick field by field what to take. Nothing is written until I hit Save. Fields can be locked, per book or as a library-wide default, so a later fetch can't quietly undo a correction I made by hand. The four sources (Hardcover, Goodreads, Google Books, and OpenLibrary) are queried at the same time and independently. One being down never blocks the others, and each reports why it came back empty: rate limited, blocked, timed out, or unreachable.</p>
+
+      <figure>
+        <img width="1280" height="800" loading="lazy" src="../../docs/bookcrawler-metadata-compare.webp" alt="BookCrawler metadata editor comparing a fetched OpenLibrary result against the current values, with only the Authors and ISBN fields ticked to overwrite" />
+        <figcaption>Comparing a fetched result against the book's current values. Only the ticked fields get written.</figcaption>
+      </figure>
+
+      <div class="fig-pair">
+        <figure>
+          <img width="1277" height="1095" loading="lazy" src="../../docs/bookcrawler-stats.webp" alt="BookCrawler stats page showing library totals, format breakdown, and how many books carry each metadata field" />
+          <figcaption>Stats, including how complete the metadata is across the library</figcaption>
+        </figure>
+        <figure>
+          <img width="1275" height="801" loading="lazy" src="../../docs/bookcrawler-genres.webp" alt="BookCrawler genres page listing eleven genres with a book count for each" />
+          <figcaption>Genres, built from the tags written into each book</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="compression" aria-labelledby="compression-h">
+    <div class="sec-head">
+      <div><h2 id="compression-h">Compression instead of conversion</h2><svg class="wave" aria-hidden="true"><use href="#wave"/></svg></div>
+    </div>
+    <div class="prose">
+      <p>Before writing any code I counted what was in the library. It held 97 books at the time. Three were MOBI files, the format CWA's conversion existed for. Seven were EPUBs too large to email to a Kindle, every one of them an image-heavy nonfiction book: cookbooks, illustrated history, illustrated science. Conversion was solving a problem I had three times, and size was the one I kept hitting.</p>
+      <p>Gmail refuses attachments over 25 MB, and the largest book in that set was 195 MB. My old workaround was opening each one in Calibre's editor and running its lossy image compression by hand. That option isn't available from Calibre's command line, so BookCrawler does it directly. It re-encodes the JPEGs inside the EPUB at stepped quality levels (55, then 45, 35, and 30) and then starts capping image size, from 2400 pixels down to 1200. It stops at the first result under the limit. All seven books made it under 25 MB, and six of them never needed resizing. The 195 MB book came out at 24 MB. In production, a 39 MB book with 130 images compressed to 22 MB and delivered.</p>
+      <p>The compressed copy is Kindle-only. It's stored separately, keyed to the exact source file and the current size limit, so editing the book or raising the limit can't reuse a stale copy. The book in the library is never touched. The few MOBI and PDF files still show up in the library as real entries you can download. They just can't be edited, sent, or read in the browser, and the app says why instead of hiding them.</p>
+    </div>
+  </section>
+
+  <section class="sec" id="readers" aria-labelledby="readers-h">
+    <div class="sec-head">
+      <div><h2 id="readers-h">Two readers, two roles</h2><svg class="wave" aria-hidden="true"><use href="#wave"/></svg></div>
+    </div>
+    <div class="prose">
+      <p>My wife uses the library too, so accounts were part of the plan from the start. There are two roles. Admin, which is me, manages metadata, users, the review queue, and mail settings. Reader can browse, search, download, read in the browser, mark books read, and send to their own Kindle. Each account has its own Kindle address, read status, and reading position, so we can both be partway through the same book without stepping on each other.</p>
+      <p>The mail settings live in the app, encrypted, and take effect without a restart. Sends are queued and tracked through each step, and a failure shows its reason on the book page. The app is also careful about what success means. "Accepted" means Gmail took the message, not that the book reached the Kindle, and the app says exactly that. Amazon converts and delivers on its own schedule, and a large illustrated book can take an hour.</p>
+
+      <figure>
+        <img width="1280" height="800" loading="lazy" src="../../docs/bookcrawler-reader.webp" alt="BookCrawler's in-browser reader showing a two-page spread with controls for font size, line spacing, margins, theme, layout, and page position" />
+        <figcaption>The in-browser reader. Each account keeps its own place in every book.</figcaption>
+      </figure>
+
+      <div class="fig-pair">
+        <figure>
+          <img width="1257" height="900" loading="lazy" src="../../docs/bookcrawler-appearance.webp" alt="BookCrawler profile page with a password change form and ten color themes to choose from" />
+          <figcaption>Each account picks its own theme and font</figcaption>
+        </figure>
+        <figure>
+          <img width="863" height="561" loading="lazy" src="../../docs/bookcrawler-login.webp" alt="BookCrawler login form with username and password fields" />
+          <figcaption>Local accounts, no outside sign-in service</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="built" aria-labelledby="built-h">
+    <div class="sec-head">
+      <div><h2 id="built-h">How it was built</h2><svg class="wave" aria-hidden="true"><use href="#wave"/></svg></div>
+    </div>
+    <div class="prose">
+      <p>I planned it in phases, each with its own detailed plan and a done-when check that had to pass before the next phase started: the scanner first, then metadata fetching, Kindle sending, the library UI, the metadata editor, accounts and roles, the reader, BookDrop, a polish and testing phase, and finally deployment. Each phase left a working app behind it, so I could have stopped at any point and kept what I had.</p>
+      <p>Testing ran against copies of real books, never the live library. After every round I checked the real library, BookDrop folder, and config folder against a manifest of file sizes and hashes to confirm nothing had changed. The automated suite runs with warnings treated as errors and no skipped tests, and it's past 600 tests now.</p>
+      <p>The polish phase ended differently on purpose. Instead of closing on an automated check, it closed when I was satisfied with the app after using it against my real library. That took six rounds of hands-on walkthroughs and fix passes, and I logged 125 findings along the way. Some were bugs. Most were the kind of thing you only notice by using the app: how titles sort, where the series number sits on a card, what happens to a duplicate, how the reader turns pages. The phase ended with a permission review of every route to make sure a Reader account couldn't reach anything meant for Admin.</p>
+    </div>
+  </section>
+
+  <section class="sec" id="hiccups" aria-labelledby="hiccups-h">
+    <div class="sec-head">
+      <div><h2 id="hiccups-h">The hiccups</h2><svg class="wave" aria-hidden="true"><use href="#wave"/></svg></div>
+    </div>
+    <div class="prose">
+      <p><strong>Sort titles hid junk.</strong> EPUBs can carry their own sort title, and BookCrawler used to trust it. Some of mine held a bare ISBN, and one held the full source filename. Both sort ahead of every real title, so the library opened on two random books. Others kept "The" at the front while their neighbors dropped it, so a book's position depended on its publisher. Now the sort order comes from the title itself, with one rule for every book: drop a leading "the", "an", or "a". Nothing inside a file can override it.</p>
+      <p><strong>Fifteen books were published in the year 101.</strong> Calibre writes 0101-01-01 into a book's date field to mean "unknown," and my year parser read it as a real year. Six other books showed their language as UND, the official code for "undetermined." Both values are now thrown out when a book is read, and a migration cleared the ones already stored. That second part mattered, because the scanner skips files that haven't changed, so the bad values would otherwise have stayed forever.</p>
+      <p><strong>Two metadata sources broke on the same day.</strong> Goodreads has no public API, so BookCrawler's Goodreads integration is unofficial and depends on how their website is put together. One day Goodreads moved the piece it depended on, and every Goodreads fetch failed until I updated the client to look in the new place. The same day I found out why Google Books had been rate-limiting me from the start. Google's shared quota for callers without an API key is zero, so every anonymous search fails. Adding a free key fixed it. I also changed how a rate limit shows up in the app, so it reads "rate limited" instead of a generic error.</p>
+      <p><strong>Imported books never left the drop folder.</strong> Three books sat in BookDrop after they'd been imported, and the logs filled with an error on every sweep. Three separate faults had stacked up. rclone runs as root, so the folders it created belonged to root, and BookCrawler could import the book but not delete the original. Then the import had rewritten the book's metadata, so the leftover original no longer matched its own queue entry, and BookDrop tried to mark an approved book as failed. Then the error handler itself crashed, so it retried the same thing on every sweep. The rclone script now hands the folders to the right owner after each pull. I fixed the two bugs and added a log line for the case that had been silent.</p>
+      <p><strong>The folder watcher can't see the folder.</strong> This one is a repeat from the CWA write-up. On my server's storage, file change notifications don't reliably reach a container when something outside it writes the file, which is exactly how rclone delivers books. BookDrop has a file watcher, but the real intake is a sweep every sixty seconds, and the watcher only helps on the occasions it fires. CWA hit the same limit on a different machine, and the answer was the same both times: assume you'll have to poll.</p>
+    </div>
+  </section>
+
+  <section class="sec" id="differently" aria-labelledby="differently-h">
+    <div class="sec-head">
+      <div><h2 id="differently-h">What I'd do differently</h2><svg class="wave" aria-hidden="true"><use href="#wave"/></svg></div>
+    </div>
+    <div class="prose">
+      <p>I'd build the Logs page first. It came late, during deployment, because the same failure kept showing up: the app knew exactly what had gone wrong and threw that away before anyone could see it. A scan would skip a file and keep the reason to itself. A send would fail with a code but no explanation. Now every scan, send, BookDrop import, and login attempt is recorded with its reason, and the admin Logs page shows it all. That page has answered more questions than any other part of the app, and it would have saved hours if it had existed from the first phase.</p>
+
+      <figure>
+        <img width="1273" height="1228" loading="lazy" src="../../docs/bookcrawler-logs.webp" alt="BookCrawler Logs page listing periodic library scans with their time, duration, and counts of added, updated, skipped, and failed files" />
+        <figcaption>The Logs page. Every scan, send, import, and login attempt is kept with its reason.</figcaption>
+      </figure>
+      <p>One gap from that lesson is still open. When Gmail rejects a send, BookCrawler records which kind of rejection it was but drops the text of Gmail's reply, so the actual reason never reaches the screen. It's a small fix I haven't made yet.</p>
+    </div>
+  </section>
+
+  <section class="sec" id="next" aria-labelledby="next-h">
+    <div class="sec-head">
+      <div><h2 id="next-h">What's next</h2><svg class="wave" aria-hidden="true"><use href="#wave"/></svg></div>
+    </div>
+    <div class="prose">
+      <p>BookCrawler is in daily use and stable. The next real addition is an MCP server, so an assistant can read the logs and look up books in the library without me screenshotting the admin pages. It will start read-only. Anything that edits a book or sends one will need an explicit confirmation step.</p>
+    </div>
+  </section>
+
+  <div class="btns end">
+    <a class="btn btn-fill" href="../">All projects</a>
+  </div>
+  </div>
+  <aside class="toc" aria-labelledby="toc-h">
+    <nav>
+      <h2 id="toc-h">On this page</h2>
+      <ol>
+        <li><a href="#why">Why I built it</a></li>
+        <li><a href="#what-it-is">What it is</a></li>
+        <li><a href="#files">The files are the source of truth</a></li>
+        <li><a href="#compression">Compression instead of conversion</a></li>
+        <li><a href="#readers">Two readers, two roles</a></li>
+        <li><a href="#built">How it was built</a></li>
+        <li><a href="#hiccups">The hiccups</a></li>
+        <li><a href="#differently">What I'd do differently</a></li>
+        <li><a href="#next">What's next</a></li>
+      </ol>
+    </nav>
+  </aside>
+  </div>
+</main>
+
+<footer><div class="shell"><span>Rogers City, MI</span><span class="foot-links"><a href="https://www.linkedin.com/in/jaimedelapaz" target="_blank" rel="noopener">LinkedIn</a><a href="https://github.com/jaime-builds" target="_blank" rel="noopener">GitHub</a></span><span>© 2026</span></div></footer>
+</body>
+</html>
