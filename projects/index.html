@@ -2,11 +2,25 @@
 <html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8" />
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-W5mksKZi0jN1Mh3pl/WkKX4p6zH+wnU+aBc7pxrBklU=' 'sha256-y/MBcUsM3hUWViW7RabfgJybhlfGoUAVfTRJq/q1EtU='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'" />
+<meta name="referrer" content="strict-origin-when-cross-origin" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Projects — Jaime De La Paz</title>
 <link rel="preload" href="../docs/fonts/albert-sans-latin.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="preload" href="../docs/fonts/besley-latin.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="stylesheet" href="../docs/site.css" />
+<meta name="description" content="Projects by Jaime De La Paz: a movie analytics dashboard, a tower defense game, and the self-hosted homelab that runs them." />
+<link rel="canonical" href="https://jaime.build/projects/" />
+<meta name="theme-color" content="#070f18" />
+<link rel="icon" href="../docs/favicon-32.png" type="image/png" sizes="32x32" />
+<link rel="apple-touch-icon" href="../docs/apple-touch-icon.png" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="jaime.build" />
+<meta property="og:title" content="Projects — Jaime De La Paz" />
+<meta property="og:description" content="Projects by Jaime De La Paz: a movie analytics dashboard, a tower defense game, and the self-hosted homelab that runs them." />
+<meta property="og:url" content="https://jaime.build/projects/" />
+<meta property="og:image" content="https://jaime.build/docs/og-default.png" />
+<meta name="twitter:card" content="summary_large_image" />
 <script>try{var t=localStorage.getItem('jb-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}</script>
 <script src="../docs/site.js" defer></script>
 </head>
@@ -37,54 +51,57 @@
 <main class="shell" id="main">
   <section class="page-head" aria-labelledby="title">
     <h1 id="title">Projects</h1>
+    <p>Things I've built, from games to the homelab that runs them.</p>
   </section>
 
   <section class="sec" aria-label="All projects">
     <div class="plist">
-    <a class="card prow" href="movie-analytics-dashboard/">
-      <div class="thumb"><img src="../docs/movie-dashboard-analytics-1.png" alt="" loading="lazy" /></div>
+    <article class="card prow">
+      <div class="thumb"><img width="1258" height="1212" src="../docs/movie-dashboard-analytics-1.webp" alt="" loading="lazy" /></div>
       <div>
-        <h2>Movie Analytics Dashboard</h2>
+        <h2><a class="prow-link" href="movie-analytics-dashboard/">Movie Analytics Dashboard</a></h2>
         <p>Full-stack movie discovery platform pulling live TMDB data, with a custom hidden-gems scoring engine.</p>
         <p class="stack">Live · Python · Flask · PostgreSQL · TMDB API</p>
+        <p class="live"><a href="https://movie-dashboard.jaime.build" target="_blank" rel="noopener">Visit site <svg aria-hidden="true"><use href="#out"/></svg></a></p>
       </div>
-    </a>
-    <a class="card prow" href="rust-rush/">
-      <div class="thumb"><img src="../docs/rust-rush-combat.png" alt="" loading="lazy" style="object-position: center 35%" /></div>
+    </article>
+    <article class="card prow">
+      <div class="thumb"><img width="935" height="1191" src="../docs/rust-rush-combat.webp" alt="" loading="lazy" style="object-position: center 35%" /></div>
       <div>
-        <h2>Rust Rush, a tower defense game</h2>
+        <h2><a class="prow-link" href="rust-rush/">Rust Rush, a tower defense game</a></h2>
         <p>Real-time browser tower defense with a server-authoritative Go backend running at 60 FPS.</p>
         <p class="stack">Live · Go · React · WebSockets · SQLite</p>
+        <p class="live"><a href="https://rust-rush.jaime.build" target="_blank" rel="noopener">Play it <svg aria-hidden="true"><use href="#out"/></svg></a></p>
       </div>
-    </a>
-    <a class="card prow" href="self-hosted-infrastructure/">
-      <div class="thumb"><svg viewBox="470 320 500 390" preserveAspectRatio="xMidYMid slice" width="100%" height="100%" aria-hidden="true"><image href="../docs/network-topology.svg" width="1100" height="680"/></svg></div>
+    </article>
+    <article class="card prow">
+      <div class="thumb"><svg viewBox="470 320 500 390" preserveAspectRatio="xMidYMid slice" width="100%" height="100%" aria-hidden="true"><image class="theme-dark" href="../docs/network-topology.svg" width="1100" height="680"/><image class="theme-light" href="../docs/network-topology-light.svg" width="1100" height="680"/></svg></div>
       <div>
-        <h2>Self-hosted infrastructure</h2>
-        <p>A home server running two dozen self-hosted services behind a reverse proxy and tunnel, no ports exposed.</p>
+        <h2><a class="prow-link" href="self-hosted-infrastructure/">Self-hosted infrastructure</a></h2>
+        <p>A home server running 60-plus containers behind a reverse proxy and tunnel, no ports exposed.</p>
         <p class="stack">Live · Unraid · Docker · Caddy · Cloudflare Tunnel</p>
       </div>
-    </a>
-    <a class="card prow" href="media-automation-stack/">
-      <div class="thumb"><svg viewBox="270 130 400 312" preserveAspectRatio="xMidYMid slice" width="100%" height="100%" aria-hidden="true"><image href="../docs/media-stack-flow.svg" width="1100" height="560"/></svg></div>
+    </article>
+    <article class="card prow">
+      <div class="thumb"><svg viewBox="20 -4 560 350" preserveAspectRatio="xMidYMid slice" width="100%" height="100%" aria-hidden="true"><image class="theme-dark" href="../docs/media-stack-flow.svg" width="1100" height="480"/><image class="theme-light" href="../docs/media-stack-flow-light.svg" width="1100" height="480"/></svg></div>
       <div>
-        <h2>Media automation stack</h2>
-        <p>1,737 movies and 164 shows, each added with about thirty seconds of work.</p>
+        <h2><a class="prow-link" href="media-automation-stack/">Media automation stack</a></h2>
+        <p>1,700-plus movies and 160-plus shows, each added with about thirty seconds of work.</p>
         <p class="stack">Live · Deluge · Prowlarr · Radarr · Sonarr · rclone</p>
       </div>
-    </a>
-    <a class="card prow" href="calibre-kindle-setup/">
-      <div class="thumb"><svg viewBox="760 280 330 258" preserveAspectRatio="xMidYMid slice" width="100%" height="100%" aria-hidden="true"><image href="../docs/media-stack-flow.svg" width="1100" height="560"/></svg></div>
+    </article>
+    <article class="card prow">
+      <div class="thumb"><svg viewBox="760 220 330 258" preserveAspectRatio="xMidYMid slice" width="100%" height="100%" aria-hidden="true"><image class="theme-dark" href="../docs/media-stack-flow.svg" width="1100" height="480"/><image class="theme-light" href="../docs/media-stack-flow-light.svg" width="1100" height="480"/></svg></div>
       <div>
-        <h2>Calibre and Kindle setup</h2>
+        <h2><a class="prow-link" href="calibre-kindle-setup/">Calibre and Kindle setup</a></h2>
         <p>An ebook pipeline where finding the book is the only manual step.</p>
-        <p class="stack">Complete · Calibre-Web Automated · Kindle</p>
+        <p class="stack">Retired · Calibre-Web Automated · Kindle</p>
       </div>
-    </a>
+    </article>
     </div>
   </section>
 </main>
 
-<footer><div class="shell"><span>Rogers City, MI</span><span>© 2026</span></div></footer>
+<footer><div class="shell"><span>Rogers City, MI</span><span class="foot-links"><a href="https://www.linkedin.com/in/jaimedelapaz" target="_blank" rel="noopener">LinkedIn</a><a href="https://github.com/jaime-builds" target="_blank" rel="noopener">GitHub</a></span><span>© 2026</span></div></footer>
 </body>
 </html>

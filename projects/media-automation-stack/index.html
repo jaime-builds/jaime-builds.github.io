@@ -2,11 +2,25 @@
 <html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8" />
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-W5mksKZi0jN1Mh3pl/WkKX4p6zH+wnU+aBc7pxrBklU=' 'sha256-y/MBcUsM3hUWViW7RabfgJybhlfGoUAVfTRJq/q1EtU='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'" />
+<meta name="referrer" content="strict-origin-when-cross-origin" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Media Automation Stack — Jaime De La Paz</title>
 <link rel="preload" href="../../docs/fonts/albert-sans-latin.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="preload" href="../../docs/fonts/besley-latin.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="stylesheet" href="../../docs/site.css" />
+<meta name="description" content="A seedbox-to-library pipeline with Radarr, Sonarr, rclone, Plex, and Jellyfin, where picking what to add is the only manual step." />
+<link rel="canonical" href="https://jaime.build/projects/media-automation-stack/" />
+<meta name="theme-color" content="#070f18" />
+<link rel="icon" href="../../docs/favicon-32.png" type="image/png" sizes="32x32" />
+<link rel="apple-touch-icon" href="../../docs/apple-touch-icon.png" />
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="jaime.build" />
+<meta property="og:title" content="Media Automation Stack — Jaime De La Paz" />
+<meta property="og:description" content="A seedbox-to-library pipeline with Radarr, Sonarr, rclone, Plex, and Jellyfin, where picking what to add is the only manual step." />
+<meta property="og:url" content="https://jaime.build/projects/media-automation-stack/" />
+<meta property="og:image" content="https://jaime.build/docs/og-default.png" />
+<meta name="twitter:card" content="summary_large_image" />
 <script>try{var t=localStorage.getItem('jb-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}</script>
 <script src="../../docs/site.js" defer></script>
 </head>
@@ -38,14 +52,14 @@
   <section class="wu-hero" aria-labelledby="title">
   <div>
     <h1 id="title">Media automation stack</h1>
-    <p class="lead">1,737 movies and 164 shows, each added with about thirty seconds of work.</p>
+    <p class="lead">1,700-plus movies and 160-plus shows, each added with about thirty seconds of work.</p>
     <p class="sub">Automated movie and TV pipeline, grab to playback.</p>
     <p class="stack">Radarr · Sonarr · rclone · Plex · Jellyfin</p>
   </div>
   <dl class="card stats" aria-label="Project facts">
     <div><dt>Status</dt><dd>Live</dd></div>
-    <div><dt>Movies</dt><dd>1,737</dd></div>
-    <div><dt>TV shows</dt><dd>164</dd></div>
+    <div><dt>Movies</dt><dd>1,700+</dd></div>
+    <div><dt>TV shows</dt><dd>160+</dd></div>
     <div><dt>Sync intervals</dt><dd>30 / 45 min</dd></div>
     <div><dt>Manual effort per item</dt><dd>~30 sec</dd></div>
   </dl>
@@ -56,7 +70,7 @@
       <div><h2 id="why-h">Why I built it</h2><svg class="wave" aria-hidden="true"><use href="#wave"/></svg></div>
     </div>
     <div class="prose">
-      <p>I keep my own movie and TV library instead of renting access to someone else's. The catch is upkeep. Every new movie used to mean downloading a file, moving it to the server, renaming it so the media server would recognize it, filing it in the right folder, and kicking off a library scan. That's fine for ten movies. It stops being fine long before 1,737 of them, and TV makes it worse because one show can be hundreds of episodes across a dozen seasons.</p>
+      <p>I keep my own movie and TV library instead of renting access to someone else's. The catch is upkeep. Every new movie used to mean downloading a file, moving it to the server, renaming it so the media server would recognize it, filing it in the right folder, and kicking off a library scan. That's fine for ten movies. It stops being fine long before 1,700 of them, and TV makes it worse because one show can be hundreds of episodes across a dozen seasons.</p>
       <p>The goal was the same one behind my ebook pipeline: shrink the manual work down to the one decision worth making by hand. I pick what enters the library. The downloading, transferring, naming, sorting, and serving all happen without me.</p>
     </div>
   </section>
@@ -128,9 +142,9 @@
       <p>It starts with a grab. I find a release on a private tracker and add the torrent to Deluge on the seedbox. My part takes about thirty seconds, and it ends there. A label goes on at add time, and Deluge routes the completed download into a movies folder or a TV folder on its own.</p>
       <p>Radarr and Sonarr run on the seedbox too, one managing the movie collection and one managing TV. They search through Prowlarr, my indexer manager and the single place tracker credentials live, and they handle the part of library upkeep I hated most, the naming. Files come out matching the conventions media servers expect, down to season folders and episode numbering. I never rename anything.</p>
       <p>From there my home server takes over. Two rclone scripts run on a schedule through Unraid's User Scripts plugin, movies every thirty minutes and TV every forty-five. Each one copies anything new from the seedbox down to the media share on the array. They copy instead of moving, so the seedbox keeps its files and the torrents keep seeding.</p>
-      <p>Once files land on the array, everything downstream reads from that one share. Plex and Jellyfin both serve it. Tautulli sits next to Plex, tracking play history and stream quality. Tunarr turns pieces of the library into live TV channels, which gets its own section below.</p>
+      <p>Once files land on the array, everything downstream reads from that one share. Plex and Jellyfin both serve it. Tautulli sits next to Plex, tracking play history and stream quality.</p>
       <p>There's also a lazier entry point than the tracker itself. Seerr puts a Netflix-style browse and request screen in front of the whole thing. Hit request on a movie or show, and it flows to Radarr or Sonarr, which take it from there. It works fine from a phone, which is where I mostly use it.</p>
-      <p>The library this feeds currently sits at 1,737 movies and 164 shows, 6,262 episodes in all.</p>
+      <p>The library this feeds currently sits at more than 1,700 movies and 160 shows, over 6,000 episodes in all.</p>
     </div>
   </section>
 
@@ -141,19 +155,10 @@
     <div class="prose">
       <p>Running two media servers on one library looks like indecision, and for a while it was. Jellyfin went in as an evaluation against Plex, with the assumption that one of the two would eventually go.</p>
       <p>Neither one lost. Jellyfin is faster and snappier in daily use, and its web UI makes Plex feel bloated by comparison. Plex wins on Skip Intro, where its native feature is more reliable than Jellyfin's audio fingerprinting plugin, and its mobile apps are more polished. Six weeks in, neither gap looked big enough to give up the other side's strengths, so I stopped treating it as a competition and made both permanent.</p>
-      <p>Keeping both costs almost nothing, which made the call easy. The media exists once on disk, both servers read the same share, and the second front end amounts to one more container and a config folder. Anything Radarr or Sonarr delivers shows up in both after a scan. Jellyfin also does work beyond playback: it's the media source Tunarr builds channels from, and it handles hardware transcoding through the server's integrated GPU.</p>
+      <p>Keeping both costs almost nothing. The media exists once on disk, both servers read the same share, and the second front end amounts to one more container and a config folder. Anything Radarr or Sonarr delivers shows up in both after a scan. Jellyfin also handles hardware transcoding.</p>
     </div>
   </section>
 
-  <section class="sec" id="live-tv" aria-labelledby="live-tv-h">
-    <div class="sec-head">
-      <div><h2 id="live-tv-h">Live TV from the library</h2><svg class="wave" aria-hidden="true"><use href="#wave"/></svg></div>
-    </div>
-    <div class="prose">
-      <p>Channels are the one part of cable worth missing, and Tunarr rebuilds them. It schedules shows from the library into virtual live TV channels and presents itself to Plex as an HDHomeRun tuner, so the channels show up in Plex's live TV guide the way broadcast ones would. Four channels run right now: The Simpsons, The Office, Rick and Morty, and Forged in Fire.</p>
-      <p>The appeal is ambient TV. Sometimes nobody wants to pick an episode. They want The Office to just be on, somewhere in the middle of season four, the way it used to be. Tunarr pulls its media through Jellyfin rather than Plex, which is part of why Jellyfin holds a permanent slot.</p>
-    </div>
-  </section>
 
   <section class="sec" id="hiccups" aria-labelledby="hiccups-h">
     <div class="sec-head">
@@ -172,7 +177,7 @@
       <div><h2 id="differently-h">What I'd do differently</h2><svg class="wave" aria-hidden="true"><use href="#wave"/></svg></div>
     </div>
     <div class="prose">
-      <p>I'd build verification into the sync scripts from day one. The stale hostname failure was only possible because a clean exit code was my entire definition of success. A few extra lines, checking whether anything transferred and when the last file landed, would have caught the dead connection on the first run. Instead the library sat quietly frozen until I noticed. The habit I took away applies to every scheduled job I run now: a script that reports success should be reporting an outcome, not an exit code.</p>
+      <p>I'd build verification into the sync scripts from day one. The stale hostname failure was only possible because a clean exit code was my entire definition of success. A few extra lines, checking whether anything transferred and when the last file landed, would have caught the dead connection on the first run. Instead the library sat quietly frozen until I noticed. Every scheduled job I run now checks what it moved, not just its exit code.</p>
     </div>
   </section>
 
@@ -181,6 +186,6 @@
   </div>
 </main>
 
-<footer><div class="shell"><span>Rogers City, MI</span><span>© 2026</span></div></footer>
+<footer><div class="shell"><span>Rogers City, MI</span><span class="foot-links"><a href="https://www.linkedin.com/in/jaimedelapaz" target="_blank" rel="noopener">LinkedIn</a><a href="https://github.com/jaime-builds" target="_blank" rel="noopener">GitHub</a></span><span>© 2026</span></div></footer>
 </body>
 </html>
