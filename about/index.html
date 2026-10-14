@@ -2,11 +2,25 @@
 <html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8" />
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-W5mksKZi0jN1Mh3pl/WkKX4p6zH+wnU+aBc7pxrBklU=' 'sha256-y/MBcUsM3hUWViW7RabfgJybhlfGoUAVfTRJq/q1EtU='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'" />
+<meta name="referrer" content="strict-origin-when-cross-origin" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>About — Jaime De La Paz</title>
 <link rel="preload" href="../docs/fonts/albert-sans-latin.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="preload" href="../docs/fonts/besley-latin.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="stylesheet" href="../docs/site.css" />
+<meta name="description" content="About Jaime De La Paz: 15+ years in technical support, now an Enterprise Support Engineer at Depot.dev. Background, skills, certifications, and hobbies." />
+<link rel="canonical" href="https://jaime.build/about/" />
+<meta name="theme-color" content="#070f18" />
+<link rel="icon" href="../docs/favicon-32.png" type="image/png" sizes="32x32" />
+<link rel="apple-touch-icon" href="../docs/apple-touch-icon.png" />
+<meta property="og:type" content="profile" />
+<meta property="og:site_name" content="jaime.build" />
+<meta property="og:title" content="About — Jaime De La Paz" />
+<meta property="og:description" content="About Jaime De La Paz: 15+ years in technical support, now an Enterprise Support Engineer at Depot.dev. Background, skills, certifications, and hobbies." />
+<meta property="og:url" content="https://jaime.build/about/" />
+<meta property="og:image" content="https://jaime.build/docs/og-default.png" />
+<meta name="twitter:card" content="summary_large_image" />
 <script>try{var t=localStorage.getItem('jb-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}</script>
 <script src="../docs/site.js" defer></script>
 </head>
@@ -36,7 +50,7 @@
 
 <main class="shell" id="main">
   <section class="me" aria-labelledby="title">
-    <img class="avatar" src="../docs/avatar.png" alt="Jaime De La Paz" width="120" height="120" />
+    <img class="avatar" src="../docs/avatar.webp" alt="Jaime De La Paz" width="120" height="120" />
     <div>
       <h1 id="title">Hey, I'm Jaime</h1>
       <p class="sub">Enterprise Support Engineer @ Depot.dev · 15+ years in technical support · Bilingual EN / ES</p>
@@ -77,17 +91,16 @@
       <div><h2 id="certs-h">Certifications</h2><svg class="wave" aria-hidden="true"><use href="#wave"/></svg></div>
     </div>
     <dl class="card rows">
+      <div><dt>Learn Git</dt><dd class="when">Boot.dev · March 2026</dd></div>
+      <div><dt>Learn to Code in Python</dt><dd class="when">Boot.dev · February 2026</dd></div>
+      <div><dt>Build a Bookbot in Python</dt><dd class="when">Boot.dev · February 2026</dd></div>
+      <div><dt>Learn Linux</dt><dd class="when">Boot.dev · February 2026</dd></div>
       <div><dt>Datadog: Configuration Learning Path</dt><dd class="when">Datadog · January 2026</dd></div>
       <div><dt>Datadog: Core Skills Learning Path</dt><dd class="when">Datadog · January 2026</dd></div>
       <div><dt>Getting Started with Artificial Intelligence</dt><dd class="when">IBM · January 2026</dd></div>
       <div><dt>LFS148: Getting Started with OpenTelemetry</dt><dd class="when">The Linux Foundation · January 2026</dd></div>
-      <div><dt>Shopify: Development Fundamentals Verified Skill Badge</dt><dd class="when">Shopify · December 2024 · Expires December 2026</dd></div>
-      <div><dt>Shopify: Foundations Certification</dt><dd class="when">Shopify · June 2024 · Expires June 2026</dd></div>
       <div><dt>ClickHouse Core Certification</dt><dd class="when">ClickHouse, Inc. · February 2025 · Expires February 2027</dd></div>
-      <div><dt>Learn to Code in Python</dt><dd class="when">Boot.dev · February 2026</dd></div>
-      <div><dt>Build a Bookbot in Python</dt><dd class="when">Boot.dev · February 2026</dd></div>
-      <div><dt>Learn Linux</dt><dd class="when">Boot.dev · February 2026</dd></div>
-      <div><dt>Learn Git</dt><dd class="when">Boot.dev · March 2026</dd></div>
+      <div><dt>Shopify: Foundations Certification and Development Fundamentals Badge</dt><dd class="when">Shopify · 2024 · Program since retired by Shopify</dd></div>
     </dl>
   </section>
 
@@ -100,7 +113,7 @@
       <h3>Video Games</h3>
       <p>I've been into gaming since I was a kid. The game that started it all was <strong>Super Mario Bros. 3</strong>, the first game I ever beat from beginning to end. That set the tone. Over the years a handful of others really got their hooks in me: <strong>StarCraft</strong>, <strong>Age of Empires</strong>, <strong>Diablo</strong>, <strong>Civilization</strong>, <strong>Escape Velocity</strong>. I still remember playing <strong>StarCraft</strong> with friends before class started in high school.</p>
         <p>These days I gravitate toward survival, creative, simulator, and strategy titles. Current favorites include <strong>Grounded</strong>, <strong>Palworld</strong>, <strong>Minecraft</strong>, <strong>X-COM</strong>, <strong>Vampire Survivors</strong>, and <strong>Uncharted</strong>. For retro, the taste shifts a bit. Platformers like <strong>Mario 64</strong> and <strong>GoldenEye</strong>, RPGs like <strong>Quest 64</strong> and <strong>Gladius</strong>. Some classics just don't age.</p>
-        <p>I have a proper emulation setup running on my main PC and on my ROG Ally. Right now I'm playing through <strong>Quest 64</strong>, <strong>Gladius</strong>, and <strong>South Park: The Stick of Truth</strong> on it. At some point just playing wasn't enough, so I built my own tower defense game in Go, <a href="../projects/rust-rush/">Rust Rush</a>, and it's live now. Turns out making games is harder than playing them.</p>
+        <p>I have a proper emulation setup running on my main PC and on my handheld. Right now I'm playing through <strong>Quest 64</strong>, <strong>Gladius</strong>, and <strong>South Park: The Stick of Truth</strong> on it. At some point just playing wasn't enough, so I built my own tower defense game in Go, <a href="../projects/rust-rush/">Rust Rush</a>, and it's live now. Turns out making games is harder than playing them.</p>
     </article>
     <article class="card hobby">
       <h3>Movies &amp; TV</h3>
@@ -119,7 +132,7 @@
         <p>I also play fantasy football, which means football season is never really just about watching.</p>
     </article>
     <article class="card hobby gitcg">
-      <button class="gitcg-open" type="button" aria-haspopup="dialog" aria-controls="gitcg-dialog" aria-label="Open the GitHub profile card full size"><img src="../docs/jaime-builds-gitcg.png" alt="Jaime's GitHub profile trading card. Open full size." loading="lazy" /></button>
+      <button class="gitcg-open" type="button" aria-haspopup="dialog" aria-controls="gitcg-dialog" aria-label="Open the GitHub profile card full size"><img width="640" height="980" src="../docs/jaime-builds-gitcg.webp" alt="Jaime's GitHub profile trading card. Open full size." loading="lazy" /></button>
       <div>
         <h3>GitHub profile card</h3>
         <p>Generated with <strong>GiTCG</strong>, a fun little tool that turns any GitHub profile into a trading-card-style graphic. Click the card for the full-size version.</p>
@@ -130,11 +143,11 @@
 
   <dialog class="lightbox" id="gitcg-dialog" aria-label="GitHub profile card, full size">
     <form method="dialog"><button class="btn btn-line" type="submit">Close</button></form>
-    <img src="../docs/jaime-builds-gitcg.png" alt="Jaime's GitHub profile trading card, full size" loading="lazy" />
+    <img width="640" height="980" src="../docs/jaime-builds-gitcg.webp" alt="Jaime's GitHub profile trading card, full size" loading="lazy" />
   </dialog>
 </main>
 
-<footer><div class="shell"><span>Rogers City, MI</span><span>© 2026</span></div></footer>
+<footer><div class="shell"><span>Rogers City, MI</span><span class="foot-links"><a href="https://www.linkedin.com/in/jaimedelapaz" target="_blank" rel="noopener">LinkedIn</a><a href="https://github.com/jaime-builds" target="_blank" rel="noopener">GitHub</a></span><span>© 2026</span></div></footer>
 <script>
   (() => {
     const dlg = document.getElementById('gitcg-dialog');

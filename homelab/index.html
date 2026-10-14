@@ -2,11 +2,25 @@
 <html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8" />
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-W5mksKZi0jN1Mh3pl/WkKX4p6zH+wnU+aBc7pxrBklU=' 'sha256-y/MBcUsM3hUWViW7RabfgJybhlfGoUAVfTRJq/q1EtU='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'" />
+<meta name="referrer" content="strict-origin-when-cross-origin" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Homelab — Jaime De La Paz</title>
 <link rel="preload" href="../docs/fonts/albert-sans-latin.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="preload" href="../docs/fonts/besley-latin.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="stylesheet" href="../docs/site.css" />
+<meta name="description" content="What runs on my home server: media, books, photos, monitoring, home automation, and a dozen self-built apps, with network and media flow diagrams." />
+<link rel="canonical" href="https://jaime.build/homelab/" />
+<meta name="theme-color" content="#070f18" />
+<link rel="icon" href="../docs/favicon-32.png" type="image/png" sizes="32x32" />
+<link rel="apple-touch-icon" href="../docs/apple-touch-icon.png" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="jaime.build" />
+<meta property="og:title" content="Homelab — Jaime De La Paz" />
+<meta property="og:description" content="What runs on my home server: media, books, photos, monitoring, home automation, and a dozen self-built apps, with network and media flow diagrams." />
+<meta property="og:url" content="https://jaime.build/homelab/" />
+<meta property="og:image" content="https://jaime.build/docs/og-default.png" />
+<meta name="twitter:card" content="summary_large_image" />
 <script>try{var t=localStorage.getItem('jb-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}</script>
 <script src="../docs/site.js" defer></script>
 </head>
@@ -37,7 +51,8 @@
 <main class="shell" id="main">
   <section class="page-head" aria-labelledby="title">
     <h1 id="title">Homelab</h1>
-    <p>A snapshot of what's currently running at home. Media server, book pipeline, monitoring, home automation, and a handful of self-built tools, all running on a small self-hosted server behind a reverse proxy and tunnel, with no ports opened to the internet.</p>
+    <p>A snapshot of what's currently running at home. Media server, book pipeline, monitoring, home automation, and a dozen self-built apps, all running on a small self-hosted server behind a reverse proxy and tunnel, with no ports opened to the internet.</p>
+    <p>Last updated October 2026.</p>
   </section>
 
   <section class="sec wide-fig" id="topology" aria-labelledby="topology-h">
@@ -45,7 +60,7 @@
       <div><h2 id="topology-h">Network topology</h2><svg class="wave" aria-hidden="true"><use href="#wave"/></svg></div>
     </div>
     <figure>
-      <div class="diagram scroller"><img src="../docs/network-topology.svg" alt="Network topology diagram: Internet to a fiber ISP connection to a Wi-Fi 7 router. The router feeds a multi-gigabit switch, a directly connected Gaming PC, and two isolated wireless networks, Wi-Fi Main for trusted devices and Wi-Fi IoT. The switch connects to the Media Server running Unraid, which has a multi-bay USB drive enclosure attached. A Cloudflare Tunnel runs outbound only from the Media Server, so no ports are forwarded on the router and all external access goes through the tunnel." /></div>
+      <div class="diagram scroller"><img class="theme-dark" width="1100" height="680" src="../docs/network-topology.svg" alt="Network topology diagram: Internet to a fiber ISP connection to a Wi-Fi 7 router. The router feeds a multi-gigabit switch, a directly connected Gaming PC, and two isolated wireless networks, Wi-Fi Main for trusted devices and Wi-Fi IoT. The switch connects to the Media Server running Unraid, which has a multi-bay USB drive enclosure attached. A Cloudflare Tunnel runs outbound only from the Media Server, so no ports are forwarded on the router and all external access goes through the tunnel." /><img class="theme-light" loading="lazy" width="1100" height="680" src="../docs/network-topology-light.svg" alt="Network topology diagram: Internet to a fiber ISP connection to a Wi-Fi 7 router. The router feeds a multi-gigabit switch, a directly connected Gaming PC, and two isolated wireless networks, Wi-Fi Main for trusted devices and Wi-Fi IoT. The switch connects to the Media Server running Unraid, which has a multi-bay USB drive enclosure attached. A Cloudflare Tunnel runs outbound only from the Media Server, so no ports are forwarded on the router and all external access goes through the tunnel." /></div>
       <figcaption class="pan-hint">Scroll the diagram sideways to read it.</figcaption>
     </figure>
   </section>
@@ -76,7 +91,7 @@
       <div><h2 id="media-flow-h">Media stack flow</h2><svg class="wave" aria-hidden="true"><use href="#wave"/></svg></div>
     </div>
     <figure>
-      <div class="diagram scroller"><img src="../docs/media-stack-flow.svg" alt="Media stack flow diagram: two acquisition lanes, video from a private tracker and books from a self-built book search interface, both routing through an off-site seedbox that downloads and seeds for ratio. A scheduled rclone sync pulls content into the parity-protected Unraid storage array, which then fans out to Plex and Jellyfin, self-built AI-scheduled virtual live TV channels, and the ebook and audiobook library with auto-import on arrival. Nothing torrents directly on the home network." loading="lazy" /></div>
+      <div class="diagram scroller"><img class="theme-dark" width="1100" height="480" src="../docs/media-stack-flow.svg" alt="Media stack flow diagram: two acquisition lanes, video from a private tracker and books from a self-hosted book search interface, both routing through an off-site seedbox that downloads and seeds for ratio. A scheduled rclone sync pulls content into the parity-protected Unraid storage array, which then fans out to Plex and Jellyfin and to the ebook and audiobook library with auto-import on arrival. Nothing torrents directly on the home network." loading="lazy" /><img class="theme-light" loading="lazy" width="1100" height="480" src="../docs/media-stack-flow-light.svg" alt="Media stack flow diagram: two acquisition lanes, video from a private tracker and books from a self-hosted book search interface, both routing through an off-site seedbox that downloads and seeds for ratio. A scheduled rclone sync pulls content into the parity-protected Unraid storage array, which then fans out to Plex and Jellyfin and to the ebook and audiobook library with auto-import on arrival. Nothing torrents directly on the home network." /></div>
       <figcaption class="pan-hint">Scroll the diagram sideways to read it.</figcaption>
     </figure>
   </section>
@@ -95,7 +110,6 @@
           <tr class="cat"><th colspan="2" scope="colgroup">Media</th></tr>
           <tr><td>Plex / Jellyfin</td><td>Media server (running in parallel)</td></tr>
           <tr><td>Tautulli</td><td>Playback monitoring for Plex</td></tr>
-          <tr><td>Tunarr + SmarTunarr</td><td>Self-built virtual live TV channels, AI-generated scheduling</td></tr>
         </tbody>
 
         <tbody>
@@ -106,7 +120,7 @@
 
         <tbody>
           <tr class="cat"><th colspan="2" scope="colgroup">Books</th></tr>
-          <tr><td>Calibre-Web Automated</td><td>Ebook library with auto-import pipeline</td></tr>
+          <tr><td>BookCrawler</td><td>Self-built ebook library, metadata write-back, send to Kindle</td></tr>
           <tr><td>Audiobookshelf</td><td>Audiobook server</td></tr>
           <tr><td>Shelfmark</td><td>Book search and acquisition</td></tr>
         </tbody>
@@ -136,11 +150,19 @@
         <tbody>
           <tr class="cat"><th colspan="2" scope="colgroup">Home</th></tr>
           <tr><td>Home Assistant</td><td>Smart home automation platform</td></tr>
+          <tr><td>Mealie</td><td>Recipes and meal planning</td></tr>
         </tbody>
 
         <tbody>
           <tr class="cat"><th colspan="2" scope="colgroup">Games</th></tr>
           <tr><td>RomM</td><td>Retro game library manager</td></tr>
+          <tr><td>Palworld</td><td>On-demand game server</td></tr>
+        </tbody>
+
+        <tbody>
+          <tr class="cat"><th colspan="2" scope="colgroup">Projects</th></tr>
+          <tr><td><a href="../projects/rust-rush/">Rust Rush</a></td><td>Self-built tower defense game</td></tr>
+          <tr><td><a href="../projects/movie-analytics-dashboard/">Movie Analytics Dashboard</a></td><td>Self-built movie discovery platform</td></tr>
         </tbody>
 
         <tbody>
@@ -149,6 +171,9 @@
           <tr><td>Caddy</td><td>Reverse proxy, internal HTTPS</td></tr>
           <tr><td>Cloudflare Tunnel</td><td>External access, no open ports</td></tr>
           <tr><td>Uptime Kuma / Glance / Beszel / Dozzle</td><td>Monitoring, dashboards, logs</td></tr>
+          <tr><td>Speedtest Tracker</td><td>Scheduled internet speed tests</td></tr>
+          <tr><td>Diun</td><td>Container image update alerts</td></tr>
+          <tr><td>Kopia</td><td>Backups</td></tr>
         </tbody>
 
         <tbody>
@@ -160,6 +185,6 @@
   </section>
 </main>
 
-<footer><div class="shell"><span>Rogers City, MI</span><span>© 2026</span></div></footer>
+<footer><div class="shell"><span>Rogers City, MI</span><span class="foot-links"><a href="https://www.linkedin.com/in/jaimedelapaz" target="_blank" rel="noopener">LinkedIn</a><a href="https://github.com/jaime-builds" target="_blank" rel="noopener">GitHub</a></span><span>© 2026</span></div></footer>
 </body>
 </html>

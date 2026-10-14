@@ -2,11 +2,25 @@
 <html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8" />
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-W5mksKZi0jN1Mh3pl/WkKX4p6zH+wnU+aBc7pxrBklU=' 'sha256-y/MBcUsM3hUWViW7RabfgJybhlfGoUAVfTRJq/q1EtU='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'" />
+<meta name="referrer" content="strict-origin-when-cross-origin" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Movie Analytics Dashboard — Jaime De La Paz</title>
 <link rel="preload" href="../../docs/fonts/albert-sans-latin.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="preload" href="../../docs/fonts/besley-latin.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="stylesheet" href="../../docs/site.css" />
+<meta name="description" content="A full-stack movie discovery platform in Python, Flask, and PostgreSQL: 21,769 movies, a hidden-gems scoring formula, and a security audit of my own code." />
+<link rel="canonical" href="https://jaime.build/projects/movie-analytics-dashboard/" />
+<meta name="theme-color" content="#070f18" />
+<link rel="icon" href="../../docs/favicon-32.png" type="image/png" sizes="32x32" />
+<link rel="apple-touch-icon" href="../../docs/apple-touch-icon.png" />
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="jaime.build" />
+<meta property="og:title" content="Movie Analytics Dashboard — Jaime De La Paz" />
+<meta property="og:description" content="A full-stack movie discovery platform in Python, Flask, and PostgreSQL: 21,769 movies, a hidden-gems scoring formula, and a security audit of my own code." />
+<meta property="og:url" content="https://jaime.build/projects/movie-analytics-dashboard/" />
+<meta property="og:image" content="https://jaime.build/docs/movie-dashboard-analytics-1.png" />
+<meta name="twitter:card" content="summary_large_image" />
 <script>try{var t=localStorage.getItem('jb-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}</script>
 <script src="../../docs/site.js" defer></script>
 </head>
@@ -69,10 +83,10 @@
       <div><h2 id="what-it-is-h">What it is</h2><svg class="wave" aria-hidden="true"><use href="#wave"/></svg></div>
     </div>
     <div class="prose">
-      <p>Movie Analytics Dashboard is a full-stack movie discovery platform. It pulls data from The Movie Database (TMDB) API and stores it locally: 21,769 movies, 7,378 directors, and 19 genres as of the last count. Users can create accounts, build favorites and watchlists, rate and review movies, and organize films into named collections.</p>
+      <p>Movie Analytics Dashboard is a full-stack movie discovery platform. It pulls data from The Movie Database (TMDB) API and stores it locally: 21,769 movies, 15,210 directors, and 19 genres as of the last count. Users can create accounts, build favorites and watchlists, rate and review movies, and organize films into named collections.</p>
 
       <figure>
-        <img loading="lazy" src="../../docs/movie-analytics-homepage.png" alt="Movie Analytics Dashboard homepage showing the stats bar, Movie of the Day, and feature shortcut cards" />
+        <img width="1263" height="1037" loading="lazy" src="../../docs/movie-analytics-homepage.webp" alt="Movie Analytics Dashboard homepage showing the stats bar, Movie of the Day, and feature shortcut cards" />
         <figcaption>The homepage: live stats, Movie of the Day, and feature shortcuts</figcaption>
       </figure>
 
@@ -84,19 +98,19 @@
 
       <div class="fig-pair">
         <figure>
-          <img loading="lazy" src="../../docs/movie-dashboard-analytics-1.png" alt="Analytics dashboard showing total movies, average rating, total revenue, and a genre distribution pie chart" />
+          <img width="1258" height="1212" loading="lazy" src="../../docs/movie-dashboard-analytics-1.webp" alt="Analytics dashboard showing total movies, average rating, total revenue, and a genre distribution pie chart" />
           <figcaption>Analytics dashboard: KPI cards and genre distribution</figcaption>
         </figure>
         <figure>
-          <img loading="lazy" src="../../docs/movie-dashboard-analytics-2.png" alt="Analytics dashboard showing movies by release year, average rating by genre, and top production companies" />
+          <img width="1255" height="1075" loading="lazy" src="../../docs/movie-dashboard-analytics-2.webp" alt="Analytics dashboard showing movies by release year, average rating by genre, and top production companies" />
           <figcaption>Release timeline, ratings by genre, and top studios</figcaption>
         </figure>
       </div>
 
-      <p>The actor collaboration network is the feature I'm proudest of visually. It's a D3.js force-directed graph built from any actor's page: the actor sits at the center, up to 30 collaborators orbit around them with their TMDB profile photos attached, and the connecting lines are weighted by how many films they've shared. Hovering an edge shows the actual movie titles. Dragging a node pins it in place. It's the one page where the data actually looks alive instead of sitting in a table.</p>
+      <p>The actor collaboration network is the feature I'm proudest of visually. It's a D3.js force-directed graph built from any actor's page: the actor sits at the center, up to 30 collaborators orbit around them with their TMDB profile photos attached, and the connecting lines are weighted by how many films they've shared. Hovering an edge shows the actual movie titles. Dragging a node pins it in place. It's the one page where the data looks alive instead of sitting in a table.</p>
 
       <figure>
-        <img loading="lazy" src="../../docs/movie-dashboard-actor-graph.png" alt="D3.js force-directed collaboration network graph centered on Jackie Chan, showing 30 collaborators connected by shared-film edges" />
+        <img width="1273" height="1206" loading="lazy" src="../../docs/movie-dashboard-actor-graph.webp" alt="D3.js force-directed collaboration network graph centered on Jackie Chan, showing 30 collaborators connected by shared-film edges" />
         <figcaption>Jackie Chan's collaboration network, 30 collaborators deep</figcaption>
       </figure>
 
@@ -116,7 +130,7 @@
       <div class="stack-item"><p><strong>Bootstrap 5.</strong> The fastest way to a decent-looking UI without hand-rolling CSS, which meant I could spend my learning time on the backend and database side instead of frontend from scratch.</p></div>
       <div class="stack-item"><p><strong>Docker.</strong> I wanted the deployment story to be portable and repeatable, something that would work the same whether it was running on a hosting platform or on my own server later. It's also a real skill worth having on its own.</p></div>
       <div class="stack-item"><p><strong>GitHub Actions.</strong> I wanted to treat this like a real project, not a tutorial. That meant pull requests and CI checks that had to pass before anything merged, which is what GitHub Actions runs on every push: tests across three Python versions, linting, and a security scan.</p></div>
-      <div class="stack-item"><p><strong>Redis, briefly.</strong> Railway's setup pushed toward adding Redis for caching and rate limiting, so I added it. When I moved to self-hosting, I dropped it. The app already fell back cleanly to in-process caching, and running my own Redis instance for a single-user app wasn't worth the extra moving part.</p></div>
+      <div class="stack-item"><p><strong>Redis, briefly.</strong> Railway's setup pushed toward adding Redis for caching and rate limiting, so I added it. When I moved to self-hosting, I dropped it. The app already fell back cleanly to in-process caching, and running my own Redis instance for an app this size wasn't worth the extra moving part.</p></div>
     </div>
   </section>
 
@@ -132,7 +146,7 @@
       <p>Two more Postgres-only bugs showed up during the first data sync: a cast column too narrow for some ensemble voice-cast credits, and a handful of deadlocks from running too many sync workers in parallel. Neither was fatal. Postgres just enforces things SQLite lets slide, and I found out the hard way.</p>
 
       <h3>Writing tests for the first time</h3>
-      <p>I'd never written a test suite before this project. Getting the first batch to pass green was one of the better moments of the whole build. It wasn't just satisfying, it changed how I thought about the app: what happens when a user isn't logged in, what happens when two requests hit the same row at once, what a broken migration actually does to a live database.</p>
+      <p>I'd never written a test suite before this project. Getting the first batch to pass green was one of the better moments of the whole build. It wasn't just satisfying, it changed how I thought about the app: what happens when a user isn't logged in, what happens when two requests hit the same row at once, what a broken migration does to a live database.</p>
       <p>The suite grew with the app and now sits at 463 tests, covering authentication, routes, the API, the database models, and the admin panel. One early mistake taught me the most. My test fixture pointed at the real database instead of an isolated one, so running pytest wiped my actual movie data. I fixed it by switching to an in-memory SQLite database for every test run, then spent 45 minutes re-syncing 8,000 movies to undo the damage. I've never made that mistake twice.</p>
 
       <h3>User accounts, ratings, and reviews</h3>
@@ -150,13 +164,13 @@
         <li>Fixed a few smaller correctness bugs the audit turned up along the way: director and studio average ratings were counting unrated movies as zero instead of excluding them, which skewed the numbers.</li>
         <li>Hardened the production config: it now refuses to start if the secret key is left at its insecure default, forces <code>DEBUG</code> off outside local development, and sets secure cookie flags.</li>
       </ul>
-      <p>Getting all of this right without a security background meant reading a fair amount about what each vulnerability class actually does, not just applying a fix I didn't understand.</p>
+      <p>Getting all of this right without a security background meant reading a fair amount about what each vulnerability class does, not just applying a fix I didn't understand.</p>
 
       <h3>The CI that wasn't running</h3>
       <p>The CSRF fix above accidentally broke something else, and I didn't notice for weeks.</p>
       <p>Before CSRF protection went in, the app initialized its database with a plain <code>Base.metadata.create_all()</code> call. Adding Alembic as the single source of truth for schema changes meant that old code path had to go, so it was changed to raise a <code>RuntimeError</code> if anything tried to call it directly. That was the right call. The problem is the GitHub Actions test workflow still had a leftover step that called it: <code>python -m src.models</code>, the old database-init command, sitting right there in <code>tests.yml</code>.</p>
-      <p>Every push after that fix broke CI. Not with a confusing failure either. A clean, obvious <code>RuntimeError</code>. It just didn't get looked at, because the two GitHub Actions workflows for this repo are fully independent: <code>tests.yml</code> runs the test suite, and a separate <code>ci.yml</code> builds and pushes the Docker image, with a comment in the file that says testing is handled elsewhere. Nothing stopped the Docker build workflow from going green and deploying while the test workflow sat red in the background. Railway auto-deploys on every push to main regardless of CI status, so for however long that gap lasted, every deploy shipped without a single test actually running against it.</p>
-      <p>I only caught it by checking the Actions run history directly instead of assuming things were fine because the site was still up. The fix was one line, swap <code>python -m src.models</code> for <code>alembic upgrade head</code> in the workflow file, but the real fix was the habit: don't just look at whether the site loads, look at whether the pipeline that's supposed to protect it actually ran.</p>
+      <p>Every push after that fix broke CI. Not with a confusing failure either. A clean, obvious <code>RuntimeError</code>. It just didn't get looked at, because the two GitHub Actions workflows for this repo are fully independent: <code>tests.yml</code> runs the test suite, and a separate <code>ci.yml</code> builds and pushes the Docker image, with a comment in the file that says testing is handled elsewhere. Nothing stopped the Docker build workflow from going green and deploying while the test workflow sat red in the background. Railway auto-deploys on every push to main regardless of CI status, so for however long that gap lasted, every deploy shipped without a single test running against it.</p>
+      <p>I only caught it by checking the Actions run history directly instead of assuming things were fine because the site was still up. The fix was one line, swap <code>python -m src.models</code> for <code>alembic upgrade head</code> in the workflow file, and I check the Actions history now instead of trusting that the site loads.</p>
 
       <h3>Movie of the Day</h3>
       <p>A small feature with a fun problem behind it. The homepage shows one featured movie, picked from the Hidden Gems pool, and it needs three things: the same movie for every visitor on a given day, no repeats within 30 days, and no chance of two people getting a different pick if they both load the homepage in the same second.</p>
@@ -167,7 +181,7 @@ def pick_movie_of_the_day(date_str, eligible_movie_ids):
     digest = hashlib.sha256(date_str.encode()).hexdigest()
     index = int(digest, 16) % len(eligible_movie_ids)
     return eligible_movie_ids[index]</code></pre>
-      <p>The eligible pool is Hidden Gems minus whatever's been picked in the last 30 days, sorted by movie ID so the indexing is stable. If two requests both land on the exact same untouched day at the exact same moment, both workers try to insert the same pick into a table with a unique constraint on the date. One wins, the other catches the resulting <code>IntegrityError</code> on that constraint and just reads back the winning row instead of erroring out. It's not much code, but it covers every case.</p>
+      <p>The eligible pool is Hidden Gems minus whatever's been picked in the last 30 days, sorted by movie ID so the indexing is stable. If two requests both land on the exact same untouched day at the exact same moment, both workers try to insert the same pick into a table with a unique constraint on the date. One wins, the other catches the resulting <code>IntegrityError</code> on that constraint and just reads back the winning row instead of erroring out.</p>
 
       <h3>Building the admin dashboard</h3>
       <p>The most recent addition, and the biggest single feature added after the app first went live. Up to this point, moderation meant editing the database directly. The admin panel replaced that with fourteen routes behind a proper <code>is_admin</code> flag: a dashboard home with top-line stats and a live tail of the last 20 warning and error log lines, a users page with search and ban and unban controls, and moderation views for every rating and review, including the ones that have been hidden.</p>
@@ -202,6 +216,6 @@ def pick_movie_of_the_day(date_str, eligible_movie_ids):
   </div>
 </main>
 
-<footer><div class="shell"><span>Rogers City, MI</span><span>© 2026</span></div></footer>
+<footer><div class="shell"><span>Rogers City, MI</span><span class="foot-links"><a href="https://www.linkedin.com/in/jaimedelapaz" target="_blank" rel="noopener">LinkedIn</a><a href="https://github.com/jaime-builds" target="_blank" rel="noopener">GitHub</a></span><span>© 2026</span></div></footer>
 </body>
 </html>

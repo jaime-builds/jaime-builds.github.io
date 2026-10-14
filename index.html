@@ -2,11 +2,25 @@
 <html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8" />
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-W5mksKZi0jN1Mh3pl/WkKX4p6zH+wnU+aBc7pxrBklU=' 'sha256-y/MBcUsM3hUWViW7RabfgJybhlfGoUAVfTRJq/q1EtU='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'" />
+<meta name="referrer" content="strict-origin-when-cross-origin" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Jaime De La Paz — Enterprise Support Engineer</title>
 <link rel="preload" href="docs/fonts/albert-sans-latin.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="preload" href="docs/fonts/besley-latin.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="stylesheet" href="docs/site.css" />
+<meta name="description" content="Jaime De La Paz, Enterprise Support Engineer at Depot.dev. Projects I&#x27;ve built, the homelab they run on, and write-ups on how they came together." />
+<link rel="canonical" href="https://jaime.build/" />
+<meta name="theme-color" content="#070f18" />
+<link rel="icon" href="docs/favicon-32.png" type="image/png" sizes="32x32" />
+<link rel="apple-touch-icon" href="docs/apple-touch-icon.png" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="jaime.build" />
+<meta property="og:title" content="Jaime De La Paz — Enterprise Support Engineer" />
+<meta property="og:description" content="Jaime De La Paz, Enterprise Support Engineer at Depot.dev. Projects I&#x27;ve built, the homelab they run on, and write-ups on how they came together." />
+<meta property="og:url" content="https://jaime.build/" />
+<meta property="og:image" content="https://jaime.build/docs/og-default.png" />
+<meta name="twitter:card" content="summary_large_image" />
 <script>try{var t=localStorage.getItem('jb-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}</script>
 <script src="docs/site.js" defer></script>
 </head>
@@ -53,10 +67,10 @@
     </div>
     <div class="feature">
       <article class="card">
-        <div class="shot"><img src="docs/movie-dashboard-analytics-1.png" alt="Movie Analytics Dashboard analytics page with charts" loading="lazy" /></div>
+        <div class="shot"><img width="1258" height="1212" src="docs/movie-dashboard-analytics-1.webp" alt="Movie Analytics Dashboard analytics page with charts" loading="lazy" /></div>
         <div class="card-body">
           <h3>Movie Analytics Dashboard</h3>
-          <p>A full-stack movie discovery platform with user authentication, personalized collections, ratings and reviews, and a rich analytics dashboard, plus an admin panel for full site moderation. Most of the interesting work is in the SQL: window functions, subqueries, a custom hidden-gems scoring algorithm, and a normalized 18-table schema.</p>
+          <p>A full-stack movie discovery platform with user authentication, personalized collections, ratings and reviews, and an analytics dashboard with six charts, plus an admin panel for full site moderation. Most of the interesting work is in the SQL: window functions, subqueries, a custom hidden-gems scoring algorithm, and a normalized 18-table schema.</p>
           <dl class="facts">
             <dt>Library</dt><dd>21,769 movies, weekly TMDB sync</dd>
             <dt>Quality</dt><dd>86% test coverage, 13-endpoint REST API</dd>
@@ -65,11 +79,12 @@
           <div class="btns">
             <a class="btn btn-fill" href="https://movie-dashboard.jaime.build" target="_blank" rel="noopener">Visit site <svg aria-hidden="true"><use href="#out"/></svg></a>
             <a class="btn btn-line" href="projects/movie-analytics-dashboard/">Read the write-up</a>
+            <a class="btn btn-line" href="https://github.com/jaime-builds/movie-analytics-dashboard" target="_blank" rel="noopener">GitHub <svg aria-hidden="true"><use href="#out"/></svg></a>
           </div>
         </div>
       </article>
       <article class="card">
-        <div class="shot"><img src="docs/rust-rush-combat.png" alt="Rust Rush mid-wave, towers firing along the path" loading="lazy" style="object-position: center 35%" /></div>
+        <div class="shot"><img width="935" height="1191" src="docs/rust-rush-combat.webp" alt="Rust Rush mid-wave, towers firing along the path" loading="lazy" style="object-position: center 35%" /></div>
         <div class="card-body">
           <h3>Rust Rush, a tower defense game</h3>
           <p>A real-time tower defense game in the browser, with a server-authoritative Go backend and a React and Canvas frontend. All game logic, including BFS pathfinding, projectile physics, targeting, and damage, runs on the server at 60 FPS. Difficulty order across 6 maps was set by running each map through a fixed-budget simulation.</p>
@@ -81,6 +96,7 @@
           <div class="btns">
             <a class="btn btn-fill" href="https://rust-rush.jaime.build" target="_blank" rel="noopener">Play it <svg aria-hidden="true"><use href="#out"/></svg></a>
             <a class="btn btn-line" href="projects/rust-rush/">Read the write-up</a>
+            <a class="btn btn-line" href="https://github.com/jaime-builds/rust-rush" target="_blank" rel="noopener">GitHub <svg aria-hidden="true"><use href="#out"/></svg></a>
           </div>
         </div>
       </article>
@@ -93,7 +109,7 @@
     </div>
     <div class="lab">
       <div>
-        <p class="lead">What runs at home: media server, book pipeline, monitoring, home automation, and a handful of self-built tools, with no ports opened to the internet.</p>
+        <p class="lead">What runs at home: media server, book pipeline, monitoring, home automation, and a dozen self-built apps, with no ports opened to the internet.</p>
         <p>Everything routes through a Cloudflare Tunnel rather than forwarded ports, so there are no inbound holes in the firewall. Storage runs on Unraid with parity protection, and AdGuard Home filters DNS for every device on the network.</p>
         <dl class="hw">
           <dt>Gaming PC</dt><dd>Primary workstation for development and gaming</dd>
@@ -104,7 +120,7 @@
         <a class="btn btn-fill" href="homelab/">Full tour: diagrams, hardware, every service</a>
       </div>
       <figure>
-        <div class="diagram"><img src="docs/network-topology.svg" alt="Network topology: internet, ISP, router, switch, the Unraid server and the devices behind it" /></div>
+        <div class="diagram"><img class="theme-dark" width="1100" height="680" src="docs/network-topology.svg" alt="Network topology: internet, ISP, router, switch, the Unraid server and the devices behind it" /><img class="theme-light" loading="lazy" width="1100" height="680" src="docs/network-topology-light.svg" alt="Network topology: internet, ISP, router, switch, the Unraid server and the devices behind it" /></div>
         <figcaption class="diagram-cap">The network diagram from the homelab page.</figcaption>
       </figure>
     </div>
@@ -117,16 +133,16 @@
     </div>
     <div class="minis">
       <a class="card mini" href="projects/self-hosted-infrastructure/">
-        <div class="thumb"><svg viewBox="470 320 500 390" preserveAspectRatio="xMidYMid slice" width="100%" height="100%" aria-hidden="true"><image href="docs/network-topology.svg" width="1100" height="680"/></svg></div>
-        <div><h3>Self-hosted infrastructure</h3><p>Two dozen self-hosted services behind a reverse proxy and tunnel, no ports exposed.</p><div class="stack">Unraid · Docker · Caddy</div></div>
+        <div class="thumb"><svg class="glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="6" rx="1.5"/><rect x="4" y="14" width="16" height="6" rx="1.5"/><path d="M7.5 7h.01M7.5 17h.01M11 7h5.5M11 17h5.5"/></svg></div>
+        <div><h3>Self-hosted infrastructure</h3><p>60-plus containers on one home server, behind a reverse proxy and tunnel, no ports exposed.</p><div class="stack">Unraid · Docker · Caddy</div></div>
       </a>
       <a class="card mini" href="projects/media-automation-stack/">
-        <div class="thumb"><svg viewBox="270 130 400 312" preserveAspectRatio="xMidYMid slice" width="100%" height="100%" aria-hidden="true"><image href="docs/media-stack-flow.svg" width="1100" height="560"/></svg></div>
-        <div><h3>Media automation stack</h3><p>A seedbox-to-library pipeline that goes from request to organized library without manual steps.</p><div class="stack">Prowlarr · Radarr · Sonarr</div></div>
+        <div class="thumb"><svg class="glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M10 9.3v5.4l4.6-2.7z"/></svg></div>
+        <div><h3>Media automation stack</h3><p>A seedbox-to-library pipeline with one manual step: picking what to add.</p><div class="stack">Prowlarr · Radarr · Sonarr</div></div>
       </a>
       <a class="card mini" href="projects/calibre-kindle-setup/">
-        <div class="thumb"><svg viewBox="760 280 330 258" preserveAspectRatio="xMidYMid slice" width="100%" height="100%" aria-hidden="true"><image href="docs/media-stack-flow.svg" width="1100" height="560"/></svg></div>
-        <div><h3>Calibre and Kindle setup</h3><p>Automated ebook pipeline from acquisition to Kindle-ready file, no manual conversion.</p><div class="stack">Calibre-Web Automated · Kindle</div></div>
+        <div class="thumb"><svg class="glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6.8C10 5.3 7 4.8 4 5.3v12.9c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5V5.3c-3-.5-6 0-8 1.5zM12 6.8v12.9"/></svg></div>
+        <div><h3>Calibre and Kindle setup</h3><p>The ebook pipeline I ran before building my own, from search to Kindle with no manual conversion.</p><div class="stack">Calibre-Web Automated · rclone</div></div>
       </a>
     </div>
   </section>
@@ -145,6 +161,6 @@
   </section>
 </main>
 
-<footer><div class="shell"><span>Rogers City, MI</span><span>© 2026</span></div></footer>
+<footer><div class="shell"><span>Rogers City, MI</span><span class="foot-links"><a href="https://www.linkedin.com/in/jaimedelapaz" target="_blank" rel="noopener">LinkedIn</a><a href="https://github.com/jaime-builds" target="_blank" rel="noopener">GitHub</a></span><span>© 2026</span></div></footer>
 </body>
 </html>

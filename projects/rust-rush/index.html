@@ -2,11 +2,25 @@
 <html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8" />
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-W5mksKZi0jN1Mh3pl/WkKX4p6zH+wnU+aBc7pxrBklU=' 'sha256-y/MBcUsM3hUWViW7RabfgJybhlfGoUAVfTRJq/q1EtU='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'" />
+<meta name="referrer" content="strict-origin-when-cross-origin" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Rust Rush — Jaime De La Paz</title>
 <link rel="preload" href="../../docs/fonts/albert-sans-latin.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="preload" href="../../docs/fonts/besley-latin.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="stylesheet" href="../../docs/site.css" />
+<meta name="description" content="A real-time browser tower defense game with a server-authoritative Go backend at 60 FPS, a React and Canvas frontend, and map difficulty set by simulation." />
+<link rel="canonical" href="https://jaime.build/projects/rust-rush/" />
+<meta name="theme-color" content="#070f18" />
+<link rel="icon" href="../../docs/favicon-32.png" type="image/png" sizes="32x32" />
+<link rel="apple-touch-icon" href="../../docs/apple-touch-icon.png" />
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="jaime.build" />
+<meta property="og:title" content="Rust Rush — Jaime De La Paz" />
+<meta property="og:description" content="A real-time browser tower defense game with a server-authoritative Go backend at 60 FPS, a React and Canvas frontend, and map difficulty set by simulation." />
+<meta property="og:url" content="https://jaime.build/projects/rust-rush/" />
+<meta property="og:image" content="https://jaime.build/docs/rust-rush-combat.png" />
+<meta name="twitter:card" content="summary_large_image" />
 <script>try{var t=localStorage.getItem('jb-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}</script>
 <script src="../../docs/site.js" defer></script>
 </head>
@@ -74,10 +88,10 @@
     <div class="prose">
       <p>Rust Rush is a real-time tower defense game that runs in the browser. You place towers on a grid, enemies path around them toward your goal, and you survive escalating waves by upgrading, evolving, and selling towers as the economy allows. It's live at <a href="https://rust-rush.jaime.build" target="_blank" rel="noopener">rust-rush.jaime.build</a>, self-hosted on my home server behind a Cloudflare Tunnel.</p>
 
-      <p>The architecture is the part I'm most deliberate about: the game is fully server-authoritative. Every piece of game logic, pathfinding, tower targeting, projectile physics, damage, wave spawning, win and loss detection, runs in Go at 60 frames per second. The React client renders state and sends inputs over a WebSocket at 60 messages per second, and that's all it does. No game outcome is ever computed in the browser, which means there's nothing for a player to tamper with client-side.</p>
+      <p>The architecture is the part I'm most deliberate about: the game is fully server-authoritative. Every piece of game logic, pathfinding, tower targeting, projectile physics, damage, wave spawning, win and loss detection, runs in Go at 60 frames per second. The React client draws the state the server sends over a WebSocket 60 times a second and sends back player inputs, and that's all it does. No game outcome is ever computed in the browser, which means there's nothing for a player to tamper with client-side.</p>
 
       <figure>
-        <img loading="lazy" src="../../docs/rust-rush-combat.png" alt="Late wave of Rust Rush in progress, showing evolved towers, projectiles, and Tesla arcs hitting several enemies on a map with obstacles" />
+        <img width="935" height="1191" loading="lazy" src="../../docs/rust-rush-combat.webp" alt="Late wave of Rust Rush in progress, showing evolved towers, projectiles, and Tesla arcs hitting several enemies on a map with obstacles" />
         <figcaption>A late wave in progress. Every projectile and path on screen is computed server-side at 60 FPS.</figcaption>
       </figure>
 
@@ -111,12 +125,12 @@
     <div class="prose">
 
       <h3>Making the server the only source of truth</h3>
-      <p>Early on, some game logic lived in the browser. The turning point was moving all of it to the server and demoting the client to a pure renderer. This wasn't about purity. It paid off three ways: the client can't cheat, the client can't drift out of sync with the rules, and every behavior has exactly one implementation to test.</p>
-      <p>Keeping that discipline took ongoing effort. A duplicate BFS implementation snuck into the client for debug spawns and had to be deleted. The wave preview strip could have recomputed wave composition in TypeScript, but instead the server includes it in every snapshot, built from the same function that actually spawns the waves, so what the preview shows and what arrives can never disagree. Even the fast-forward button's state comes from the server, which means it survives a page reload mid-game.</p>
+      <p>Early on, some game logic lived in the browser. The turning point was moving all of it to the server and demoting the client to a pure renderer. It paid off three ways: the client can't cheat, the client can't drift out of sync with the rules, and every behavior has exactly one implementation to test.</p>
+      <p>Keeping that discipline took ongoing effort. A duplicate BFS implementation snuck into the client for debug spawns and had to be deleted. The wave preview strip could have recomputed wave composition in TypeScript, but instead the server includes it in every snapshot, built from the same function that spawns the waves, so what the preview shows and what arrives can never disagree. Even the fast-forward button's state comes from the server, which means it survives a page reload mid-game.</p>
 
       <h3>Tuning the difficulty curve</h3>
       <p>The first playable version had a problem: I survived to wave 55 with $67,000 in the bank. Enemies had flat stats at every wave, so towers got relatively stronger forever and gold piled up faster than it could be spent.</p>
-      <p>The fix was scaling enemy health and speed at spawn time, and the tuning took two passes. The first attempt applied a 15% compound health multiplier from wave 1, and I was dead by wave 6. The second started a 10% multiplier at wave 5 instead, giving the early game a grace period before the wall arrives, plus a speed ramp capped at +80% and a quadratic bump in enemy counts past wave 10. Playtesting settled at a consistent game over around wave 22, which was the target. The lesson that stuck: compound scaling needs a grace period, because a curve that feels fair at wave 15 is brutal if it starts at wave 1.</p>
+      <p>The fix was scaling enemy health and speed at spawn time, and the tuning took two passes. The first attempt applied a 15% compound health multiplier from wave 1, and I was dead by wave 6. The second started a 10% multiplier at wave 5 instead, giving the early game a grace period before the wall arrives, plus a speed ramp capped at +80% and a quadratic bump in enemy counts past wave 10. Playtesting settled at a consistent game over around wave 22, which was the target. Compound scaling needs a grace period. A curve that feels fair at wave 15 is brutal at wave 1.</p>
 
       <h3>The evolution system, and one accounting trick</h3>
       <p>Tower upgrades plateau at level 4, and for a long time that was just where progression ended. The evolution system replaced that plateau with a real decision: every MAX-level tower can permanently transform into one of two specialized final forms. Pulse forks into a close-range shredder or a multi-shot volley. Stasis becomes either a constant slow aura or a single-target root. Tesla splits into a continuous laser or a support tower that buffs its neighbors and never fires a shot.</p>
@@ -124,7 +138,7 @@
       <p>It's also the game's first irreversible action. Nothing else in Rust Rush is permanent, so the evolve flow shows both options up front and asks for confirmation before committing, the only confirmation dialog in the game.</p>
 
       <figure>
-        <img loading="lazy" src="../../docs/rust-rush-evolve.png" alt="Evolve panel showing both evolution options for a MAX-level tower, with a confirmation step before committing" />
+        <img width="772" height="373" loading="lazy" src="../../docs/rust-rush-evolve.webp" alt="Evolve panel showing both evolution options for a MAX-level tower, with a confirmation step before committing" />
         <figcaption>The evolve panel. Both terminal forms shown before the game's only irreversible choice.</figcaption>
       </figure>
 
@@ -134,14 +148,14 @@
       <p>So instead of guessing, I ranked the maps with a measured simulation: a deterministic bot playing every map with identical fixed tower budgets at six spending levels, no upgrades, no clever placement, summing waves survived and score across all runs. The result confirmed the instinct was wrong. The Switchback, the map with the most obstacles and the longest path, measured as the easiest in the roster, because its 44-cell route gives towers more than twice the time on target of a 20-cell map. The simulation lives in the repo as a test, so the ranking is reproducible, and the final unlock order came straight from its output.</p>
 
       <figure>
-        <img loading="lazy" src="../../docs/rust-rush-map-select.png" alt="Map select screen showing real unlock progress across the six maps, with several secured and at least one still locked" />
+        <img width="635" height="686" loading="lazy" src="../../docs/rust-rush-map-select.webp" alt="Map select screen showing real unlock progress across the six maps, with several secured and at least one still locked" />
         <figcaption>Map select. The unlock order came from the simulation, not my gut.</figcaption>
       </figure>
 
       <h3>An audit that found bugs months old</h3>
       <p>Midway through the project I ran a full audit of the documentation against the actual code, verifying every claim in the TODO and README rather than trusting the checkboxes, with AI review helping work through the roughly 280 claims. Most held up. Eleven were wrong, and two of the wrong ones were real behavior bugs that had been latent for months, both proven with a failing test before the fix.</p>
       <p>The first: "trapped enemies stop moving" was false. An enemy fully walled in by towers was treated as having reached the goal, so it dealt 10 damage and vanished. The documented behavior, and the fair one, is that a trapped enemy waits and resumes when a path reopens, which is what it does now. The second: the "wave freezes when path blocked" fix only covered blocking a path mid-wave. Starting a wave against an already-blocked path soft-locked the game forever.</p>
-      <p>The same pass caught a class of concurrency bugs waiting to happen: the WebSocket hub's client map was being written from three goroutines with no synchronization, two connections arriving at the same moment could create duplicate rooms with doubled game loops, and a race in the wave-start handler could double-spawn a wave. All of it got mutexes, atomic gates, and a stress test. The habit I took away is the same one from my other projects: verify claims against reality on a schedule, because "the docs say it works" and "it works" drift apart quietly.</p>
+      <p>The same pass caught a class of concurrency bugs waiting to happen: the WebSocket hub's client map was being written from three goroutines with no synchronization, two connections arriving at the same moment could create duplicate rooms with doubled game loops, and a race in the wave-start handler could double-spawn a wave. All of it got mutexes, atomic gates, and a stress test. Docs and code drift apart, so I check one against the other on a schedule now.</p>
 
       <h3>Sound with no sound files</h3>
       <p>The game has music and sound effects, and the repo contains zero audio files. Everything is synthesized live in the browser through the Web Audio API: oscillators, filters, and envelopes. The background music is a generative ambient pad, a low drone with a sparse arpeggio wandering over it, so it never loops in a way you can catch. The effects are deliberately minimal, four in total: explosions, plus one-off stings for evolving a tower, starting a wave, and game over. No placement clicks, no per-shot pew-pew, because a late wave has dozens of towers firing and that gets exhausting fast.</p>
@@ -178,6 +192,6 @@
   </div>
 </main>
 
-<footer><div class="shell"><span>Rogers City, MI</span><span>© 2026</span></div></footer>
+<footer><div class="shell"><span>Rogers City, MI</span><span class="foot-links"><a href="https://www.linkedin.com/in/jaimedelapaz" target="_blank" rel="noopener">LinkedIn</a><a href="https://github.com/jaime-builds" target="_blank" rel="noopener">GitHub</a></span><span>© 2026</span></div></footer>
 </body>
 </html>
