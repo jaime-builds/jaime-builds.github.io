@@ -24,7 +24,7 @@ Features a dark/light mode toggle (dark by default, preference saved to `localSt
 | Project write-ups | `projects/<name>/` | One page per finished project: motivation, stack decisions, technical deep dives |
 | Homelab | `homelab/` | Infrastructure tour: diagrams, hardware, every service |
 
-Current write-ups: Movie Analytics Dashboard, Rust Rush, Self-hosted infrastructure, Media automation stack, Calibre and Kindle setup.
+Current write-ups: Movie Analytics Dashboard, Rust Rush, BookCrawler, Self-hosted infrastructure, Media automation stack, Calibre and Kindle setup.
 
 ---
 
@@ -46,9 +46,11 @@ No npm. No build step. Clone and open.
 git clone https://github.com/jaime-builds/jaime-builds.github.io.git
 cd jaime-builds.github.io
 
-# Serve locally (root-relative paths and fonts work best over HTTP)
+# Serve locally (fonts load best over HTTP)
 npx serve .
 ```
+
+Pages link to each other and to `docs/` with relative paths (`../docs/site.css`). The one exception is `404.html`, which uses root-relative paths (`/docs/site.css`) because GitHub Pages serves it at whatever URL was missing.
 
 ---
 
@@ -64,9 +66,29 @@ All pages load `docs/site.css` and `docs/site.js`. Page-specific layout lives in
 
 **To add a project:** add a `.prow` card in `projects/index.html`, and a card in `index.html` if it should be featured.
 
-**To add a write-up:** create `projects/<name>/index.html`, following an existing write-up such as `projects/rust-rush/`, then link it from the project's card.
+**To add a write-up:** create `projects/<name>/index.html` by copying an existing write-up such as `projects/rust-rush/`, then:
+
+1. Link it from the project's card in `projects/index.html`.
+2. Add its URL to `sitemap.xml`.
+3. Make it the first line of the "Lately" list on the home page.
+4. Fill in the Published row in the facts card (`<time datetime="YYYY-MM-DD">`).
+5. Set `og:image` to a 1200x630 PNG in `docs/` (social sites handle WebP unevenly), or leave `og-default.png`.
+
+**When you change a write-up's content:** update its Updated row in the facts card.
 
 **To add a cert:** add a row to the certifications list in `about/index.html`, newest first.
+
+### Content Security Policy
+
+Every page has its own CSP `<meta>` tag near the top of `<head>`. It allows inline scripts only by SHA-256 hash. Every page has the one-line theme script, and `about/index.html` also has the About dialog script. If you edit an inline script by even one character, the browser blocks it until the hash is updated, and the only sign is a console error.
+
+After changing any inline script, print the current hashes and paste them into the CSP on **every** page:
+
+```bash
+python -c "import re,sys,hashlib,base64;[print(f, 'sha256-'+base64.b64encode(hashlib.sha256(s.encode()).digest()).decode()) for f in sys.argv[1:] for s in re.findall(r'<script>(.*?)</script>',open(f,encoding='utf-8').read(),re.S)]" index.html about/index.html
+```
+
+A new page copied from an existing one already has the right CSP.
 
 ---
 
@@ -80,7 +102,12 @@ jaime-builds.github.io/
 │   ├── index.html          # All projects
 │   └── <name>/index.html   # One write-up per project
 ├── homelab/index.html      # Homelab tour
-├── docs/                   # site.css, site.js, fonts, screenshots, diagrams, logo, avatar
+├── docs/                   # Site assets, not documentation: site.css, site.js, fonts,
+│                           # screenshots, diagrams, preview images, logo, avatar
+├── 404.html                # Not-found page (root-relative paths)
+├── robots.txt
+├── sitemap.xml             # One <url> per public page
+├── favicon.ico
 ├── CNAME
 └── README.md
 ```
