@@ -24,7 +24,7 @@ Features a dark/light mode toggle (dark by default, preference saved to `localSt
 | Project write-ups | `projects/<name>/` | One page per finished project: motivation, stack decisions, technical deep dives |
 | Homelab | `homelab/` | Infrastructure tour: diagrams, hardware, every service |
 
-Current write-ups: Movie Analytics Dashboard, Rust Rush, BookCrawler, Self-hosted infrastructure, Media automation stack, Calibre and Kindle setup.
+Current write-ups: Movie Analytics Dashboard, Rust Rush, BookCrawler, LedgerView, Self-hosted infrastructure, Media automation stack, Calibre and Kindle setup.
 
 ---
 
