@@ -62,13 +62,13 @@
   <dl class="card stats" aria-label="Project facts">
     <div><dt>Status</dt><dd>Live</dd></div>
     <div><dt>Published</dt><dd><time datetime="2026-08-11">Aug 11, 2026</time></dd></div>
-    <div><dt>Updated</dt><dd><time datetime="2026-10-14">Oct 14, 2026</time></dd></div>
+    <div><dt>Updated</dt><dd><time datetime="2026-11-05">Nov 5, 2026</time></dd></div>
     <div><dt>Phases</dt><dd>23</dd></div>
     <div><dt>Maps</dt><dd>6</dd></div>
     <div><dt>Tower forms</dt><dd>15</dd></div>
     <div><dt>Server loop</dt><dd>60 FPS</dd></div>
     <div><dt>WebSocket messages</dt><dd>60/sec</dd></div>
-    <div><dt>Go tests</dt><dd>47</dd></div>
+    <div><dt>Go tests</dt><dd>134</dd></div>
     <div><dt>Build time</dt><dd>6 months</dd></div>
   </dl>
   </section>
@@ -102,9 +102,16 @@
 
       <p>There are 5 base tower types, each with a distinct job. Pulse is the reliable workhorse, Railgun the long-range single-target specialist, Mortar the splash damage, Stasis the slow debuff, and Tesla the chain lightning that arcs between enemies. Each tower upgrades through 4 levels, and at MAX level every tower can permanently evolve into one of two terminal forms, 10 in total, from a piercing rail shot that punches through everything in a line to a support tower that deals no damage at all and instead buffs its neighbors.</p>
 
+      <p>Selecting a tower shows its special stats, like Stasis slow strength or Mortar blast size, plus a NEXT line listing exactly what the next upgrade changes. Both come from the server, so they always match what an upgrade actually does.</p>
+
+      <figure>
+        <img width="780" height="560" loading="lazy" src="../../docs/rust-rush-tower-panel.webp" alt="Rust Rush tower panel for a level 1 Mortar showing range, damage, fire rate, and blast size, with a NEXT line listing the level 2 upgrade changes" />
+        <figcaption>The tower panel: special stats and the next upgrade, both sent by the server.</figcaption>
+      </figure>
+
       <p>The game has 6 maps, each a different obstacle layout, unlocked one at a time in a fixed sequence. Every map has a win wave: survive to it and you get a Zone Secured victory screen with the option to keep going in Endless mode. Beating a map also unlocks a Harder difficulty on it, with a tighter economy and tougher bosses. Enemies path around your towers with BFS pathfinding that recalculates in real time, so placing a tower mid-wave instantly reroutes everything on the board.</p>
 
-      <p>On top of that sits a full presentation layer: a sci-fi visual theme where towers are geometric hardware and enemies are heading-rotated craft, procedurally synthesized sound with no audio files anywhere in the project, screen shake, a settings menu, hotkeys, real speed controls with a true pause, and an in-game glossary covering every tower, evolution, and enemy type. A private SQLite stats store records one row per completed game behind an admin login, with no player accounts anywhere.</p>
+      <p>On top of that sits a full presentation layer: a sci-fi visual theme where towers are geometric hardware and enemies are heading-rotated craft, procedurally synthesized sound with no audio files anywhere in the project, screen shake, a settings menu, hotkeys and full keyboard play, real speed controls with a true pause, and an in-game glossary covering every tower, evolution, and enemy type. Accounts are optional. Guests play exactly as before, and signing in adds a public leaderboard for each map, an autosave you can resume from the map screen, and 12 achievements. A private SQLite stats store still records one row per completed game behind an admin login.</p>
     </div>
   </section>
 
@@ -118,7 +125,7 @@
       <div class="stack-item"><p><strong>HTML5 Canvas.</strong> A tower defense game redraws dozens of moving objects 60 times per second, which is exactly what the DOM is bad at and Canvas is built for. The whole board is one canvas element with an animation loop reading game state from refs.</p></div>
       <div class="stack-item"><p><strong>WebSockets.</strong> The server broadcasts a full game snapshot 60 times per second and the client sends inputs back on the same connection. Gorilla WebSocket on the Go side, a custom hook on the React side.</p></div>
       <div class="stack-item"><p><strong>BFS pathfinding.</strong> Enemies need the shortest path around whatever the player has built, recalculated every time a tower is placed. BFS on a uniform grid gives that without the extra machinery of A*, and a later optimization pass rewrote it as an integer-indexed search, 47 times faster than the first version and proven byte-identical across 500 randomized boards.</p></div>
-      <div class="stack-item"><p><strong>SQLite.</strong> The stats store needed to be tiny: one row per completed game, no accounts, no names. A pure-Go SQLite driver meant no database container and no C toolchain in the build, just a file on a volume mount.</p></div>
+      <div class="stack-item"><p><strong>SQLite.</strong> The database needed to be tiny. It started as a stats store with one row per completed game and no names, and the accounts, leaderboard, saves, and achievements later moved into the same file. A pure-Go SQLite driver meant no database container and no C toolchain in the build, just a file on a volume mount.</p></div>
       <div class="stack-item"><p><strong>Self-hosting over a platform.</strong> The plan was originally to deploy on a hosting platform, but by mid-2026 Railway and Fly.io had dropped their free tiers and Render's remaining one cold-starts after 15 minutes idle, which kills an always-on WebSocket game. So it runs in Docker on my home server instead, routed through a Cloudflare Tunnel with no ports opened to the internet, the same pattern as everything else I self-host.</p></div>
     </div>
   </section>
@@ -131,7 +138,7 @@
 
       <h3>Making the server the only source of truth</h3>
       <p>Early on, some game logic lived in the browser. The turning point was moving all of it to the server and demoting the client to a pure renderer. It paid off three ways: the client can't cheat, the client can't drift out of sync with the rules, and every behavior has exactly one implementation to test.</p>
-      <p>Keeping that discipline took ongoing effort. A duplicate BFS implementation snuck into the client for debug spawns and had to be deleted. The wave preview strip could have recomputed wave composition in TypeScript, but instead the server includes it in every snapshot, built from the same function that spawns the waves, so what the preview shows and what arrives can never disagree. Even the fast-forward button's state comes from the server, which means it survives a page reload mid-game.</p>
+      <p>Keeping that discipline took ongoing effort. A duplicate BFS implementation snuck into the client for debug spawns and had to be deleted. The wave preview strip could have recomputed wave composition in TypeScript, but instead the server includes it in every snapshot, built from the same function that spawns the waves, so what the preview shows and what arrives can never disagree. Even the fast-forward button's state comes from the server, which means it survives a page reload mid-game. The same idea later covered dropped connections: the client remembers its room, and if it reconnects within 60 seconds it picks the game back up where it left off.</p>
 
       <h3>Tuning the difficulty curve</h3>
       <p>The first playable version had a problem: I survived to wave 55 with $67,000 in the bank. Enemies had flat stats at every wave, so towers got relatively stronger forever and gold piled up faster than it could be spent.</p>
@@ -161,6 +168,7 @@
       <p>Midway through the project I ran a full audit of the documentation against the actual code, verifying every claim in the TODO and README rather than trusting the checkboxes, with AI review helping work through the roughly 280 claims. Most held up. Eleven were wrong, and two of the wrong ones were real behavior bugs that had been latent for months, both proven with a failing test before the fix.</p>
       <p>The first: "trapped enemies stop moving" was false. An enemy fully walled in by towers was treated as having reached the goal, so it dealt 10 damage and vanished. The documented behavior, and the fair one, is that a trapped enemy waits and resumes when a path reopens, which is what it does now. The second: the "wave freezes when path blocked" fix only covered blocking a path mid-wave. Starting a wave against an already-blocked path soft-locked the game forever.</p>
       <p>The same pass caught a class of concurrency bugs waiting to happen: the WebSocket hub's client map was being written from three goroutines with no synchronization, two connections arriving at the same moment could create duplicate rooms with doubled game loops, and a race in the wave-start handler could double-spawn a wave. All of it got mutexes, atomic gates, and a stress test. Docs and code drift apart, so I check one against the other on a schedule now.</p>
+      <p>A later pass added the guard rails a public game server needs. Each connection can send at most 30 messages a second, the server caps rooms and connections, and the container runs as a non-root user with CPU, memory, and process limits. A GitHub Actions workflow now runs the Go tests with the race detector, lints and tests the client, and builds the Docker image on every push.</p>
 
       <h3>Sound with no sound files</h3>
       <p>The game has music and sound effects, and the repo contains zero audio files. Everything is synthesized live in the browser through the Web Audio API: oscillators, filters, and envelopes. The background music is a generative ambient pad, a low drone with a sparse arpeggio wandering over it, so it never loops in a way you can catch. The effects are deliberately minimal, four in total: explosions, plus one-off stings for evolving a tower, starting a wave, and game over. No placement clicks, no per-shot pew-pew, because a late wave has dozens of towers firing and that gets exhausting fast.</p>
@@ -170,6 +178,11 @@
       <p>Pause sounds trivial until the simulation runs on a server. The 60 FPS loop, the projectiles in flight, the tower cooldowns, and a separate goroutine actively spawning the current wave on its own timers all have to freeze together and resume with no catch-up jump.</p>
       <p>The implementation keeps the 60Hz loop ticking but has the update function return immediately while paused, so nothing advances. The spawn goroutine holds its timers rather than sleeping through them, so an enemy due in two seconds is still due in two seconds after a ten-minute pause. Pause also composes with the speed control: pause at 3x, resume at 3x.</p>
 
+      <h3>Adding accounts to a game built without them</h3>
+      <p>For eight months Rust Rush had no accounts at all, and I wanted to keep it that way for anyone who just wants to play. Accounts are optional: a username and password, no email. That means a forgotten password can't be recovered, but it also means I'm not storing anyone's email. Passwords are stored as Argon2id hashes, and the session cookie's token is stored only as a hash, so a copy of the database can't be used to log in.</p>
+      <p>The server-authoritative design paid off here. Every score was already computed by the server, so the leaderboard needed no anti-cheat. There's no number from the browser to fake. Only runs by signed-in players count, and Normal and Harder are ranked separately on each map.</p>
+      <p>Saves follow one rule: one automatic save per account, always the latest state. It's written at every wave break, when the room closes, and when the server shuts down. There's no manual save and no older copy to reload, so a bad run can't be undone by reloading. Achievements work the same way: the server awards all 12 from what actually happens in your runs.</p>
+
     </div>
   </section>
 
@@ -178,7 +191,7 @@
       <div><h2 id="whats-next-h">What's next</h2><svg class="wave" aria-hidden="true"><use href="#wave"/></svg></div>
     </div>
     <div class="prose">
-      <p>The project hit my "done for now" milestone with the July 30 deployment, and I mean the "for now." The deprioritized list is real: a map editor with user-created maps, multiplayer with a co-op mode, user accounts with a proper leaderboard instead of the current per-browser high score, and achievements. Smaller items first, like showing the special stats (slow duration, splash radius) in the tower info panel, which the towers already track internally but the UI never displays. The four later maps also got their difficulty ranking from the simulation rather than my own full playthroughs, so a spot-check run on each is on the list if anything ever feels off.</p>
+      <p>The project hit my "done for now" milestone with the July 30 deployment, and I meant the "for now." In November I came back for the smaller items on the list: the tower stat panel, accounts, a real leaderboard, saves, and achievements. What's left is the bigger work: a map editor with user-created maps, and multiplayer with a co-op mode. The four later maps also got their difficulty ranking from the simulation rather than my own full playthroughs, so a spot-check run on each is on the list if anything ever feels off.</p>
     </div>
   </section>
 
